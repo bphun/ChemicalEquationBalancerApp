@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81155FC723A70A5E00B5D7E6 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81155FC623A70A5E00B5D7E6 /* Matrix.swift */; };
+		81155FC923A70A6700B5D7E6 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81155FC823A70A6700B5D7E6 /* Vector.swift */; };
 		8169857623A31CDE002F6CC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169857523A31CDE002F6CC6 /* AppDelegate.swift */; };
 		8169857823A31CDE002F6CC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169857723A31CDE002F6CC6 /* SceneDelegate.swift */; };
 		8169857A23A31CDE002F6CC6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169857923A31CDE002F6CC6 /* ViewController.swift */; };
@@ -15,6 +17,12 @@
 		8169858223A31CDE002F6CC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8169858123A31CDE002F6CC6 /* Assets.xcassets */; };
 		8169858523A31CDE002F6CC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8169858323A31CDE002F6CC6 /* LaunchScreen.storyboard */; };
 		8169859023A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */; };
+		81DD042023C809DF00B7EDBB /* ImageProcessorResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */; };
+		81E521D823A8574000661CDC /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521D723A8574000661CDC /* NetworkRequest.swift */; };
+		81E521DB23A8575200661CDC /* ImageProcessorRequestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */; };
+		81E521DD23A8575F00661CDC /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521DC23A8575F00661CDC /* Resources.swift */; };
+		81E521DF23A8821D00661CDC /* ApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521DE23A8821D00661CDC /* ApiRequest.swift */; };
+		81E521E123A9600300661CDC /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521E023A9600300661CDC /* FrameExtractor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		81155FC623A70A5E00B5D7E6 /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
+		81155FC823A70A6700B5D7E6 /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
 		8169857223A31CDE002F6CC6 /* ChemicalEquationBalancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChemicalEquationBalancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8169857523A31CDE002F6CC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8169857723A31CDE002F6CC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +50,12 @@
 		8169858B23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChemicalEquationBalancerAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChemicalEquationBalancerAppTests.swift; sourceTree = "<group>"; };
 		8169859123A31CDF002F6CC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorResponseModels.swift; sourceTree = "<group>"; };
+		81E521D723A8574000661CDC /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
+		81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorRequestModels.swift; sourceTree = "<group>"; };
+		81E521DC23A8575F00661CDC /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
+		81E521DE23A8821D00661CDC /* ApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiRequest.swift; sourceTree = "<group>"; };
+		81E521E023A9600300661CDC /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +76,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81155FCA23A70D9F00B5D7E6 /* HttpNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				81E521D723A8574000661CDC /* NetworkRequest.swift */,
+				81E521DC23A8575F00661CDC /* Resources.swift */,
+				81E521DE23A8821D00661CDC /* ApiRequest.swift */,
+			);
+			path = HttpNetworking;
+			sourceTree = "<group>";
+		};
+		814F733C23C80DEA00956236 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */,
+				81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		8169856923A31CDE002F6CC6 = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +119,10 @@
 				8169857523A31CDE002F6CC6 /* AppDelegate.swift */,
 				8169857723A31CDE002F6CC6 /* SceneDelegate.swift */,
 				8169857923A31CDE002F6CC6 /* ViewController.swift */,
+				81E521E023A9600300661CDC /* FrameExtractor.swift */,
+				814F733C23C80DEA00956236 /* Models */,
+				81155FCA23A70D9F00B5D7E6 /* HttpNetworking */,
+				8169859A23A31E3B002F6CC6 /* Matrix */,
 				8169857B23A31CDE002F6CC6 /* Main.storyboard */,
 				8169858123A31CDE002F6CC6 /* Assets.xcassets */,
 				8169858323A31CDE002F6CC6 /* LaunchScreen.storyboard */,
@@ -100,6 +139,15 @@
 				8169859123A31CDF002F6CC6 /* Info.plist */,
 			);
 			path = ChemicalEquationBalancerAppTests;
+			sourceTree = "<group>";
+		};
+		8169859A23A31E3B002F6CC6 /* Matrix */ = {
+			isa = PBXGroup;
+			children = (
+				81155FC623A70A5E00B5D7E6 /* Matrix.swift */,
+				81155FC823A70A6700B5D7E6 /* Vector.swift */,
+			);
+			path = Matrix;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,9 +251,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81E521D823A8574000661CDC /* NetworkRequest.swift in Sources */,
+				81E521E123A9600300661CDC /* FrameExtractor.swift in Sources */,
+				81E521DD23A8575F00661CDC /* Resources.swift in Sources */,
+				81DD042023C809DF00B7EDBB /* ImageProcessorResponseModels.swift in Sources */,
 				8169857A23A31CDE002F6CC6 /* ViewController.swift in Sources */,
+				81155FC723A70A5E00B5D7E6 /* Matrix.swift in Sources */,
 				8169858023A31CDE002F6CC6 /* ChemicalEquationBalancerApp.xcdatamodeld in Sources */,
+				81E521DB23A8575200661CDC /* ImageProcessorRequestModels.swift in Sources */,
 				8169857623A31CDE002F6CC6 /* AppDelegate.swift in Sources */,
+				81155FC923A70A6700B5D7E6 /* Vector.swift in Sources */,
+				81E521DF23A8821D00661CDC /* ApiRequest.swift in Sources */,
 				8169857823A31CDE002F6CC6 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
