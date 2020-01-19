@@ -1,4 +1,4 @@
-package com.bphan.ChemicalEquationBalancerAppServer.ResponseModels;
+package com.bphan.ChemicalEquationBalancerAppServer.Models.ResponseModels;
 
 import java.io.IOException;
 import java.util.List;

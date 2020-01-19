@@ -1,4 +1,4 @@
-package com.bphan.ChemicalEquationBalancerAppServer.RequestModels;
+package com.bphan.ChemicalEquationBalancerAppServer.Models.RequestModels;
 
 public class Feature {
     private long maxResults;

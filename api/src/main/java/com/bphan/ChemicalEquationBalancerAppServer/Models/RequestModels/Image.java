@@ -1,4 +1,4 @@
-package com.bphan.ChemicalEquationBalancerAppServer.RequestModels;
+package com.bphan.ChemicalEquationBalancerAppServer.Models.RequestModels;
 
 public class Image {
     private String content;
