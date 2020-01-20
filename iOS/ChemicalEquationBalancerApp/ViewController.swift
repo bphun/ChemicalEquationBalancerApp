@@ -12,6 +12,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageCaptureButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var frameExtractor: FrameExtractor!
     var shouldCaptureFrame = false
@@ -21,6 +22,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         super.viewDidLoad()
         frameExtractor = FrameExtractor()
         frameExtractor.delegate = self
+        activityIndicator.isHidden = true
     }
     
     @IBAction func imageCaptureButtonAction(_ sender: Any) {
@@ -33,6 +35,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         if shouldCaptureFrame && !requestInProgress {
             shouldCaptureFrame = false
             
+            displayActivityIndicator()
             DispatchQueue.global().async {
                 print("Request start")
                 self.processImage(image)
@@ -72,6 +75,9 @@ class ViewController: UIViewController, FrameExtractorDelegate {
             }
             self.requestInProgress = false
             print("Request finished. Capture available")
+            DispatchQueue.main.async {
+                self.hideActivityIndicator()
+            }
         })
     }
     
@@ -108,6 +114,16 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         print("Augmented column: \(augmentVector)")
         
         print("Solution: \(solve(matrix: systemMatrix, for: augmentVector))")
+    }
+    
+    private func displayActivityIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func hideActivityIndicator() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
 }
 
