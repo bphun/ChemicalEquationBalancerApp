@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 public class StoredRequestInfoApiResponse {
-    String status, description;
+    private String status, description;
 
     public StoredRequestInfoApiResponse(String status, String description) {
         this.status = status;
@@ -13,22 +13,22 @@ public class StoredRequestInfoApiResponse {
     }
 
     @JsonProperty
-    String getstatus() {
+    public String getStatus() {
         return status;
     }
 
     @JsonProperty
-    void setstatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     
     @JsonProperty
-    String getdescription() {
+    public String getDescription() {
         return description;
     }
 
     @JsonProperty
-    void setdescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     

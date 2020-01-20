@@ -1,9 +1,11 @@
 package com.bphan.ChemicalEquationBalancerAppServer.Services;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Base64;
+import java.util.Base64.Decoder;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -50,7 +52,7 @@ public class AmazonClient {
 
         try {
             File file = generateImageFileFromBase64String(s3ImageFileName, base64EncodedImage);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName;
+            fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
             uploadTos3Bucket(s3ImageFileName, file);
             file.delete();
         } catch (Exception e) {
@@ -62,7 +64,7 @@ public class AmazonClient {
 
     public String deleteImageByName(String s3ImageFileName) {
         try {
-            s3Client.deleteObject(new DeleteObjectRequest(bucketName, s3ImageFileName));
+            s3Client.deleteObject(new DeleteObjectRequest(bucketName, s3ImageFileName + ".png"));
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
@@ -70,22 +72,38 @@ public class AmazonClient {
     }
 
     private File generateImageFileFromBase64String(String s3ImageFileName, String base64EncodedImage) {
-        File imageFile = null;
+        BufferedImage image = null;
         byte[] imageBytes;
+        File imageFile = new File(s3ImageFileName + ".png");
 
         try {
-            imageBytes = Base64.getDecoder().decode(base64EncodedImage);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
-
-            imageFile = new File(s3ImageFileName);
-            ImageIO.write(ImageIO.read(byteArrayInputStream), ".png", imageFile);
-
-            byteArrayInputStream.close();
+            Decoder decoder = Base64.getDecoder();
+            imageBytes = decoder.decode(base64EncodedImage);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            image = ImageIO.read(bis);
+            bis.close();
+            ImageIO.write(image, "png", imageFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return imageFile;
+        // File imageFile = null;
+        // byte[] imageBytes;
+
+        // try {
+        //     imageBytes = Base64.getDecoder().decode(base64EncodedImage);
+        //     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
+
+        //     imageFile = new File(s3ImageFileName + ".png");
+        //     ImageIO.write(ImageIO.read(byteArrayInputStream), ".png", imageFile);
+
+        //     byteArrayInputStream.close();
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+
+        // return imageFile;
     }
 
     private String base64EncodeImageFile(File imageFile) {
@@ -105,11 +123,7 @@ public class AmazonClient {
     }
 
     private void uploadTos3Bucket(String filename, File file) {
-        try {
-            s3Client.putObject(
-                    new PutObjectRequest(bucketName, filename, file).withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (Exception e) {
-
-        }
+        s3Client.putObject(
+                new PutObjectRequest(bucketName, filename + ".png", file).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 }

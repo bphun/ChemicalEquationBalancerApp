@@ -5,144 +5,135 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 public class StoredRequestInfo {
-    String id;
-    String s3ImageUrl;
-    String userInputtedChemicalEquationString;
-    long gcpRequestStartTimeMs;
-    long gcpRequestEndTimeMs;
-    String verifiedChemicalEquationString;
-    String gcpIdentifiedChemicalEquationString;
-    long onDeviceImageProcessStartTime;
-    long onDeviceImageProcessEndTime;
-    String onDeviceImageProcessDeviceName;
-    boolean chemicalEquationStringVerified;
+    private String id;
+    private String s3ImageUrl;
+    private String userInputtedChemicalEquationString;
+    private long gcpRequestStartTimeMs;
+    private long gcpRequestEndTimeMs;
+    private String verifiedChemicalEquationString;
+    private String gcpIdentifiedChemicalEquationString;
+    private long onDeviceImageProcessStartTime;
+    private long onDeviceImageProcessEndTime;
+    private String onDeviceImageProcessDeviceName;
 
     public StoredRequestInfo(String id, String s3ImageUrl, String userInputtedChemicalEquationString,
             long gcpRequestStartTimeMs, long gcpRequestEndTimeMs, String verifiedChemicalEquationString,
             String gcpIdentifiedChemicalEquationString, long onDeviceImageProcessStartTime,
-            long onDeviceImageProcessEndTime, String onDeviceImageProcessDeviceName,
-            boolean chemicalEquationStringVerified) {
+            long onDeviceImageProcessEndTime, String onDeviceImageProcessDeviceName) {
 
-        this.id = id;
-        this.s3ImageUrl = s3ImageUrl;
-        this.userInputtedChemicalEquationString = userInputtedChemicalEquationString;
+        this.id = checkNull(id);
+        this.s3ImageUrl = checkNull(s3ImageUrl);
+        this.userInputtedChemicalEquationString = checkNull(userInputtedChemicalEquationString);
         this.gcpRequestStartTimeMs = gcpRequestStartTimeMs;
         this.gcpRequestEndTimeMs = gcpRequestEndTimeMs;
-        this.verifiedChemicalEquationString = verifiedChemicalEquationString;
-        this.gcpIdentifiedChemicalEquationString = gcpIdentifiedChemicalEquationString;
+        this.verifiedChemicalEquationString = checkNull(verifiedChemicalEquationString);
+        this.gcpIdentifiedChemicalEquationString = checkNull(gcpIdentifiedChemicalEquationString);
         this.onDeviceImageProcessStartTime = onDeviceImageProcessStartTime;
         this.onDeviceImageProcessEndTime = onDeviceImageProcessEndTime;
-        this.onDeviceImageProcessDeviceName = onDeviceImageProcessDeviceName;
-        this.chemicalEquationStringVerified = chemicalEquationStringVerified;
+        this.onDeviceImageProcessDeviceName = checkNull(onDeviceImageProcessDeviceName);
     }
 
     @JsonProperty
-    String getId() {
+    public String getId() {
         return id;
     }
 
     @JsonProperty
-    void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     @JsonProperty
-    String gets3ImageUrl() {
+    public String gets3ImageUrl() {
         return s3ImageUrl;
     }
 
     @JsonProperty
-    void sets3ImageUrl(String s3ImageUrl) {
+    public void sets3ImageUrl(String s3ImageUrl) {
         this.s3ImageUrl = s3ImageUrl;
     }
 
     @JsonProperty
-    String getUserInputtedChemicalEquationString() {
+    public String getUserInputtedChemicalEquationString() {
         return userInputtedChemicalEquationString;
     }
 
     @JsonProperty
-    void setUserInputtedChemicalEquationString(String userInputtedChemicalEquationString) {
+    public void setUserInputtedChemicalEquationString(String userInputtedChemicalEquationString) {
         this.userInputtedChemicalEquationString = userInputtedChemicalEquationString;
     }
 
     @JsonProperty
-    long getGcpRequestStartTimeMs() {
+    public long getGcpRequestStartTimeMs() {
         return gcpRequestStartTimeMs;
     }
 
     @JsonProperty
-    void setGcpRequestStartTimeMs(long gcpRequestStartTimeMs) {
+    public void setGcpRequestStartTimeMs(long gcpRequestStartTimeMs) {
         this.gcpRequestStartTimeMs = gcpRequestStartTimeMs;
     }
 
     @JsonProperty
-    long getGcpRequestEndTimeMs() {
+    public long getGcpRequestEndTimeMs() {
         return gcpRequestEndTimeMs;
     }
 
     @JsonProperty
-    void setGcpRequestEndTimeMs(long gcpRequestEndTimeMs) {
+    public void setGcpRequestEndTimeMs(long gcpRequestEndTimeMs) {
         this.gcpRequestEndTimeMs = gcpRequestEndTimeMs;
     }
 
     @JsonProperty
-    String getVerifiedChemicalEquationString() {
+    public String getVerifiedChemicalEquationString() {
         return verifiedChemicalEquationString;
     }
 
     @JsonProperty
-    void setVerifiedChemicalEquationString(String verifiedChemicalEquationString) {
+    public void setVerifiedChemicalEquationString(String verifiedChemicalEquationString) {
         this.verifiedChemicalEquationString = verifiedChemicalEquationString;
     }
 
     @JsonProperty
-    String getGcpIdentifiedChemicalEquationString() {
+    public String getGcpIdentifiedChemicalEquationString() {
         return gcpIdentifiedChemicalEquationString;
     }
 
     @JsonProperty
-    void setGcpIdentifiedChemicalEquationString(String gcpIdentifiedChemicalEquationString) {
+    public void setGcpIdentifiedChemicalEquationString(String gcpIdentifiedChemicalEquationString) {
         this.gcpIdentifiedChemicalEquationString = gcpIdentifiedChemicalEquationString;
     }
 
     @JsonProperty
-    long getOnDeviceImageProcessStartTime() {
+    public long getOnDeviceImageProcessStartTime() {
         return onDeviceImageProcessStartTime;
     }
 
     @JsonProperty
-    void setOnDeviceImageProcessStartTime(long onDeviceImageProcessStartTime) {
+    public void setOnDeviceImageProcessStartTime(long onDeviceImageProcessStartTime) {
         this.onDeviceImageProcessStartTime = onDeviceImageProcessStartTime;
     }
 
     @JsonProperty
-    long getOnDeviceImageProcessEndTime() {
+    public long getOnDeviceImageProcessEndTime() {
         return onDeviceImageProcessEndTime;
     }
 
     @JsonProperty
-    void setOnDeviceImageProcessEndTime(long onDeviceImageProcessEndTime) {
+    public void setOnDeviceImageProcessEndTime(long onDeviceImageProcessEndTime) {
         this.onDeviceImageProcessEndTime = onDeviceImageProcessEndTime;
     }
 
     @JsonProperty
-    String getOnDeviceImageProcessDeviceName() {
+    public String getOnDeviceImageProcessDeviceName() {
         return onDeviceImageProcessDeviceName;
     }
 
     @JsonProperty
-    void setOnDeviceImageProcessDeviceName(String onDeviceImageProcessDeviceName) {
+    public void setOnDeviceImageProcessDeviceName(String onDeviceImageProcessDeviceName) {
         this.onDeviceImageProcessDeviceName = onDeviceImageProcessDeviceName;
     }
 
-    @JsonProperty
-    boolean getChemicalEquationStringVerified() {
-        return chemicalEquationStringVerified;
-    }
-
-    @JsonProperty
-    void setChemicalEquationStringVerified(boolean chemicalEquationStringVerified) {
-        this.chemicalEquationStringVerified = chemicalEquationStringVerified;
+    private String checkNull(String str) {
+        return str != null ? str : "";
     }
 }
