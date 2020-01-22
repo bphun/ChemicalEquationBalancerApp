@@ -32,6 +32,12 @@ public class RequestInfoController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/view")
+    public StoredRequestInfo getStoredRequestInfoList(@RequestParam(value = "rid", required = true) String id) {
+        return imageProcessorRequestRepository.getRequestWithId(id);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/updateValue")
     public StoredRequestInfoApiResponse updateValue(@RequestParam(value = "rid", required = true) String id,
             @RequestParam(value = "vid", required = true) String valueId,

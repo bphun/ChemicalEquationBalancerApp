@@ -38,6 +38,19 @@ public class ImageProcessorRequestRepository {
                         resource.getString("onDeviceImageProcessDeviceName")));
     }
 
+    public StoredRequestInfo getRequestWithId(String requestId) {
+        return jdbcTemplate.query("SELECT * FROM ImageProcessorRequestInfo " + "WHERE id='" + requestId + "'",
+                (resource, rowNum) -> new StoredRequestInfo(resource.getString("id"), resource.getString("s3ImageUrl"),
+                        resource.getString("userInputtedChemicalEquationString"),
+                        resource.getLong("gcpRequestStartTimeMs"), resource.getLong("gcpRequestEndTimeMs"),
+                        resource.getString("verifiedChemicalEquationString"),
+                        resource.getString("gcpIdentifiedChemicalEquationString"),
+                        resource.getLong("onDeviceImageProcessStartTime"),
+                        resource.getLong("onDeviceImageProcessEndTime"),
+                        resource.getString("onDeviceImageProcessDeviceName")))
+                .get(0);
+    }
+
     public StoredRequestInfoApiResponse updateUserInputtedChemicalEquationString(String id, String value) {
         return doValueUpdate(id, "userInputtedChemicalEquationString", value);
     }
@@ -89,14 +102,9 @@ public class ImageProcessorRequestRepository {
     public List<BoundingBox> getBoundingBoxesForRequest(String requestId) {
         return jdbcTemplate.query(
                 "SELECT * FROM ChemicalEquationBoundingBox" + " WHERE imageProcessorRequestInfoId='" + requestId + "'",
-                (resource, rowNum) -> new BoundingBox(
-                    resource.getString("id"),
-                    resource.getString("imageProcessorRequestInfoId"),
-                    resource.getInt("originX"),
-                    resource.getInt("originY"),
-                    resource.getInt("width"),
-                    resource.getInt("height")
-                ));
+                (resource, rowNum) -> new BoundingBox(resource.getString("id"),
+                        resource.getString("imageProcessorRequestInfoId"), resource.getInt("originX"),
+                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height")));
     }
 
     private StoredRequestInfoApiResponse doValueUpdate(String id, String valueId, Object value) {
