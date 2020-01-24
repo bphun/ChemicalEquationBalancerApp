@@ -2,8 +2,8 @@ import Accelerate
 
 public struct Matrix<T> where T: FloatingPoint, T: ExpressibleByFloatLiteral {
     
-    let rows: Int
-    let columns: Int
+    public let rows: Int
+    public let columns: Int
     internal var data: Vector<T>
     
     public init(_ data: [T], rows: Int, columns: Int) {
@@ -234,7 +234,6 @@ public func solve(matrix: Matrix<Double>, for vector: Vector<Double>) -> Vector<
     
     return solution
 }
-
 
 extension Matrix: CustomStringConvertible {
     public var description: String {

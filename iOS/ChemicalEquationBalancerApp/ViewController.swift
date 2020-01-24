@@ -13,6 +13,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageCaptureButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var uploadImageSwitch: UISwitch!
     
     var frameExtractor: FrameExtractor!
     var shouldCaptureFrame = false
@@ -36,25 +37,26 @@ class ViewController: UIViewController, FrameExtractorDelegate {
             shouldCaptureFrame = false
             
             displayActivityIndicator()
+            let shouldUploadImage = self.uploadImageSwitch.isOn
             DispatchQueue.global().async {
                 print("Request start")
-                self.processImage(image)
+                self.processImage(image, shouldUploadImage: shouldUploadImage)
             }
         }
     }
     
-    func processImage(_ image: UIImage) {
+    func processImage(_ image: UIImage, shouldUploadImage: Bool) {
         guard let base64EncodedImageString = image.toBase64() else { return }
-        imageRequest(base64EncodedImage: base64EncodedImageString)
+        imageRequest(base64EncodedImage: base64EncodedImageString, shouldUploadImage: shouldUploadImage)
     }
     
-    func imageRequest(base64EncodedImage: String) {
+    func imageRequest(base64EncodedImage: String, shouldUploadImage: Bool) {
         let feature = ImageprocessorFeature(maxResults: 20, type: FeatureType.DocumentTextDetection.rawValue)
         let image = ImageProcessorImage(base64EncodedString: base64EncodedImage)
         let imageProcessorRequest = ImageProcessorRequest(image: image, feature: feature)
         let imageProcessorRequestBody = ImageProcessorRequestBody(request: imageProcessorRequest)
         let requestBodyJson = try! JSONEncoder().encode(imageProcessorRequestBody)
-        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson))
+        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage))
         
         requestInProgress = true
 //        print(requestBodyJson.prettyPrintedJSONString)
@@ -84,8 +86,6 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     func parseChemicalEquation(_ input: String?) -> Matrix<Double>? {
         guard input != nil else { return nil }
         guard isValidChemicalEquation(input!) else { return nil }
-        
-        print(input)
         
         var matrix: Matrix<Double>?
         

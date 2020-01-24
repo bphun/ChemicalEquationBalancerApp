@@ -38,8 +38,21 @@ struct ImageProcessResource: ApiResource {
     init(data: Data? = nil) {
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = path
-        print(String(data!.count))
 
+        urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = method.rawValue
+        urlRequest.httpBody = data
+        urlRequest.addValue(String(data!.count), forHTTPHeaderField: "Content-Length")
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
+    
+    init(data: Data? = nil, shouldUploadImage: Bool) {
+        var urlComponents = URLComponents(string: hostUrl)!
+        urlComponents.path = path
+
+        let queryItems = [URLQueryItem(name: "upload", value: shouldUploadImage ? "true" : "false")]
+        urlComponents.queryItems = queryItems
+        
         urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = method.rawValue
         urlRequest.httpBody = data
