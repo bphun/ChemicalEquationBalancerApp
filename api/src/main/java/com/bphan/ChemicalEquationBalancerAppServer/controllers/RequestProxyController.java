@@ -38,7 +38,7 @@ class RequestProxyController {
     @RequestMapping(value = "/proxy", method = RequestMethod.POST)
     public ResponseEntity<ImageProcessorResponse> proxy(@RequestBody ImageProcessorRequest requestBody,
             @RequestHeader("Content-Length") String contentLength,
-            @RequestParam(value = "uploadImg", required = false) boolean shouldUploadImg,
+            @RequestParam(value = "upload", required = false) boolean shouldUploadImg,
             HttpServletResponse response) {
 
         HttpHeaders gcpApiRequestHeaders = new HttpHeaders();
@@ -59,11 +59,11 @@ class RequestProxyController {
 
         imageProcessorResponse.setRequestId(requestId);
 
-        // if (shouldUploadImg) {
-        requestInfoUploadRunner = new RequestInfoUploadRunner(imageProcessorRequestRepository, amazonClient, requestId,
-                base64EncodedImage, requestStartTime, requestEndTime);
-        new Thread(requestInfoUploadRunner).start();
-        // }
+        if (shouldUploadImg) {
+            requestInfoUploadRunner = new RequestInfoUploadRunner(imageProcessorRequestRepository, amazonClient,
+                    requestId, base64EncodedImage, requestStartTime, requestEndTime);
+            new Thread(requestInfoUploadRunner).start();
+        }
 
         return ResponseEntity.ok(imageProcessorResponse);
     }

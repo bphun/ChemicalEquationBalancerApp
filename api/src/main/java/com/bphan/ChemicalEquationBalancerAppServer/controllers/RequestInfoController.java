@@ -8,6 +8,7 @@ import com.bphan.ChemicalEquationBalancerAppServer.DatabaseConnector.ImageProces
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBox;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoApiResponse;
+import com.bphan.ChemicalEquationBalancerAppServer.Services.AmazonClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +26,9 @@ public class RequestInfoController {
     @Autowired
     private ImageProcessorRequestRepository imageProcessorRequestRepository;
 
+    @Autowired
+    private AmazonClient amazonClient;
+    
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/list")
     public List<StoredRequestInfo> getStoredRequestInfoList() {
@@ -81,5 +85,36 @@ public class RequestInfoController {
     @GetMapping("/getBoundingBoxes")
     public List<BoundingBox> addBoundingBox(@RequestParam(value = "rid", required = true) String requestId) {
         return imageProcessorRequestRepository.getBoundingBoxesForRequest(requestId);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/nextRequest")
+    public StoredRequestInfoApiResponse nextRequest(@RequestParam(value = "t", required = true) String timestamp) {
+        return imageProcessorRequestRepository.getNextRequestIdAfterTimestamp(timestamp);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/previousRequest")
+    public StoredRequestInfoApiResponse previousRequest(@RequestParam(value = "t", required = true) String timestamp) {
+        return imageProcessorRequestRepository.getPreviousRequestIdBeforeTimestamp(timestamp);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/deleteRequest")
+    public StoredRequestInfoApiResponse deleteRequest(@RequestParam(value = "rid", required = true) String requestId) {
+        StoredRequestInfoApiResponse response = imageProcessorRequestRepository.deleteRequest(requestId);
+
+        if (response.getStatus() == "success") {
+            String deleteImageResponse = amazonClient.deleteImageByName(requestId);
+            if (deleteImageResponse != "success") {
+                response.setStatus("error");
+                response.setDescription("Unable to delete image");
+            }         
+        } else {
+            response.setStatus("error");
+            response.setDescription("Unable to delete request");
+        }
+
+        return response;
     }
 }

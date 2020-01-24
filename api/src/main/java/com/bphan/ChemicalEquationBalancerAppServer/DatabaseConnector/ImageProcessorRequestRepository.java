@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBox;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoApiResponse;
+import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ public class ImageProcessorRequestRepository {
     }
 
     public List<StoredRequestInfo> getRequestList() {
-        return jdbcTemplate.query("SELECT * FROM ImageProcessorRequestInfo",
+        return jdbcTemplate.query("SELECT * FROM ImageProcessorRequestInfo ORDER BY gcpRequestStartTimeMs ASC",
                 (resource, rowNum) -> new StoredRequestInfo(resource.getString("id"), resource.getString("s3ImageUrl"),
                         resource.getString("userInputtedChemicalEquationString"),
                         resource.getLong("gcpRequestStartTimeMs"), resource.getLong("gcpRequestEndTimeMs"),
@@ -85,15 +86,22 @@ public class ImageProcessorRequestRepository {
         }
 
         StoredRequestInfoApiResponse response;
-        int changedRows = jdbcTemplate.update("INSERT INTO ChemicalEquationBoundingBox"
-                + "(id, imageProcessorRequestInfoId, originX, originY, width, height)" + "VALUES (?, ?, ?, ?, ?, ?)",
-                boundingBox.getId(), boundingBox.getImageProcessorRequestInfoId(), boundingBox.getOriginX(),
-                boundingBox.getOriginY(), boundingBox.getWidth(), boundingBox.getHeight());
+        try {
+            int changedRows = jdbcTemplate.update(
+                    "INSERT INTO ChemicalEquationBoundingBox"
+                            + "(id, imageProcessorRequestInfoId, originX, originY, width, height)"
+                            + "VALUES (?, ?, ?, ?, ?, ?)",
+                    boundingBox.getId(), boundingBox.getImageProcessorRequestInfoId(), boundingBox.getOriginX(),
+                    boundingBox.getOriginY(), boundingBox.getWidth(), boundingBox.getHeight());
 
-        if (changedRows > 0) {
-            response = new StoredRequestInfoApiResponse("success", "");
-        } else {
-            response = new StoredRequestInfoApiResponse("error", "SQL error");
+            if (changedRows > 0) {
+                response = new StoredRequestInfoApiResponse("success", "");
+            } else {
+                response = new StoredRequestInfoApiResponse("error", "SQL error");
+            }
+
+        } catch (Exception e) {
+            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
         }
 
         return response;
@@ -105,6 +113,53 @@ public class ImageProcessorRequestRepository {
                 (resource, rowNum) -> new BoundingBox(resource.getString("id"),
                         resource.getString("imageProcessorRequestInfoId"), resource.getInt("originX"),
                         resource.getInt("originY"), resource.getInt("width"), resource.getInt("height")));
+    }
+
+    public StoredRequestInfoApiResponse getNextRequestIdAfterTimestamp(String timestamp) {
+        StoredRequestInfoApiResponse response;
+
+        try {
+            response = jdbcTemplate.query(
+                    "SELECT * FROM ImageProcessorRequestInfo WHERE " + "gcpRequestStartTimeMs > "
+                            + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs ASC LIMIT 0,1;",
+                    (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
+        } catch (Exception e) {
+            response = new StoredRequestInfoApiResponse("error", "No available requests");
+        }
+
+        return response;
+    }
+
+    public StoredRequestInfoApiResponse getPreviousRequestIdBeforeTimestamp(String timestamp) {
+        StoredRequestInfoApiResponse response;
+
+        try {
+            response = jdbcTemplate.query(
+                    "SELECT * FROM ImageProcessorRequestInfo WHERE " + "gcpRequestStartTimeMs < "
+                            + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs DESC LIMIT 0,1;",
+                    (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
+        } catch (Exception e) {
+            response = new StoredRequestInfoApiResponse("error", "No available requests");
+        }
+
+        return response;
+    }
+
+    public StoredRequestInfoApiResponse deleteRequest(String requestId) {
+        StoredRequestInfoApiResponse response;
+
+        try {
+            int rowsAffected = jdbcTemplate.update("DELETE FROM ImageProcessorRequestInfo WHERE id = ?", requestId);
+            if (rowsAffected > 0) {
+                response = new StoredRequestInfoApiResponse("success", "");
+            } else {
+                response = new StoredRequestInfoApiResponse("error", "SQL error");
+            }
+        } catch (Exception e) {
+            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+        }
+
+        return response;
     }
 
     private StoredRequestInfoApiResponse doValueUpdate(String id, String valueId, Object value) {

@@ -68,7 +68,7 @@ public class AmazonClient {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
-        return "Success";
+        return "success";
     }
 
     private File generateImageFileFromBase64String(String s3ImageFileName, String base64EncodedImage) {
