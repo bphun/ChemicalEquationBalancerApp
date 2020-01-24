@@ -3,6 +3,7 @@ import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal } from "@
 import "@shopify/polaris/styles.css";
 import "../App.css"
 import queryString from 'query-string';
+import { withRouter } from "react-router";
 
 class RequestViewPage extends React.Component {
 
@@ -14,11 +15,12 @@ class RequestViewPage extends React.Component {
             modalTextInputValue: "",
             storedRequest: undefined,
             viewInfoReady: false,
-            shouldDisplayImageLabelingTool: false
+            shouldDisplayImageLabelingTool: false,
+            previousRequestId: undefined,
+            nextRequestId: undefined,
+            hasNextRequest: false,
+            hasPreviousRequest: false
         }
-        this.handleValueEditModalSubmit.bind(this)
-        this.updateVerifiedEquationString.bind(this)
-        this.updateUserEquationString.bind(this)
     }
 
     componentDidMount() {
@@ -28,10 +30,40 @@ class RequestViewPage extends React.Component {
             .then(results => {
                 return results.json()
             }).then(response => {
-                this.setState({ storedRequest: response })
+                this.setState({ storedRequest: response }, () => {
+                    this.fetchNextAndPreviousRequestInfo()
+                })
             }).catch(err => {
                 console.log(err);
             })
+
+    }
+
+    fetchNextAndPreviousRequestInfo() {
+        if (!this.state.nextRequestId) {
+            fetch("http://localhost:8080/storedRequests/nextRequest?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+                .then(results => {
+                    return results.json()
+                }).then(response => {
+                    if (response.status !== "error") {
+                        this.setState({ nextRequestId: response.id, hasNextRequest: true })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+        }
+        if (!this.state.previousRequestId) {
+            fetch("http://localhost:8080/storedRequests/previousRequest?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+                .then(results => {
+                    return results.json()
+                }).then(response => {
+                    if (response.status !== "error") {
+                        this.setState({ previousRequestId: response.id, hasPreviousRequest: true })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+        }
     }
 
     handleValueEditModalSubmit() {
@@ -61,9 +93,6 @@ class RequestViewPage extends React.Component {
             ...this.state.storedRequest,
             verifiedChemicalEquationString: str
         })
-        // const updatedRequest = this.state.storedRequest;
-        // updatedRequest.verifiedChemicalEquationString = str;
-        // this.setState({ storedRequest: updatedRequest })
     }
 
     updateUserEquationString(str) {
@@ -71,9 +100,39 @@ class RequestViewPage extends React.Component {
             ...this.state.storedRequest,
             userInputtedChemicalEquationString: str
         })
-        // const updatedRequest = this.state.storedRequest;
-        // updatedRequest.userInputtedChemicalEquationString = str;
-        // this.setState({ storedRequest: updatedRequest })
+    }
+
+    onNextPageClick() {
+        this.props.history.push({
+            pathname: "/view?rid=" + this.state.nextRequestId,
+            state: { previousRequestId: this.state.storedRequest.id }
+        })
+        window.location.reload();
+    }
+
+    onPreviousPageClick() {
+        this.props.history.push({
+            pathname: "/view?rid=" + this.state.previousRequestId,
+            state: { nextRequestId: this.state.storedRequest.id }
+        })
+        window.location.reload();
+    }
+
+    deleteRequest() {
+        fetch("http://localhost:8080/storedRequests/deleteRequest?rid=" + this.state.storedRequest.id, { mode: "cors" })
+            .then(results => {
+                return results.json()
+            }).then(response => {
+                console.log(response)
+                if (response.status === "success") {
+                    this.props.history.push({pathname: "/"})
+                    window.location.reload();
+                } else {
+                    alert("Error: " + response.description);
+                }
+            }).catch(err => {
+                console.log(err);
+            })
     }
 
     render() {
@@ -99,7 +158,17 @@ class RequestViewPage extends React.Component {
 
         return (
             <AppProvider>
-                <Page title={pageTitle} fullWidth={true} fullHeight={true}>
+                <Page
+                    title={pageTitle}
+                    fullWidth={true}
+                    fullHeight={true}
+                    breadcrumbs={[{ content: "Home", url: "/" }]}
+                    pagination={{
+                        hasNext: this.state.hasNextRequest,
+                        onNext: () => this.onNextPageClick(),
+                        hasPrevious: this.state.hasPreviousRequest,
+                        onPrevious: () => this.onPreviousPageClick()
+                    }}>
                     <Modal
                         open={this.state.shouldDisplayEditValueModal}
                         onClose={() => this.setState({ shouldDisplayEditValueModal: false, editTargetValueId: "" })}
@@ -124,7 +193,23 @@ class RequestViewPage extends React.Component {
                             </Card>
                         </Stack.Item>
                         <Stack.Item>
-                            <Card title="Request Info" fullHeight={true} primaryFooterAction={{ content: "Label Image", onAction: () => this.setState({ shouldDisplayImageLabelingTool: true }) }}>
+                            <Card
+                                title="Request Info"
+                                fullHeight={true}
+                                primaryFooterAction={
+                                    {
+                                        content: "Label Image",
+                                        onAction: () => this.setState({ shouldDisplayImageLabelingTool: true })
+                                    }
+                                }
+                                secondaryFooterActions={
+                                    [{
+                                        content: "Delete Request",
+                                        destructive: true,
+                                        onAction: () => this.deleteRequest()
+                                    }]
+                                }
+                            >
                                 <Card.Section title="Execution Date">
                                     <p>{requestDate.toLocaleDateString("en-US") + " " + requestDate.toLocaleTimeString("en-US")}</p>
                                 </Card.Section>
@@ -155,4 +240,4 @@ class RequestViewPage extends React.Component {
     }
 }
 
-export default RequestViewPage
+export default withRouter(RequestViewPage)
