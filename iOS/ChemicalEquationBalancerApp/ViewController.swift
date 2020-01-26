@@ -18,6 +18,8 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     var frameExtractor: FrameExtractor!
     var shouldCaptureFrame = false
     var requestInProgress = false
+    var hasEquationStr = false
+    var equationStr: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,39 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     
     @IBAction func imageCaptureButtonAction(_ sender: Any) {
         self.shouldCaptureFrame = true
+    }
+    
+    @IBAction func manualEntryAction(_ sender: Any) {
+        let alert = UIAlertController(title: "Enter chemical equation", message: "Seperate reactants and products with \"->\"", preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Equation"
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel ,handler: nil))
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { [weak alert] (_) in
+            if let textField = alert?.textFields![0] {
+                let result = self.balanceEquation(textField.text!)
+             
+                let resultAlert = UIAlertController(title: "Results", message: result, preferredStyle: .alert)
+                resultAlert.addAction(UIAlertAction(title: "Done", style: .cancel ,handler: nil))
+                resultAlert.addAction(UIAlertAction(title: "Upload Image", style: .default, handler: { [weak alert] (_) in
+                    self.equationStr = textField.text!
+                    DispatchQueue.main.async {
+                        resultAlert.resignFirstResponder()
+                    }
+                }))
+
+                DispatchQueue.main.async {
+                    alert?.resignFirstResponder()
+                    self.present(resultAlert, animated: true, completion: nil)
+                }
+            }
+        }))
+
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     func captured(image: UIImage) {
@@ -56,7 +91,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         let imageProcessorRequest = ImageProcessorRequest(image: image, feature: feature)
         let imageProcessorRequestBody = ImageProcessorRequestBody(request: imageProcessorRequest)
         let requestBodyJson = try! JSONEncoder().encode(imageProcessorRequestBody)
-        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage))
+        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr))
         
         requestInProgress = true
 //        print(requestBodyJson.prettyPrintedJSONString)
@@ -66,16 +101,17 @@ class ViewController: UIViewController, FrameExtractorDelegate {
                 if let error = processorOutput.responses[0].error {
                     print("API Bad Response: \(error.message!) (\(error.code!))")
                 } else {
-                    let topResponse = processorOutput.responses[0]
-                    if let equationMatrix = self.parseChemicalEquation(topResponse.fullTextAnnotation?.text ?? nil) {
-                        let solution = solve(matrix: equationMatrix, for: self.zeroVectorWithSize(equationMatrix.rows))
-                        print(solution)
-                    }
+//                    let topResponse = processorOutput.responses[0]
+//                    if let equationMatrix = self.parseChemicalEquation(topResponse.fullTextAnnotation?.text ?? nil) {
+//                        let solution = solve(matrix: equationMatrix, for: self.zeroVectorWithSize(equationMatrix.rows))
+//                        print(solution)
+//                    }
                 }
             } else {
                 print("Received no API response")
             }
             self.requestInProgress = false
+            self.equationStr = nil
             print("Request finished. Capture available")
             DispatchQueue.main.async {
                 self.hideActivityIndicator()
@@ -83,37 +119,21 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         })
     }
     
-    func parseChemicalEquation(_ input: String?) -> Matrix<Double>? {
-        guard input != nil else { return nil }
-        guard isValidChemicalEquation(input!) else { return nil }
+    private func balanceEquation(_ equationStr: String) -> String {
+        let equation = ChemicalEquation(equationStr: equationStr)
+        let solution = equation.balance();
         
-        var matrix: Matrix<Double>?
+        var result = ""
         
-        return nil
-    }
-    
-    func isValidChemicalEquation(_ input: String) -> Bool {
-        return true
-    }
-
-    func zeroVectorWithSize(_ n: Int) -> Vector<Double> {
-        return Vector<Double>.init(repeating: 0.0, count: n)
-    }
-    
-    func computeMatrix() {
-        let system: [[Double]] = [
-            [1, 0, 1, 4],
-            [0, 0, 1, 2]
-        ]
-        let augmentVector: Vector<Double> = [1, 0]
+        result += "Equation string: \(equationStr)\n"
+        result += "Equation matrix:\n\(equation.matrix())\n"
+        result += "LHS elements: \(equation.getLhsElements())\n"
+        result += "RHS elements: \(equation.getRhsElements())\n"
+        result += "Element set: \(equation.elements())\n"
+        result += "Solution vector(Unprocessed): \(equation.getUnProcessedSolution())\n"
+        result += "Solution vector(Processed): \(solution!)\n"
         
-        let systemMatrix = Matrix<Double>(twoDimArr: system)
-        
-        //print(invert(systemMatrix))
-        print("Matrix:\n\(systemMatrix)")
-        print("Augmented column: \(augmentVector)")
-        
-        print("Solution: \(solve(matrix: systemMatrix, for: augmentVector))")
+        return result
     }
     
     private func displayActivityIndicator() {

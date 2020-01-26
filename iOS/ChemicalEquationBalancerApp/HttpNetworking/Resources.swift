@@ -59,6 +59,24 @@ struct ImageProcessResource: ApiResource {
         urlRequest.addValue(String(data!.count), forHTTPHeaderField: "Content-Length")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
     }
+    
+    init(data: Data? = nil, shouldUploadImage: Bool, equationStr: String?) {
+        var urlComponents = URLComponents(string: hostUrl)!
+        urlComponents.path = path
+
+        var queryItems = [URLQueryItem(name: "upload", value: shouldUploadImage ? "true" : "false")]
+        if equationStr != nil {
+            print("setting equation str")
+            queryItems.append(URLQueryItem(name: "eq", value: equationStr!))
+        }
+        urlComponents.queryItems = queryItems
+        
+        urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = method.rawValue
+        urlRequest.httpBody = data
+        urlRequest.addValue(String(data!.count), forHTTPHeaderField: "Content-Length")
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
 }
 
 //struct ImageProcessResource: ApiResource {

@@ -17,6 +17,7 @@
 		8169858223A31CDE002F6CC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8169858123A31CDE002F6CC6 /* Assets.xcassets */; };
 		8169858523A31CDE002F6CC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8169858323A31CDE002F6CC6 /* LaunchScreen.storyboard */; };
 		8169859023A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */; };
+		81C0CD5F23DD55FE00DED9D6 /* ChemicalEquation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0CD5E23DD55FE00DED9D6 /* ChemicalEquation.swift */; };
 		81DD042023C809DF00B7EDBB /* ImageProcessorResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */; };
 		81E521D823A8574000661CDC /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521D723A8574000661CDC /* NetworkRequest.swift */; };
 		81E521DB23A8575200661CDC /* ImageProcessorRequestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */; };
@@ -50,6 +51,7 @@
 		8169858B23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChemicalEquationBalancerAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChemicalEquationBalancerAppTests.swift; sourceTree = "<group>"; };
 		8169859123A31CDF002F6CC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81C0CD5E23DD55FE00DED9D6 /* ChemicalEquation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChemicalEquation.swift; sourceTree = "<group>"; };
 		81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorResponseModels.swift; sourceTree = "<group>"; };
 		81E521D723A8574000661CDC /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorRequestModels.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			children = (
 				81E521DA23A8575200661CDC /* ImageProcessorRequestModels.swift */,
 				81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */,
+				81C0CD5E23DD55FE00DED9D6 /* ChemicalEquation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				8169857A23A31CDE002F6CC6 /* ViewController.swift in Sources */,
 				81155FC723A70A5E00B5D7E6 /* Matrix.swift in Sources */,
 				8169858023A31CDE002F6CC6 /* ChemicalEquationBalancerApp.xcdatamodeld in Sources */,
+				81C0CD5F23DD55FE00DED9D6 /* ChemicalEquation.swift in Sources */,
 				81E521DB23A8575200661CDC /* ImageProcessorRequestModels.swift in Sources */,
 				8169857623A31CDE002F6CC6 /* AppDelegate.swift in Sources */,
 				81155FC923A70A6700B5D7E6 /* Vector.swift in Sources */,

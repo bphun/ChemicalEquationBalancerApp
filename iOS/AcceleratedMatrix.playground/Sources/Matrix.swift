@@ -2,8 +2,8 @@ import Accelerate
 
 public struct Matrix<T> where T: FloatingPoint, T: ExpressibleByFloatLiteral {
     
-    public let rows: Int
-    public let columns: Int
+    public var rows: Int
+    public var columns: Int
     internal var data: Vector<T>
     
     public init(_ data: [T], rows: Int, columns: Int) {
@@ -62,6 +62,46 @@ public struct Matrix<T> where T: FloatingPoint, T: ExpressibleByFloatLiteral {
             let strides = stride(from: indexForRowColumn(0, column), to: data.count, by: columns)
             strides.enumerated().forEach { data[$1] = newValue[$0] }
         }
+    }
+    
+    // Remove at column
+    public mutating func removeColumnAt(_ targetCol: Int) -> Vector<T> {
+        var col = Vector<T>()
+        for r in 0..<rows {
+            let index = indexForRowColumn(r, targetCol) - r
+            col.append(data[index])
+            data.remove(at: index)
+        }
+        columns -= 1
+        return col
+    }
+
+    // Remove at row
+    public mutating func removeRowAt(_ targetRow: Int) -> Vector<T> {
+        var row = Vector<T>()
+        for c in 0..<columns {
+            let index = indexForRowColumn(targetRow, c) - c
+            row.append(data[index])
+            data.remove(at: index)
+        }
+        rows -= 1
+        return row
+    }
+    
+    public func getColumnAt(_ columnIndex: Int) -> Vector<T> {
+        var col = Vector<T>()
+        for r in 0..<rows {
+             col.append(data[indexForRowColumn(r, columnIndex)])
+        }
+        return col
+    }
+
+    public func getRowAt(_ rowIndex: Int) -> Vector<T> {
+        var row = Vector<T>()
+        for c in 0..<columns {
+            row.append(data[indexForRowColumn(rowIndex, c)])
+        }
+        return row
     }
     
     private func indexIsValidForRow(_ row: Int, column: Int) -> Bool {
@@ -204,36 +244,49 @@ public func invert(_ a: Matrix<Double>) -> Matrix<Double> {
     return result
 }
 
-
 public func solve(matrix: Matrix<Double>, for vector: Vector<Double>) -> Vector<Double> {
-    var systemMatrix = matrix.data
-    var solution = vector 
+    let A: [Double] = matrix.data
+    let matA = la_matrix_from_double_buffer(A, la_count_t(matrix.rows), la_count_t(matrix.columns), la_count_t(matrix.columns), la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES))
     
-    var n = __CLPK_integer(sqrt(Float(matrix.data.count)))
-
-    var pivots = [__CLPK_integer](repeating: 0, count: Int(n))
+    let b: [Double] = vector
+    let vecB = la_matrix_from_double_buffer(b, la_count_t(vector.count), 1, 1, la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES))
     
-    var solutionCols: __CLPK_integer = 1
-    var systemLeadingDimensions = n
-    var solutionLeadingDimensions = n
-    var error: __CLPK_integer = 0
-
-    print(error)
+    let vecCj = la_solve(matA, vecB)
+    var cj: [Double] = Array(repeating: 0.0, count: vector.count)
     
-    withUnsafeMutablePointer(to: &n) {
-        dgetrf_($0, $0, &systemMatrix, $0, &pivots, &error)
+    let status = la_matrix_to_double_buffer(&cj, 1, vecCj)
+    if status == la_status_t(LA_SUCCESS) {
+        return cj
+    } else {
+        return Vector<Double>()
     }
-    
-    print(error)
-    
-    _ = "T".withCString {
-        dgetrs_(UnsafeMutablePointer(mutating: $0), &n, &solutionCols, &systemMatrix, &systemLeadingDimensions, &pivots, &solution, &solutionLeadingDimensions, &error)
-    }
-    
-    print(error)
-    
-    return solution
 }
+
+//public func solve(matrix: Matrix<Double>, for vector: Vector<Double>) -> Vector<Double> {
+//    var systemMatrix = matrix.data
+//    var solution = vector
+//
+//    var n = __CLPK_integer(sqrt(Float(matrix.data.count)))
+//
+//    var pivots = [__CLPK_integer](repeating: 0, count: Int(n))
+//
+//    var solutionCols: __CLPK_integer = 1
+//    var systemLeadingDimensions = n
+//    var solutionLeadingDimensions = n
+//    var error: __CLPK_integer = 0
+//
+//    withUnsafeMutablePointer(to: &n) {
+//        dgetrf_($0, $0, &systemMatrix, $0, &pivots, &error)
+//    }
+//
+//    _ = "T".withCString {
+//        dgetrs_(UnsafeMutablePointer(mutating: $0), &n, &solutionCols, &systemMatrix, &systemLeadingDimensions, &pivots, &solution, &solutionLeadingDimensions, &error)
+//    }
+//
+//    print(systemMatrix)
+//
+//    return systemMatrix
+//}
 
 extension Matrix: CustomStringConvertible {
     public var description: String {

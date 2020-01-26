@@ -8,7 +8,7 @@
 
 import Accelerate
 
-internal typealias Vector<FloatingPoint> = [FloatingPoint]
+public typealias Vector<FloatingPoint> = [FloatingPoint]
 
 extension Vector where Element: Strideable {
     init(from: Element, to: Element, by: Element.Stride) {
