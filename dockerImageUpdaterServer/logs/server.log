@@ -1,0 +1,534 @@
+2020-02-03 00:07:45,671 [MainProcess   ] [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:07:45 UTC
+2020-02-03 00:07:45,899 [MainProcess   ] [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:07:47,461 [MainProcess   ] [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:09:42,965 [MainProcess   ] [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:09:42 UTC
+2020-02-03 00:09:43,199 [MainProcess   ] [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:09:43,199 [MainProcess   ] [$BOLDINFO         $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:09:44,722 [MainProcess   ] [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:16:21,972 [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:16:12 UTC
+2020-02-03 00:16:22,208 [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:16:22,209 [$BOLDINFO         $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:16:23,754 [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:20:03,694 [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:19:58 UTC
+2020-02-03 00:20:03,933 [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:20:03,933 [$BOLDINFO         $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:20:05,507 [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:21:23,704 [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:21:23 UTC
+2020-02-03 00:21:23,947 [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:21:23,947 [$BOLDINFO         $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:21:25,467 [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:27:29,191 [$BOLDINFO         $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 00:27:29,191 [$BOLDINFO         $RESET]   * Restarting with stat
+2020-02-03 00:27:29,447 [$BOLDWARNING      $RESET]   * Debugger is active!
+2020-02-03 00:27:29,448 [$BOLDINFO         $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 00:27:37,000 [$BOLDINFO         $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:27:36 UTC
+2020-02-03 00:27:37,239 [$BOLDDEBUG        $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:27:37,239 [$BOLDINFO         $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:27:38,752 [$BOLDINFO         $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:27:38,753 [$BOLDINFO         $RESET]  52.2.68.253 - - [03/Feb/2020 00:27:38] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 00:28:01,629 [$BOLDINFO         $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 00:28:01,664 [$BOLDINFO         $RESET]   * Restarting with stat
+2020-02-03 00:28:01,928 [$BOLDWARNING        $RESET]   * Debugger is active!
+2020-02-03 00:28:01,928 [$BOLDINFO           $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 00:28:09,974 [$BOLDINFO           $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 00:28:10,005 [$BOLDINFO         $RESET]   * Restarting with stat
+2020-02-03 00:28:10,259 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 00:28:10,260 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 00:28:20,674 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 00:28:16 UTC
+2020-02-03 00:28:20,904 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 00:28:20,904 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 00:28:22,452 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 00:28:22,453 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 00:28:22] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 01:11:55,383 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 01:11:54 UTC
+2020-02-03 01:11:55,633 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 01:11:55,633 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 01:11:57,167 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 01:17:03,565 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 01:17:03,566 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:17:03,818 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:17:03,819 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:18:03,151 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 01:18:03,178 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:18:03,457 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:18:03,458 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:18:15,527 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 01:18:15,553 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:18:15,803 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:18:15,803 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:21:21,844 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 01:21:21,870 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:21:22,125 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:21:22,126 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:26:42,915 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 01:26:42,940 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:26:43,195 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:26:43,196 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:26:53,719 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 01:26:53 UTC
+2020-02-03 01:26:53,959 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 01:26:53,959 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 01:26:55,582 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 01:26:55,589 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 01:26:55] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 01:53:21,024 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 01:53:21,025 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:53:21,277 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:53:21,278 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:53:28,177 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 01:53:27 UTC
+2020-02-03 01:53:28,428 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 01:53:28,429 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 01:53:29,993 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 01:53:30,007 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 01:53:30] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 01:55:02,867 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/DockerhubWebhookCallback.py', reloading
+2020-02-03 01:55:02,894 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 01:55:03,145 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 01:55:03,146 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 01:55:15,467 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 01:55:14 UTC
+2020-02-03 01:55:15,696 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 01:55:15,696 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 01:55:17,348 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 01:55:17,357 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 01:55:17] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 02:00:05,099 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 02:00:05,100 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 02:00:06,926 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 02:00:06,927 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 02:00:09,969 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 02:00:09 UTC
+2020-02-03 02:00:10,215 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 02:00:10,216 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 02:00:11,780 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 02:00:11,789 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 02:00:11] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 02:02:49,371 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 02:02:49,372 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 02:02:49,624 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 02:02:49,625 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 02:02:53,832 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 02:02:53 UTC
+2020-02-03 02:02:54,068 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 02:02:54,068 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 02:02:55,608 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 02:02:55,609 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 02:02:55] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 03:33:30,025 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 03:33:30,026 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:33:30,278 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:33:30,279 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:33:36,626 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 03:33:35 UTC
+2020-02-03 03:33:36,877 [$BOLDDEBUG         $RESET]  Killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 03:33:36,877 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 03:33:38,412 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 03:33:38,413 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 03:33:38] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 03:48:23,475 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:48:23,505 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:48:23,759 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:48:23,760 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:50:37,501 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:50:37,532 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:50:37,781 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:50:37,782 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:51:01,918 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:51:01,946 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:51:02,204 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:51:02,205 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:51:07,817 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 03:51:07,825 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 03:51:07] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:56:21,006 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:56:21,039 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:56:21,290 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:56:21,291 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:56:27,731 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 03:56:27,739 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 03:56:27] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:56:44,419 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:56:44,446 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:56:44,701 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:56:44,701 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:56:49,086 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 03:56:49,093 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 03:56:49] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:57:07,834 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:57:07,861 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:57:08,113 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:57:08,114 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:57:16,410 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 03:57:16,417 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 03:57:16] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:57:52,360 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:57:52,387 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:57:52,647 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:57:52,648 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:57:58,525 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 03:57:58,532 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 03:57:58] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:58:23,830 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:58:23,857 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:58:24,107 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:58:24,107 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:58:31,665 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 03:58:31] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:59:26,454 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:59:26,481 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:59:26,734 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:59:26,735 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 03:59:38,669 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 03:59:37 UTC
+2020-02-03 03:59:38,677 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 03:59:38] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 03:59:58,914 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 03:59:58,940 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 03:59:59,195 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 03:59:59,195 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:00:09,850 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:00:08 UTC
+2020-02-03 04:00:10,086 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:00:10,086 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:00:10,979 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:00:10] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:01:58,216 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:01:58,244 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:01:58,529 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:01:58,529 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:02:09,287 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:02:09] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:02:42,777 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:02:42,807 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:02:43,064 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:02:43,064 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:02:47,647 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:02:47 UTC
+2020-02-03 04:02:47,661 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:02:47,669 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:02:47] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:03:03,176 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:03:03,204 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:03:03,460 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:03:03,460 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:03:08,175 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:03:07 UTC
+2020-02-03 04:03:08,188 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:03:08,195 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:03:08] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:06:23,578 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:06:23,611 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:06:23,876 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:06:23,877 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:06:58,068 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:06:58,095 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:09:40,031 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 04:09:40,031 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:09:40,287 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:09:40,288 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:09:46,792 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:09:46] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:10:35,597 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:10:35,625 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:10:35,883 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:10:35,884 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:10:39,982 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:10:39] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:11:22,151 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:11:22,178 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:11:22,433 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:11:22,434 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:11:25,601 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:11:25 UTC
+2020-02-03 04:11:25,615 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:11:25,629 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:11:25] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:12:42,881 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:12:42,910 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:12:43,164 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:12:43,165 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:13:01,268 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:13:01,306 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:13:01,582 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:13:01,583 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:13:10,018 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:13:09 UTC
+2020-02-03 04:13:10,031 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:13:10,042 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:13:10] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:15:31,432 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:15:31,458 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:15:31,714 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:15:31,714 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:15:35,382 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:15:34 UTC
+2020-02-03 04:15:35,395 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:15:35,406 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:15:35] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:21:30,725 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:21:30,753 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:21:31,008 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:21:31,009 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:21:34,752 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:21:33 UTC
+2020-02-03 04:21:34,765 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:21:34,776 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:21:34] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:22:26,322 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:22:26,349 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:22:26,602 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:22:26,603 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:22:40,064 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:22:39 UTC
+2020-02-03 04:22:40,077 [$BOLDERROR         $RESET]  unable to get port bindings for bphun/chemical-equation-balancer:nginx
+2020-02-03 04:22:40,087 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:22:40] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:24:00,129 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:24:00,160 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:24:00,493 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:24:00,494 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:24:14,613 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:24:13 UTC
+2020-02-03 04:24:14,634 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:24:14] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:25:21,960 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:25:21,987 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:25:22,246 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:25:22,246 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:25:26,982 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:25:25 UTC
+2020-02-03 04:25:27,258 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:25:27,258 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:25:28,084 [$BOLDINFO          $RESET]  failed to start container with image bphun/chemical-equation-balancer:nginx. error: name 'true' is not defined
+2020-02-03 04:25:28,099 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:25:28] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:25:38,336 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:25:38,364 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:25:38,619 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:25:38,619 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:25:52,698 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:25:52,724 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:25:52,976 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:25:52,977 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:25:59,037 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:25:58 UTC
+2020-02-03 04:25:59,051 [$BOLDERROR         $RESET]  Image with name bphun/chemical-equation-balancer:nginx not found
+2020-02-03 04:25:59,062 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:25:59] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:26:13,944 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:26:13 UTC
+2020-02-03 04:26:14,241 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:26:14,241 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:26:15,822 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:26:15,833 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:26:15] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:28:18,797 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:28:18,829 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:28:19,086 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:28:19,087 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:28:23,506 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:28:23 UTC
+2020-02-03 04:28:23,743 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:28:23,744 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:28:25,270 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:28:25,282 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:28:25] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:28:46,241 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:28:46,266 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:28:46,519 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:28:46,520 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:28:49,470 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:28:48 UTC
+2020-02-03 04:28:49,710 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:28:49,710 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:28:51,233 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:28:51,234 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:28:51] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:28:58,589 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:28:58,615 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:28:58,869 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:28:58,869 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:29:00,881 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:29:00,907 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:29:01,246 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:29:01,247 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:29:05,270 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:29:05,301 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:29:05,557 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:29:05,557 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:29:09,002 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:29:08 UTC
+2020-02-03 04:29:09,270 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:29:09,270 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:29:10,823 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:29:10,824 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:29:10] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:29:24,669 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:29:24,694 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:29:24,947 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:29:24,948 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:29:28,335 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:29:27 UTC
+2020-02-03 04:29:28,581 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:29:28,581 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:29:30,135 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:29:30,136 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:29:30] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:30:06,178 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:30:06,205 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:30:06,459 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:30:06,460 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:30:12,043 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:30:11 UTC
+2020-02-03 04:30:12,282 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:30:12,282 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:30:13,903 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:30:13,904 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:30:13] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:31:24,902 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:31:24,927 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:31:25,178 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:31:25,179 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:31:28,656 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:31:28 UTC
+2020-02-03 04:31:28,891 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:31:28,892 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:31:30,430 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:31:30,431 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:31:30] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:31:35,237 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:31:35,263 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:31:35,514 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:31:35,515 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:32:36,859 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:32:36,885 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:33:52,481 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 04:33:52,482 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:33:52,740 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:33:52,740 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:33:53,165 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:33:52 UTC
+2020-02-03 04:33:53,399 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:33:53,399 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:33:54,921 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:33:54,922 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:33:54] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:34:10,843 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:34:10,872 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:34:11,132 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:34:11,133 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:34:17,540 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:34:17 UTC
+2020-02-03 04:34:17,789 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:17,790 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:19,345 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:34:19,353 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:34:19] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:34:31,245 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:34:31,274 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:34:31,532 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:34:31,532 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:34:35,185 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:34:34 UTC
+2020-02-03 04:34:35,432 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:35,432 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:36,965 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:34:36,977 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:34:36] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:34:46,617 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:34:46,647 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:34:46,904 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:34:46,904 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:34:51,009 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:34:50 UTC
+2020-02-03 04:34:51,251 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:51,252 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:52,784 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:34:52,785 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:34:52] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:34:59,612 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:34:59 UTC
+2020-02-03 04:34:59,863 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:34:59,863 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:01,402 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:01,403 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:35:01] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:03,323 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:02 UTC
+2020-02-03 04:35:03,585 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:03,585 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:05,144 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:05,145 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:35:05] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:06,671 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:06 UTC
+2020-02-03 04:35:06,928 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:06,928 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:08,462 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:08,462 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:35:08] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:11,250 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:10 UTC
+2020-02-03 04:35:11,500 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:11,500 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:13,090 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:13,091 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:35:13] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:17,716 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:17 UTC
+2020-02-03 04:35:17,966 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:17,966 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:19,507 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:19,508 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:35:19] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:20,816 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:20 UTC
+2020-02-03 04:35:21,057 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:21,057 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:35:22,615 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:35:22,616 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:35:22] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:35:47,277 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:35:47,303 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:35:47,556 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:35:47,557 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:35:56,609 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:35:56,637 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:35:56,891 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:35:56,892 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:36:00,280 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:35:59 UTC
+2020-02-03 04:36:00,527 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:00,527 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:02,089 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:36:02,100 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:36:02] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:36:08,960 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:36:08,990 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:36:09,241 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:36:09,242 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:36:12,424 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:36:11 UTC
+2020-02-03 04:36:12,680 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:12,680 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:14,212 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:36:14,520 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:36:14] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:36:21,311 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:36:21,337 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:36:21,591 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:36:21,592 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:36:30,643 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:36:30,670 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:36:30,980 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:36:30,981 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:36:40,339 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:36:39 UTC
+2020-02-03 04:36:40,583 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:40,583 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:36:42,118 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:36:42,389 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:36:42] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:37:15,231 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:37:15,258 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:37:15,514 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:37:15,515 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:37:19,352 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:37:18 UTC
+2020-02-03 04:37:19,593 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:37:19,593 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:37:21,151 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:37:21,448 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:37:21] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:37:31,612 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:37:31,638 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:37:31,891 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:37:31,892 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:37:57,032 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:37:57,058 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:37:57,305 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:37:57,305 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:38:00,873 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:38:00 UTC
+2020-02-03 04:38:01,132 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:38:01,132 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:38:02,764 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:38:03,057 [$BOLDERROR         $RESET]  error parsing json
+2020-02-03 04:38:03,058 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:38:03] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:38:19,432 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:38:19,464 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:38:19,718 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:38:19,718 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:38:23,302 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:38:22 UTC
+2020-02-03 04:38:23,550 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:38:23,550 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:38:25,101 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:38:25,426 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:38:25] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:39:56,266 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:39:56,293 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:39:56,548 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:39:56,548 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:40:00,225 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:39:59 UTC
+2020-02-03 04:40:00,463 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:40:00,463 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:40:02,110 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:40:02,462 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:40:02] "POST /hooks HTTP/1.1" 500 -
+2020-02-03 04:40:43,814 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:40:43,841 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:40:44,095 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:40:44,096 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:40:46,827 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:40:46 UTC
+2020-02-03 04:40:47,080 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:40:47,080 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:40:48,613 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:40:48,886 [$BOLDINFO          $RESET]  52.204.103.25 - - [03/Feb/2020 04:40:48] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:42:40,947 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-03 04:42:40,948 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:42:41,197 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:42:41,198 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:42:57,288 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:42:57,313 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:42:57,561 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:42:57,561 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:43:01,325 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:43:00 UTC
+2020-02-03 04:43:01,614 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:43:01,614 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:43:03,137 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:43:03,453 [$BOLDINFO          $RESET]  52.204.105.43 - - [03/Feb/2020 04:43:03] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:43:13,660 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:43:13,686 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:43:14,017 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:43:14,018 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:43:19,047 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:43:19,073 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:43:19,323 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:43:19,324 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:43:22,564 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:43:22 UTC
+2020-02-03 04:43:22,812 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:43:22,812 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:43:24,384 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-03 04:43:24,659 [$BOLDINFO          $RESET]  52.2.68.253 - - [03/Feb/2020 04:43:24] "POST /hooks HTTP/1.1" 200 -
+2020-02-03 04:43:29,381 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:43:29,407 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:43:29,662 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:43:29,663 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:43:45,753 [$BOLDINFO          $RESET]   * Detected change in '/home/ubuntu/dockerImageUpdaterServer/server.py', reloading
+2020-02-03 04:43:45,779 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-03 04:43:46,031 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-03 04:43:46,031 [$BOLDINFO          $RESET]   * Debugger PIN: 238-616-129
+2020-02-03 04:44:56,252 [$BOLDINFO          $RESET]  image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-02-03 04:44:55 UTC
+2020-02-03 04:44:56,493 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
+2020-02-03 04:44:56,493 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-03 04:44:58,023 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
