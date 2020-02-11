@@ -12,7 +12,6 @@ COPY ObjJsonEncoder.py dockerImageUpdater/ObjJsonEncoder.py
 COPY logger.py dockerImageUpdater/logger.py
 COPY server.py dockerImageUpdater/server.py
 COPY wsgi.py dockerImageUpdater/wsgi.py
-COPY dockerImageUpdater.service /etc/systemd/system/dockerImageUpdater.service
 
 EXPOSE 8081
 WORKDIR dockerImageUpdater

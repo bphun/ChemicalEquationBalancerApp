@@ -21,15 +21,15 @@ def parseJson(data):
     try:
         result = json.loads(data, object_hook=lambda d: namedtuple('x', d.keys())(*d.values()))
     except:
-        logger.error("error parsing json")
-        result = DockerhubWebhookCallback("error", "unable to parse request json", "docker container auto reload service", "n/a")
+        logger.error("Error parsing json")
+        result = DockerhubWebhookCallback("error", "Unable to parse request json", "Docker container auto reload service", "N/A")
 
     return result
 
 def reloadImage(requestBody):
     imageName = "{0}:{1}".format(requestBody.repository.repo_name, requestBody.push_data.tag)
 
-    logger.info("image named {0} pushed to repo by {1} at {2}".format(imageName, requestBody.push_data.pusher, toTimeStr(requestBody.push_data.pushed_at)))
+    logger.info("Image named {0} pushed to repo by {1} at {2}".format(imageName, requestBody.push_data.pusher, toTimeStr(requestBody.push_data.pushed_at)))
 
     client = docker.from_env()
 
@@ -40,30 +40,29 @@ def reloadImage(requestBody):
             try:
                 containerPorts = container.ports
                 container.kill()
-                logger.debug("killed container with image {}".format(imageName))
+                logger.debug("Killed container with image {}".format(imageName))
                 break
             except Exception as e:
-                logger.error("error killing {}".format(imageName))
-                return DockerhubWebhookCallback("error", "unable to kill {}. error: {}".format(imageName, e), "docker container auto reload service", "n/a")
+                logger.error("Error killing {}".format(imageName))
+                return DockerhubWebhookCallback("error", "Unable to kill {}. error: {}".format(imageName, e), "Docker container auto reload service", "N/A")
 
     portMappings = {}
     if containerPorts:
         for containerport, hostport in containerPorts.items():
             portMappings[containerport] = hostport
     else:
-        logger.error("Image with name {} not found".format(imageName))
-        return DockerhubWebhookCallback("error", "Image with name {} not found".format(imageName), "docker container auto reload service", "n/a")
+        logger.error("Image with name {} not found. Starting new container runtime".format(imageName))
 
-    logger.info("pulling latest version of {}".format(imageName))
+    logger.info("Pulling latest version of {}".format(imageName))
     client.images.pull(imageName)
     try:
         container = client.containers.run(imageName, detach=True, ports=portMappings, restart_policy={"name": "always"}, )
-        logger.info("restarted {} with latest revision of image".format(imageName))
+        logger.info("Restarted {} with latest revision of image".format(imageName))
     except Exception as e:
-        logger.info("failed to start container with image {}. error: {}".format(imageName, e))
-        return DockerhubWebhookCallback("error", "unable to start container with image {}. error: {}".format(imageName, e), "docker container auto reload service", "n/a")
+        logger.info("Failed to start container with image {}. error: {}".format(imageName, e))
+        return DockerhubWebhookCallback("error", "Unable to start container with image {}. Error: {}".format(imageName, e), "Docker container auto reload service", "N/A")
 
-    return DockerhubWebhookCallback("success", "reloaded {} successfully".format(imageName), "docker container auto reload service", "n/a")
+    return DockerhubWebhookCallback("success", "Reloaded {} successfully".format(imageName), "Docker container auto reload service", "N/A")
 
 @app.route('/hooks', methods=["POST"])
 def webhook():
