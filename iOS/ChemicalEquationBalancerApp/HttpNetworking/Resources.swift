@@ -29,13 +29,15 @@ protocol ApiResource {
 struct ImageProcessResource: ApiResource {
     typealias ResponseBodyModelType = ImageProcesserOutput
 
-    let hostUrl = "http://192.168.1.42:8080"
+    let hostUrl: String
     let path = "/proxy"
     let method: HTTPMethod = .POST
 
     var urlRequest: URLRequest
 
-    init(data: Data? = nil) {
+    init(data: Data? = nil, useProdApi: Bool) {
+        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = path
 
@@ -46,7 +48,9 @@ struct ImageProcessResource: ApiResource {
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
     }
     
-    init(data: Data? = nil, shouldUploadImage: Bool) {
+    init(data: Data? = nil, shouldUploadImage: Bool, useProdApi: Bool) {
+        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = path
 
@@ -60,17 +64,19 @@ struct ImageProcessResource: ApiResource {
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
     }
     
-    init(data: Data? = nil, shouldUploadImage: Bool, equationStr: String?) {
+    init(data: Data? = nil, shouldUploadImage: Bool, equationStr: String?, useProdApi: Bool) {
+        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        
         var urlComponents = URLComponents(string: hostUrl)!
-        urlComponents.path = path
+        urlComponents.path = useProdApi ? "/api/v1" + path : path
 
         var queryItems = [URLQueryItem(name: "upload", value: shouldUploadImage ? "true" : "false")]
         if equationStr != nil {
-            print("setting equation str")
-            queryItems.append(URLQueryItem(name: "eq", value: equationStr!))
+            queryItems.append(URLQueryItem(name: "eq", value: equationStr!.addingPercentEncoding(withAllowedCharacters: .alphanumerics)))
         }
+        print(queryItems)
         urlComponents.queryItems = queryItems
-        
+        print(urlComponents.url)
         urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = method.rawValue
         urlRequest.httpBody = data

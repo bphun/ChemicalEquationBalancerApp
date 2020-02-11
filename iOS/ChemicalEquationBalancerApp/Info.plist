@@ -5,9 +5,16 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>ec2-54-67-49-13.us-west-1.compute.amazonaws.com:8080</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+			</dict>
 			<key>localhost:8080</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
@@ -20,7 +27,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>NSCameraUsageDescription</key>
-	<string>Capture chemical equation images</string>
+	<string>The camera is used to capture chemical equation images</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -79,5 +86,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>PRODUCTION_API_HOSTNAME</key>
+	<string>$(PRODUCTION_API_HOSTNAME)</string>
+	<key>LOCAL_TEST_API_HOSTNAME</key>
+	<string>$(LOCAL_TEST_API_HOSTNAME)</string>
 </dict>
 </plist>

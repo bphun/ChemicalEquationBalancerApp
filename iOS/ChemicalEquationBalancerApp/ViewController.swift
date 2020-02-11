@@ -14,6 +14,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     @IBOutlet weak var imageCaptureButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var uploadImageSwitch: UISwitch!
+    @IBOutlet weak var shouldUseProdApiSwitch: UISwitch!
     
     var frameExtractor: FrameExtractor!
     var shouldCaptureFrame = false
@@ -69,29 +70,32 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         self.imageView.image = image
         
         if shouldCaptureFrame && !requestInProgress {
+            let shouldUploadImage = self.uploadImageSwitch.isOn
+            let useProdApi = self.shouldUseProdApiSwitch.isOn
+            
             shouldCaptureFrame = false
             
             displayActivityIndicator()
-            let shouldUploadImage = self.uploadImageSwitch.isOn
+            
             DispatchQueue.global().async {
                 print("Request start")
-                self.processImage(image, shouldUploadImage: shouldUploadImage)
+                self.processImage(image, shouldUploadImage: shouldUploadImage, useProdApi: useProdApi)
             }
         }
     }
     
-    func processImage(_ image: UIImage, shouldUploadImage: Bool) {
+    func processImage(_ image: UIImage, shouldUploadImage: Bool, useProdApi: Bool) {
         guard let base64EncodedImageString = image.toBase64() else { return }
-        imageRequest(base64EncodedImage: base64EncodedImageString, shouldUploadImage: shouldUploadImage)
+        imageRequest(base64EncodedImage: base64EncodedImageString, shouldUploadImage: shouldUploadImage, useProdApi: useProdApi)
     }
     
-    func imageRequest(base64EncodedImage: String, shouldUploadImage: Bool) {
+    func imageRequest(base64EncodedImage: String, shouldUploadImage: Bool, useProdApi: Bool) {
         let feature = ImageprocessorFeature(maxResults: 20, type: FeatureType.DocumentTextDetection.rawValue)
         let image = ImageProcessorImage(base64EncodedString: base64EncodedImage)
         let imageProcessorRequest = ImageProcessorRequest(image: image, feature: feature)
         let imageProcessorRequestBody = ImageProcessorRequestBody(request: imageProcessorRequest)
         let requestBodyJson = try! JSONEncoder().encode(imageProcessorRequestBody)
-        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr))
+        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr, useProdApi: useProdApi))
         
         requestInProgress = true
 //        print(requestBodyJson.prettyPrintedJSONString)
@@ -150,6 +154,6 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 extension UIImage {
     func toBase64() -> String? {
         guard let imageData = self.pngData() else { return nil }
-        return imageData.base64EncodedString()/*.replacingOccurrences(of: "/", with: "")*/
+        return imageData.base64EncodedString()
     }
 }

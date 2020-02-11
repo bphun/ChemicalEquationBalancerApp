@@ -17,6 +17,7 @@
 		8169858223A31CDE002F6CC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8169858123A31CDE002F6CC6 /* Assets.xcassets */; };
 		8169858523A31CDE002F6CC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8169858323A31CDE002F6CC6 /* LaunchScreen.storyboard */; };
 		8169859023A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */; };
+		819E965123DFF57C00F25D98 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819E965023DFF57C00F25D98 /* Environment.swift */; };
 		81C0CD5F23DD55FE00DED9D6 /* ChemicalEquation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0CD5E23DD55FE00DED9D6 /* ChemicalEquation.swift */; };
 		81DD042023C809DF00B7EDBB /* ImageProcessorResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */; };
 		81E521D823A8574000661CDC /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E521D723A8574000661CDC /* NetworkRequest.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		81155FC623A70A5E00B5D7E6 /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		81155FC823A70A6700B5D7E6 /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		8136EB3023DF501C00240D90 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		8169857223A31CDE002F6CC6 /* ChemicalEquationBalancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChemicalEquationBalancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8169857523A31CDE002F6CC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8169857723A31CDE002F6CC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 		8169858B23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChemicalEquationBalancerAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8169858F23A31CDF002F6CC6 /* ChemicalEquationBalancerAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChemicalEquationBalancerAppTests.swift; sourceTree = "<group>"; };
 		8169859123A31CDF002F6CC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		819E965023DFF57C00F25D98 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		81C0CD5E23DD55FE00DED9D6 /* ChemicalEquation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChemicalEquation.swift; sourceTree = "<group>"; };
 		81DD041F23C809DF00B7EDBB /* ImageProcessorResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorResponseModels.swift; sourceTree = "<group>"; };
 		81E521D723A8574000661CDC /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 		8169857423A31CDE002F6CC6 /* ChemicalEquationBalancerApp */ = {
 			isa = PBXGroup;
 			children = (
+				819E965023DFF57C00F25D98 /* Environment.swift */,
 				8169857523A31CDE002F6CC6 /* AppDelegate.swift */,
 				8169857723A31CDE002F6CC6 /* SceneDelegate.swift */,
 				8169857923A31CDE002F6CC6 /* ViewController.swift */,
@@ -130,6 +134,7 @@
 				8169858123A31CDE002F6CC6 /* Assets.xcassets */,
 				8169858323A31CDE002F6CC6 /* LaunchScreen.storyboard */,
 				8169858623A31CDE002F6CC6 /* Info.plist */,
+				8136EB3023DF501C00240D90 /* Config.xcconfig */,
 				8169857E23A31CDE002F6CC6 /* ChemicalEquationBalancerApp.xcdatamodeld */,
 			);
 			path = ChemicalEquationBalancerApp;
@@ -257,6 +262,7 @@
 				81E521D823A8574000661CDC /* NetworkRequest.swift in Sources */,
 				81E521E123A9600300661CDC /* FrameExtractor.swift in Sources */,
 				81E521DD23A8575F00661CDC /* Resources.swift in Sources */,
+				819E965123DFF57C00F25D98 /* Environment.swift in Sources */,
 				81DD042023C809DF00B7EDBB /* ImageProcessorResponseModels.swift in Sources */,
 				8169857A23A31CDE002F6CC6 /* ViewController.swift in Sources */,
 				81155FC723A70A5E00B5D7E6 /* Matrix.swift in Sources */,
@@ -310,6 +316,7 @@
 /* Begin XCBuildConfiguration section */
 		8169859223A31CDF002F6CC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8136EB3023DF501C00240D90 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -424,6 +431,7 @@
 		};
 		8169859523A31CDF002F6CC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8136EB3023DF501C00240D90 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
