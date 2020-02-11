@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBox;
+import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBoxDiff;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoApiResponse;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoId;
@@ -21,10 +22,11 @@ public class ImageProcessorRequestRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime, long requestEndTime) {
+    public void uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime, long requestEndTime,
+            String equationString) {
         jdbcTemplate.update("INSERT INTO ImageProcessorRequestInfo"
-                + "(id, s3ImageUrl, gcpRequestStartTimeMs, gcpRequestEndTimeMs)" + "VALUES (?, ?, ?, ?)", requestId,
-                s3ImageUrl, requestStartTime, requestEndTime);
+                + "(id, s3ImageUrl, gcpRequestStartTimeMs, gcpRequestEndTimeMs, userInputtedChemicalEquationString)"
+                + "VALUES (?, ?, ?, ?, ?)", requestId, s3ImageUrl, requestStartTime, requestEndTime, equationString);
     }
 
     public List<StoredRequestInfo> getRequestList() {
@@ -76,23 +78,40 @@ public class ImageProcessorRequestRepository {
         return doValueUpdate(id, "onDeviceImageProcessDeviceName", value);
     }
 
-    public StoredRequestInfoApiResponse updateVerificationStatus(String id, Boolean value) {
-        return doValueUpdate(id, "chemicalEquationStringVerified", value);
+    public StoredRequestInfoApiResponse deleteBoundingBox(BoundingBox boundingBox) {
+        StoredRequestInfoApiResponse response;
+
+        try {
+            String query = "DELETE FROM ChemicalEquationBoundingBox WHERE id=?";
+            int changedRows = jdbcTemplate.update(query, boundingBox.getId());
+
+            if (changedRows > 0) {
+                response = new StoredRequestInfoApiResponse("success", "");
+            } else {
+                response = new StoredRequestInfoApiResponse("error", "SQL error");
+            }
+        } catch (Exception e) {
+            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+        }
+
+        return response;
     }
 
-    public StoredRequestInfoApiResponse addBoundingBoxForRequest(BoundingBox boundingBox) {
+    public StoredRequestInfoApiResponse addBoundingBox(BoundingBox boundingBox) {
         if (boundingBox.getId() == null || boundingBox.getId().equals("")) {
             boundingBox.setId(UUID.randomUUID().toString());
         }
-
         StoredRequestInfoApiResponse response;
+
         try {
-            int changedRows = jdbcTemplate.update(
-                    "INSERT INTO ChemicalEquationBoundingBox"
-                            + "(id, imageProcessorRequestInfoId, originX, originY, width, height)"
-                            + "VALUES (?, ?, ?, ?, ?, ?)",
-                    boundingBox.getId(), boundingBox.getImageProcessorRequestInfoId(), boundingBox.getOriginX(),
-                    boundingBox.getOriginY(), boundingBox.getWidth(), boundingBox.getHeight());
+            String query = "INSERT INTO ChemicalEquationBoundingBox"
+                + "(id, imageProcessorRequestInfoId, originX, originY, width, height, tags)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE originX=?,"
+                + "originY=?, width=?, height=?, tags=?";
+
+            int changedRows = jdbcTemplate.update(query, boundingBox.getId(), boundingBox.getRequestInfoId(), boundingBox.getOriginX(), boundingBox.getOriginY(),
+            boundingBox.getWidth(), boundingBox.getHeight(), boundingBox.tagStr(), boundingBox.getOriginX(), boundingBox.getOriginX(),
+            boundingBox.getWidth(), boundingBox.getHeight(), boundingBox.tagStr());
 
             if (changedRows > 0) {
                 response = new StoredRequestInfoApiResponse("success", "");
@@ -107,12 +126,36 @@ public class ImageProcessorRequestRepository {
         return response;
     }
 
+    public StoredRequestInfoApiResponse updateBoundingBoxes(BoundingBoxDiff boundingBoxes) {
+        StoredRequestInfoApiResponse response = null;
+
+        for (BoundingBox boundingBox : boundingBoxes.getModified()) {
+            response = addBoundingBox(boundingBox);
+
+            if (response.getStatus() == "error") {
+                break;
+            }
+        }
+
+        for (BoundingBox boundingBox : boundingBoxes.getDeleted()) {
+            response = deleteBoundingBox(boundingBox);
+
+
+            if (response.getStatus() == "error") {
+                break;
+            }
+        }
+
+        return response;
+    }
+
     public List<BoundingBox> getBoundingBoxesForRequest(String requestId) {
         return jdbcTemplate.query(
                 "SELECT * FROM ChemicalEquationBoundingBox" + " WHERE imageProcessorRequestInfoId='" + requestId + "'",
                 (resource, rowNum) -> new BoundingBox(resource.getString("id"),
                         resource.getString("imageProcessorRequestInfoId"), resource.getInt("originX"),
-                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height")));
+                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height"),
+                        resource.getString("tags").split(",")));
     }
 
     public StoredRequestInfoApiResponse getNextRequestIdAfterTimestamp(String timestamp) {

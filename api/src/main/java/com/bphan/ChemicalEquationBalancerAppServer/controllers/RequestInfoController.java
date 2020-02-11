@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.bphan.ChemicalEquationBalancerAppServer.DatabaseConnector.ImageProcessorRequestRepository;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBox;
+import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBoxDiff;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoApiResponse;
 import com.bphan.ChemicalEquationBalancerAppServer.Services.AmazonClient;
@@ -28,20 +29,22 @@ public class RequestInfoController {
 
     @Autowired
     private AmazonClient amazonClient;
+
+    private final String frontendHostname = "${crossOrigin.frontendHostname}";
     
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/list")
     public List<StoredRequestInfo> getStoredRequestInfoList() {
         return imageProcessorRequestRepository.getRequestList();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/view")
     public StoredRequestInfo getStoredRequestInfoList(@RequestParam(value = "rid", required = true) String id) {
         return imageProcessorRequestRepository.getRequestWithId(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/updateValue")
     public StoredRequestInfoApiResponse updateValue(@RequestParam(value = "rid", required = true) String id,
             @RequestParam(value = "vid", required = true) String valueId,
@@ -75,31 +78,37 @@ public class RequestInfoController {
         return responseBody;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/addBoundingBox")
-    public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBox boundingBox) {
-        return imageProcessorRequestRepository.addBoundingBoxForRequest(boundingBox);
+    @CrossOrigin(origins = frontendHostname)
+    @PostMapping("/updateBoundingBoxes")
+    public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBoxDiff boundingBoxes) {
+        return imageProcessorRequestRepository.updateBoundingBoxes(boundingBoxes);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
+    @PostMapping("/addBoundingBox")
+    public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBox boundingBox) {
+        return imageProcessorRequestRepository.addBoundingBox(boundingBox);
+    }
+
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/getBoundingBoxes")
     public List<BoundingBox> addBoundingBox(@RequestParam(value = "rid", required = true) String requestId) {
         return imageProcessorRequestRepository.getBoundingBoxesForRequest(requestId);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/nextRequest")
     public StoredRequestInfoApiResponse nextRequest(@RequestParam(value = "t", required = true) String timestamp) {
         return imageProcessorRequestRepository.getNextRequestIdAfterTimestamp(timestamp);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/previousRequest")
     public StoredRequestInfoApiResponse previousRequest(@RequestParam(value = "t", required = true) String timestamp) {
         return imageProcessorRequestRepository.getPreviousRequestIdBeforeTimestamp(timestamp);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/deleteRequest")
     public StoredRequestInfoApiResponse deleteRequest(@RequestParam(value = "rid", required = true) String requestId) {
         StoredRequestInfoApiResponse response = imageProcessorRequestRepository.deleteRequest(requestId);

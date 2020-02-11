@@ -1,39 +1,54 @@
 package com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringJoiner;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 public class BoundingBox {
     private String id;
-    private String imageProcessorRequestInfoId;
+    private String requestInfoId;
     private int originX;
     private int originY;
     private int width;
     private int height;
+    private List<String> tags;
 
     public BoundingBox() {
-        
+
     }
 
-    public BoundingBox(String imageProcessorRequestInfoId, int originX, int originY,
-            int width, int height) {
+    public BoundingBox(String requestInfoId, int originX, int originY, int width, int height, List<String> tags) {
         this.id = "";
-        this.imageProcessorRequestInfoId = imageProcessorRequestInfoId;
+        this.requestInfoId = requestInfoId;
         this.originX = originX;
         this.originY = originY;
         this.width = width;
         this.height = height;
+        this.tags = tags;
     }
 
-    public BoundingBox(String id, String imageProcessorRequestInfoId, int originX, int originY,
-            int width, int height) {
+    public BoundingBox(String id, String requestInfoId, int originX, int originY, int width, int height, String tags) {
         this.id = id;
-        this.imageProcessorRequestInfoId = imageProcessorRequestInfoId;
+        this.requestInfoId = requestInfoId;
         this.originX = originX;
         this.originY = originY;
         this.width = width;
         this.height = height;
+        this.tags = Arrays.asList(tags.split(","));
+    }
+
+    public BoundingBox(String id, String requestInfoId, int originX, int originY, int width, int height, String[] tags) {
+        this.id = id;
+        this.requestInfoId = requestInfoId;
+        this.originX = originX;
+        this.originY = originY;
+        this.width = width;
+        this.height = height;
+        this.tags = Arrays.asList(tags);
     }
 
     @JsonProperty("id")
@@ -46,14 +61,14 @@ public class BoundingBox {
         this.id = id;
     }
 
-    @JsonProperty("imageProcessorRequestInfoId")
-    public String getImageProcessorRequestInfoId() {
-        return imageProcessorRequestInfoId;
+    @JsonProperty("requestInfoId")
+    public String getRequestInfoId() {
+        return requestInfoId;
     }
 
-    @JsonProperty("imageProcessorRequestInfoId")
-    public void setImageProcessorRequestInfoId(String imageProcessorRequestInfoId) {
-        this.imageProcessorRequestInfoId = imageProcessorRequestInfoId;
+    @JsonProperty("requestInfoId")
+    public void setRequestInfoId(String requestInfoId) {
+        this.requestInfoId = requestInfoId;
     }
 
     @JsonProperty("originX")
@@ -94,5 +109,21 @@ public class BoundingBox {
     @JsonProperty("height")
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    @JsonProperty("tags")
+    public List<String> getTags() {
+        return tags;
+    }
+
+    @JsonProperty("tags")
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String tagStr() {
+        StringJoiner joiner = new StringJoiner(",", "", "");
+        tags.forEach(joiner::add);
+        return joiner.toString();
     }
 }

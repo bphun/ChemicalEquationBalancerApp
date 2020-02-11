@@ -1,5 +1,8 @@
 package com.bphan.ChemicalEquationBalancerAppServer.controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +32,7 @@ class RequestProxyController {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String URL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCjcvFqGbD6kaQWy9g5kGLxWK0wvhr4l6k";
+    private final String frontendHostname = "${crossOrigin.frontendHostname}";
 
     @Autowired
     private ImageProcessorRequestRepository imageProcessorRequestRepository;
@@ -35,10 +40,12 @@ class RequestProxyController {
     @Autowired
     private AmazonClient amazonClient;
 
+    @CrossOrigin(origins = frontendHostname)
     @RequestMapping(value = "/proxy", method = RequestMethod.POST)
     public ResponseEntity<ImageProcessorResponse> proxy(@RequestBody ImageProcessorRequest requestBody,
             @RequestHeader("Content-Length") String contentLength,
             @RequestParam(value = "upload", required = false) boolean shouldUploadImg,
+            @RequestParam(value = "eq", required = false, defaultValue = "") String equationString,
             HttpServletResponse response) {
 
         HttpHeaders gcpApiRequestHeaders = new HttpHeaders();
@@ -61,10 +68,21 @@ class RequestProxyController {
 
         if (shouldUploadImg) {
             requestInfoUploadRunner = new RequestInfoUploadRunner(imageProcessorRequestRepository, amazonClient,
-                    requestId, base64EncodedImage, requestStartTime, requestEndTime);
+                    requestId, base64EncodedImage, requestStartTime, requestEndTime, decodeValue(equationString));
             new Thread(requestInfoUploadRunner).start();
         }
 
         return ResponseEntity.ok(imageProcessorResponse);
     }
+
+    // Decodes a URL encoded string using `UTF-8`
+    public static String decodeValue(String value) {
+        try {
+            return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return value;
+    }
+
 }

@@ -316,7 +316,7 @@ enum Locale {
     af, sq, ar, hy, be, bn, bg, ca, zh, hr, cs, da, nl, en, et, fil, tl, fi, fr, de, el, gu, iw, hi, hu, is, id, it, ja,
     kn, km, ko, lo, lv, lt, mk, ms, ml, mr, ne, no, fa, pl, pt, pa, ro, ru, ru_PETR1708, sr, sr_Latn, sk, sl, es, sv,
     ta, te, th, tr, uk, vi, yi, am, grc, as, az, az_cyrl, eu, bs, my, ceb, chr, dv, dz, eo, gl, ka, ht, ga, jv, kk, ky,
-    la, mt, mn, or, ps, sa, si, sw, syr, bo, ti, ur, uz, uz_cyrl, cy, zu, fy, mi, co, hmn, haw, yo, sd, ny, ku, lb, und;
+    la, mt, mn, or, ps, sa, si, sw, syr, bo, ti, ur, uz, uz_cyrl, cy, zu, fy, mi, co, hmn, haw, yo, sd, ny, ku, lb, und, ha;
 
     public String toValue() {
         switch (this) {
