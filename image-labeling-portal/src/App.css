@@ -10,3 +10,14 @@ img {
 .Polaris-DescriptionList {
     padding: 20px;
 }
+
+.makeStyles-container-2 {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    flex-grow: 0;
+    max-height: 100%;
+    min-height: 100%;
+    flex-direction: column;
+    background-color: #fff;
+}

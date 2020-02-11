@@ -1,8 +1,16 @@
 import React from 'react'
 import { AppProvider, Page, Card, DataTable, Link } from "@shopify/polaris";
-import "@shopify/polaris/styles.css";
+// import "@shopify/polaris/styles.css";
+// import Head from "next/head"
+require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class HomePage extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.apihostname = process.env.REACT_APP_API_HOSTNAME
+    }
 
     render() {
         return (
@@ -37,8 +45,8 @@ class HomePage extends React.Component {
         ]
 
         const rows = []
-
-        fetch("http://localhost:8080/storedRequests/list", { mode: "cors" })
+        
+        fetch(this.apihostname + "/storedRequests/list", { mode: "cors" })
             .then(results => {
                 return results.json();
             }).then(storedRequests => {
@@ -63,7 +71,13 @@ class HomePage extends React.Component {
             });
 
         return (
-            <AppProvider>
+            <React.Fragment>
+                <head>
+                    <title>Image Labeling Portal</title>
+                    <meta charSet="utf-8" />
+                    <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@4.11.0/styles.css" />
+                </head>
+                <AppProvider>
                 <Page title="Stored Requests" >
                     <Card>
                         <DataTable
@@ -73,7 +87,8 @@ class HomePage extends React.Component {
                         />
                     </Card>
                 </Page>
-            </AppProvider>
+                </AppProvider>
+            </React.Fragment>
         );
     }
 }

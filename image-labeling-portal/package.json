@@ -10,8 +10,10 @@
     "query-string": "^6.10.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-image-annotate": "^0.1.34",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.3.0",
+    "webpack": "4.41.2"
   },
   "scripts": {
     "start": "react-scripts start",
