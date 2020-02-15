@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal } from "@shopify/polaris";
+import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge } from "@shopify/polaris";
 // import "@shopify/polaris/styles.css";
 import "../App.css"
 // import Head from "next/head"
@@ -169,8 +169,20 @@ class RequestViewPage extends React.Component {
             "userInputtedChemicalEquationString": "user chemical equation string"
         }
 
-        const pageTitle = "Image Review (" + this.state.storedRequest.id + ")"
-        const requestDate = new Date(this.state.storedRequest.gcpRequestStartTimeMs)
+        const request = this.state.storedRequest
+        const pageTitle = "Image Review (" + request.id + ")"
+        const requestDate = new Date(request.gcpRequestStartTimeMs)
+
+        var requestStatusBadge;
+        if (request.labelingStatus === "INCOMPLETE") {
+            requestStatusBadge = <Badge status="attention" progress="incomplete">Incomplete</Badge>
+        } else if (request.labelingStatus === "IN_PROGRESS") {
+            requestStatusBadge = <Badge status="info" progress="partiallyComplete">In Progress</Badge>
+        } else if (request.labelingStatus === "LABELED") {
+            requestStatusBadge = <Badge status="success" progress="complete">Labeled</Badge>
+        } else {
+            requestStatusBadge = <Badge status="warning">Unavailable</Badge>
+        }
 
         return (
             <React.Fragment>
@@ -197,7 +209,7 @@ class RequestViewPage extends React.Component {
                             title="Edit Value"
                             primaryAction={{
                                 content: "Submit",
-                                onAction: () => this.handleValueEditModalSubmit(this.state.storedRequest),
+                                onAction: () => this.handleValueEditModalSubmit(request),
                             }}
                         >
                             <Modal.Section>
@@ -212,7 +224,7 @@ class RequestViewPage extends React.Component {
                             <Stack.Item>
                                 <Card>
 
-                                    <Image source={this.state.storedRequest.s3ImageUrl} style={imageStyle} />
+                                    <Image source={request.s3ImageUrl} style={imageStyle} />
                                 </Card>
                             </Stack.Item>
                             <Stack.Item>
@@ -237,22 +249,25 @@ class RequestViewPage extends React.Component {
                                         <p>{requestDate.toLocaleDateString("en-US") + " " + requestDate.toLocaleTimeString("en-US")}</p>
                                     </Card.Section>
                                     <Card.Section title="GCP Execution Time (ms)">
-                                        <p>{this.state.storedRequest.gcpRequestEndTimeMs - this.state.storedRequest.gcpRequestStartTimeMs}</p>
+                                        <p>{request.gcpRequestEndTimeMs - request.gcpRequestStartTimeMs}</p>
                                     </Card.Section>
                                     <Card.Section title="GCP Equation String">
-                                        <p>{this.state.storedRequest.gcpIdentifiedChemicalEquationString ? this.state.storedRequest.gcpIdentifiedChemicalEquationString : "Unavailable"}</p>
+                                        <p>{request.gcpIdentifiedChemicalEquationString ? request.gcpIdentifiedChemicalEquationString : "Unavailable"}</p>
                                     </Card.Section>
                                     <Card.Section title="OD Execution Time (ms)">
-                                        <p>{this.state.storedRequest.onDeviceImageProcessEndTime - this.state.storedRequest.onDeviceImageProcessStartTime}</p>
+                                        <p>{request.onDeviceImageProcessEndTime - request.onDeviceImageProcessStartTime}</p>
+                                    </Card.Section>
+                                    <Card.Section title="Labeling Status">
+                                        {requestStatusBadge}
                                     </Card.Section>
                                     <Card.Section title="Verified Equation String" actions={[{ content: "Edit", onAction: () => this.setState({ shouldDisplayEditValueModal: true, editTargetValueId: "verifiedChemicalEquationString" }) }]}>
-                                        <p>{this.state.storedRequest.verifiedChemicalEquationString ? decodeURI(this.state.storedRequest.verifiedChemicalEquationString) : "Unavailable"}</p>
+                                        <p>{request.verifiedChemicalEquationString ? decodeURI(request.verifiedChemicalEquationString) : "Unavailable"}</p>
                                     </Card.Section>
                                     <Card.Section title="User Equation String" actions={[{ content: "Edit", onAction: () => this.setState({ shouldDisplayEditValueModal: true, editTargetValueId: "userInputtedChemicalEquationString" }) }]}>
-                                        <p>{this.state.storedRequest.userInputtedChemicalEquationString ? decodeURI(this.state.storedRequest.userInputtedChemicalEquationString) : "Unavailable"}</p>
+                                        <p>{request.userInputtedChemicalEquationString ? decodeURI(request.userInputtedChemicalEquationString) : "Unavailable"}</p>
                                     </Card.Section>
                                     <Card.Section title="S3 Image URL">
-                                        <Link url={this.state.storedRequest.s3ImageUrl}> Link </Link>
+                                        <Link url={request.s3ImageUrl}> Link </Link>
                                     </Card.Section>
                                 </Card>
                             </Stack.Item>

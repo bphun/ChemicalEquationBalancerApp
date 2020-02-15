@@ -20,6 +20,11 @@ class ImageLabelingPage extends React.Component {
 
     componentDidMount() {
         this.getBoundingBoxes()
+        this.updateLabelingStatus("IN_PROGRESS");
+    }
+
+    componentWillUnmount() {
+        this.updateLabelingStatus(this.state.boundingBoxes.length > 0 ? "LABELED" : "INCOMPLETE");
     }
 
     getBoundingBoxes() {
@@ -52,7 +57,26 @@ class ImageLabelingPage extends React.Component {
             .catch(err => {
                 console.log(err)
             })
+    }
 
+    updateLabelingStatus(status) {
+        if (!status) { return }
+
+        let url = this.apiHostname + "/storedRequests/updateValue"
+        url += "?rid=" + this.state.requestId
+        url += "&vid=labelingStatus"
+        url += "&v=" + status
+
+        fetch(url, { mode: "cors" })
+        .then(results => {
+            return results.json()
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     redirect(path) {
@@ -69,7 +93,7 @@ class ImageLabelingPage extends React.Component {
     }
 
     onExitClick(images) {
-        console.log(this.state.boundingBoxes)
+        let numBoundingBoxes = 0;
         if (images && images[0].regions) {
             let boundingBoxes = []
             for (let i in images[0].regions) {
@@ -86,6 +110,8 @@ class ImageLabelingPage extends React.Component {
                 boundingBoxes.push(boundingBox)
             }
 
+            numBoundingBoxes = boundingBoxes.length
+
             const config = {
                 method: "POST",
                 mode: "cors",
@@ -94,8 +120,6 @@ class ImageLabelingPage extends React.Component {
                 },
                 body: JSON.stringify({ modified: boundingBoxes, deleted: this.state.boundingBoxes.filter(this.comparer(boundingBoxes)) })
             }
-            console.log({ original: this.state.boundingBoxes })
-            console.log({ modified: boundingBoxes, deleted: this.state.boundingBoxes.filter(this.comparer(boundingBoxes)) })
 
             fetch(this.apiHostname + "/storedRequests/updateBoundingBoxes", config)
                 .then(results => {
@@ -113,6 +137,7 @@ class ImageLabelingPage extends React.Component {
         } else {
             this.redirect("/view?rid=" + images[0].name)
         }
+        this.updateLabelingStatus(numBoundingBoxes > 0 ? "LABELED" : "INCOMPLETE")
     }
 
     render() {
