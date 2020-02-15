@@ -15,11 +15,13 @@ public class StoredRequestInfo {
     private long onDeviceImageProcessStartTime;
     private long onDeviceImageProcessEndTime;
     private String onDeviceImageProcessDeviceName;
+    private RequestLabelingStatus labelingStatus;
 
     public StoredRequestInfo(String id, String s3ImageUrl, String userInputtedChemicalEquationString,
             long gcpRequestStartTimeMs, long gcpRequestEndTimeMs, String verifiedChemicalEquationString,
             String gcpIdentifiedChemicalEquationString, long onDeviceImageProcessStartTime,
-            long onDeviceImageProcessEndTime, String onDeviceImageProcessDeviceName) {
+            long onDeviceImageProcessEndTime, String onDeviceImageProcessDeviceName,
+            RequestLabelingStatus labelingStatus) {
 
         this.id = checkNull(id);
         this.s3ImageUrl = checkNull(s3ImageUrl);
@@ -31,6 +33,7 @@ public class StoredRequestInfo {
         this.onDeviceImageProcessStartTime = onDeviceImageProcessStartTime;
         this.onDeviceImageProcessEndTime = onDeviceImageProcessEndTime;
         this.onDeviceImageProcessDeviceName = checkNull(onDeviceImageProcessDeviceName);
+        this.labelingStatus = labelingStatus;
     }
 
     @JsonProperty
@@ -131,6 +134,16 @@ public class StoredRequestInfo {
     @JsonProperty
     public void setOnDeviceImageProcessDeviceName(String onDeviceImageProcessDeviceName) {
         this.onDeviceImageProcessDeviceName = onDeviceImageProcessDeviceName;
+    }
+
+    @JsonProperty("labelingStatus")
+    public String getRequestLabelingStatus() {
+        return this.labelingStatus.toStr();
+    }
+
+    @JsonProperty("labelingStatus")
+    public void setRequestLabelingStatus(String status) {
+        this.labelingStatus.setStatus(status);
     }
 
     private String checkNull(String str) {

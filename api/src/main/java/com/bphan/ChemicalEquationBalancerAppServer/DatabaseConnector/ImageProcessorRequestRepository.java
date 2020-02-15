@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBox;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.BoundingBoxDiff;
+import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.RequestLabelingStatus;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoApiResponse;
 import com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoModels.StoredRequestInfoId;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCountCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,7 +40,8 @@ public class ImageProcessorRequestRepository {
                         resource.getString("gcpIdentifiedChemicalEquationString"),
                         resource.getLong("onDeviceImageProcessStartTime"),
                         resource.getLong("onDeviceImageProcessEndTime"),
-                        resource.getString("onDeviceImageProcessDeviceName")));
+                        resource.getString("onDeviceImageProcessDeviceName"),
+                        getLabelingStatusForRequest(resource.getString("id"), resource.getString("labelingStatus"))));
     }
 
     public StoredRequestInfo getRequestWithId(String requestId) {
@@ -50,8 +53,34 @@ public class ImageProcessorRequestRepository {
                         resource.getString("gcpIdentifiedChemicalEquationString"),
                         resource.getLong("onDeviceImageProcessStartTime"),
                         resource.getLong("onDeviceImageProcessEndTime"),
-                        resource.getString("onDeviceImageProcessDeviceName")))
+                        resource.getString("onDeviceImageProcessDeviceName"),
+                        getLabelingStatusForRequest(resource.getString("id"), resource.getString("labelingStatus"))))
                 .get(0);
+    }
+
+    public RequestLabelingStatus getLabelingStatusForRequest(String requestId, String statusStr) {
+        RequestLabelingStatus labelingStatus = RequestLabelingStatus.INCOMPLETE;
+        int numBoundingBoxes = numBoundingBoxesForRequest(requestId);
+        
+        if (statusStr == null) {
+            if (numBoundingBoxes >= 1) {
+                labelingStatus = RequestLabelingStatus.LABELED;
+            }
+        } else {
+            labelingStatus = RequestLabelingStatus.valueOf(statusStr);
+        }
+
+        return labelingStatus;
+    }
+
+    public int numBoundingBoxesForRequest(String requestId) {
+        RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
+        jdbcTemplate.query("SELECT * FROM ChemicalEquationBoundingBox WHERE imageProcessorRequestInfoId=\'" + requestId +"\';", countCallback);
+        return countCallback.getRowCount();
+    }
+
+    public StoredRequestInfoApiResponse updateStatusForRequest(String requestId, String status) {
+        return doValueUpdate(requestId, "labelingStatus", status);
     }
 
     public StoredRequestInfoApiResponse updateUserInputtedChemicalEquationString(String id, String value) {
@@ -105,13 +134,14 @@ public class ImageProcessorRequestRepository {
 
         try {
             String query = "INSERT INTO ChemicalEquationBoundingBox"
-                + "(id, imageProcessorRequestInfoId, originX, originY, width, height, tags)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE originX=?,"
-                + "originY=?, width=?, height=?, tags=?";
+                    + "(id, imageProcessorRequestInfoId, originX, originY, width, height, tags)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE originX=?,"
+                    + "originY=?, width=?, height=?, tags=?";
 
-            int changedRows = jdbcTemplate.update(query, boundingBox.getId(), boundingBox.getRequestInfoId(), boundingBox.getOriginX(), boundingBox.getOriginY(),
-            boundingBox.getWidth(), boundingBox.getHeight(), boundingBox.tagStr(), boundingBox.getOriginX(), boundingBox.getOriginX(),
-            boundingBox.getWidth(), boundingBox.getHeight(), boundingBox.tagStr());
+            int changedRows = jdbcTemplate.update(query, boundingBox.getId(), boundingBox.getRequestInfoId(),
+                    boundingBox.getOriginX(), boundingBox.getOriginY(), boundingBox.getWidth(), boundingBox.getHeight(),
+                    boundingBox.tagStr(), boundingBox.getOriginX(), boundingBox.getOriginX(), boundingBox.getWidth(),
+                    boundingBox.getHeight(), boundingBox.tagStr());
 
             if (changedRows > 0) {
                 response = new StoredRequestInfoApiResponse("success", "");
@@ -139,7 +169,6 @@ public class ImageProcessorRequestRepository {
 
         for (BoundingBox boundingBox : boundingBoxes.getDeleted()) {
             response = deleteBoundingBox(boundingBox);
-
 
             if (response.getStatus() == "error") {
                 break;

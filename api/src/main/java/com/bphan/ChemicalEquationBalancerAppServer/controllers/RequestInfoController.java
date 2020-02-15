@@ -31,7 +31,7 @@ public class RequestInfoController {
     private AmazonClient amazonClient;
 
     private final String frontendHostname = "${crossOrigin.frontendHostname}";
-    
+
     @CrossOrigin(origins = frontendHostname)
     @GetMapping("/list")
     public List<StoredRequestInfo> getStoredRequestInfoList() {
@@ -48,8 +48,7 @@ public class RequestInfoController {
     @GetMapping("/updateValue")
     public StoredRequestInfoApiResponse updateValue(@RequestParam(value = "rid", required = true) String id,
             @RequestParam(value = "vid", required = true) String valueId,
-            @RequestParam(value = "v", required = true) String value,
-            HttpServletResponse response) {
+            @RequestParam(value = "v", required = true) String value, HttpServletResponse response) {
         StoredRequestInfoApiResponse responseBody;
         switch (valueId) {
         case "userInputtedChemicalEquationString":
@@ -70,8 +69,11 @@ public class RequestInfoController {
         case "onDeviceImageProcessDeviceName":
             responseBody = imageProcessorRequestRepository.updateOnDeviceImageProcessDeviceName(id, value);
             break;
+        case "labelingStatus":
+            responseBody = imageProcessorRequestRepository.updateStatusForRequest(id, value);
+            break;
         default:
-        responseBody = new StoredRequestInfoApiResponse("error", "Invalid value ID");
+            responseBody = new StoredRequestInfoApiResponse("error", "Invalid value ID");
             break;
         }
 
@@ -118,7 +120,7 @@ public class RequestInfoController {
             if (deleteImageResponse != "success") {
                 response.setStatus("error");
                 response.setDescription("Unable to delete image");
-            }         
+            }
         } else {
             response.setStatus("error");
             response.setDescription("Unable to delete request");
