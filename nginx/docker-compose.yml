@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  nginx:
+    build: .
+    ports:
+      - "80:80"
+    image: "bphun/chemical-equation-balancer:nginx"
+    container_name: nginx
+    networks:
+      - chemBalancerNet
+
+networks:
+  chemBalancerNet:
