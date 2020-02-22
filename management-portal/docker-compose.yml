@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  management-portal:
+    build: .
+    ports:
+      - "5000:5000"
+    image: "bphun/chemical-equation-balancer:management-portal"
+    container_name: management-portal
+    networks:
+      - chemBalancerNet
+
+networks:
+  chemBalancerNet:

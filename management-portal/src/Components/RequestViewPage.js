@@ -1,8 +1,6 @@
 import React from 'react'
 import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge } from "@shopify/polaris";
-// import "@shopify/polaris/styles.css";
 import "../App.css"
-// import Head from "next/head"
 import queryString from 'query-string';
 import { withRouter } from "react-router";
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
@@ -17,7 +15,7 @@ class RequestViewPage extends React.Component {
             modalTextInputValue: "",
             storedRequest: undefined,
             viewInfoReady: false,
-            shouldDisplayImageLabelingTool: false,
+            shouldDisplay: false,
             previousRequestId: undefined,
             nextRequestId: undefined,
             hasNextRequest: false,
@@ -34,7 +32,7 @@ class RequestViewPage extends React.Component {
             .then(results => {
                 return results.json()
             }).then(response => {
-                this.setState({ storedRequest: response }, () => {
+                this.setState({ storedRequest: response, shouldDisplay: true }, () => {
                     this.fetchNextAndPreviousRequestInfo()
                 })
             }).catch(err => {
@@ -109,7 +107,7 @@ class RequestViewPage extends React.Component {
 
     onNextPageClick() {
         this.props.history.push({
-            pathname: "/view?rid=" + this.state.nextRequestId,
+            pathname: "/requests/view?rid=" + this.state.nextRequestId,
             state: { previousRequestId: this.state.storedRequest.id }
         })
         window.location.reload();
@@ -117,7 +115,7 @@ class RequestViewPage extends React.Component {
 
     onPreviousPageClick() {
         this.props.history.push({
-            pathname: "/view?rid=" + this.state.previousRequestId,
+            pathname: "/requests/view?rid=" + this.state.previousRequestId,
             state: { nextRequestId: this.state.storedRequest.id }
         })
         window.location.reload();
@@ -131,7 +129,7 @@ class RequestViewPage extends React.Component {
             .then(response => {
                 console.log(response)
                 if (response.status === "success") {
-                    this.props.history.push({ pathname: "/" })
+                    this.props.history.push({ pathname: "/requests/list" })
                     window.location.reload();
                 } else {
                     alert("Error: " + response.description);
@@ -145,15 +143,14 @@ class RequestViewPage extends React.Component {
     showImageLabelingView() {
         console.log(this.state.storedRequest.s3ImageUrl)
         this.props.history.push({
-            pathname: "/label",
-            state: { imageUrl: this.state.storedRequest.s3ImageUrl, requestId: this.state.storedRequest.id }
+            pathname: "/requests/label?rid=" + this.state.storedRequest.id + "&imgUrl=" + encodeURI(this.state.storedRequest.s3ImageUrl),
+            // state: { imageUrl: this.state.storedRequest.s3ImageUrl, requestId: this.state.storedRequest.id }
         })
         window.location.reload();
     }
 
     render() {
-        const { storedRequest } = this.state
-        return storedRequest ? this.displayView() : (<div></div>);
+        return !this.state.shouldDisplay ? <div></div> : this.displayView();
     }
 
     displayView() {
@@ -196,7 +193,7 @@ class RequestViewPage extends React.Component {
                         title={pageTitle}
                         fullWidth={true}
                         fullHeight={true}
-                        breadcrumbs={[{ content: "Home", url: "/" }]}
+                        breadcrumbs={[{ content: "List", url: "/requests/list" }]}
                         pagination={{
                             hasNext: this.state.hasNextRequest,
                             onNext: () => this.onNextPageClick(),

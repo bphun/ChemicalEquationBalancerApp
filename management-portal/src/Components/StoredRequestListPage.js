@@ -1,10 +1,9 @@
 import React from 'react'
-import { AppProvider, Page, Card, DataTable, Link, Badge } from "@shopify/polaris";
-// import "@shopify/polaris/styles.css";
-// import Head from "next/head"
+import { AppProvider, Page, Card, DataTable, Link, Badge, Spinner } from "@shopify/polaris";
+import LoadingView from './LoadingView';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
-class HomePage extends React.Component {
+class StoredRequestListPage extends React.Component {
 
     constructor(props) {
         super(props)
@@ -21,8 +20,27 @@ class HomePage extends React.Component {
         this.getStoredRequests()
     }
 
+    loadingView() {
+        return (
+            <React.Fragment>
+                <head>
+                    <title>Image Labeling Portal</title>
+                    <meta charSet="utf-8" />
+                    <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@4.11.0/styles.css" />
+                </head>
+                <AppProvider>
+                    <Page title="Loading requests...">
+                        <Card>
+                            <Spinner accessibilityLabel="Loading requests" hasFocusableParent={false} />
+                        </Card>
+                    </Page>
+                </AppProvider>
+            </React.Fragment>
+        );
+    }
+
     render() {
-        return !this.state.shouldDisplay ? <div></div> : (
+        return !this.state.shouldDisplay ? <LoadingView loadingText="Loading Requests..." /> : (
             <div>
                 {this.generateDataTable()}
             </div>
@@ -31,7 +49,7 @@ class HomePage extends React.Component {
 
     onChange = (storedRequest) => {
         const { history } = this.props;
-        history.push("/view?rid=" + storedRequest.id)
+        history.push("/requests/view?rid=" + storedRequest.id)
     }
 
     getStoredRequests() {
@@ -104,7 +122,10 @@ class HomePage extends React.Component {
                     <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@4.11.0/styles.css" />
                 </head>
                 <AppProvider>
-                    <Page title="Stored Requests" >
+                    <Page
+                        title={"Stored Requests (" + this.state.storedRequestInfo.length + " total)"}
+                        breadcrumbs={[{ content: "Home", url: "/" }]}
+                    >
                         <Card>
                             <DataTable
                                 columnContentTypes={columnContentTypes}
@@ -119,4 +140,4 @@ class HomePage extends React.Component {
     }
 }
 
-export default HomePage
+export default StoredRequestListPage

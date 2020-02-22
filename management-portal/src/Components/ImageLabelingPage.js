@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactImageAnnotate from "react-image-annotate"
+import queryString from 'query-string';
 import "../App.css"
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
@@ -9,8 +10,8 @@ class ImageLabelingPage extends React.Component {
         super(props)
 
         this.state = {
-            imageUrl: this.props.location.state.imageUrl,
-            requestId: this.props.location.state.requestId,
+            imageUrl: "",
+            requestId: "",
             boundingBoxes: [],
             ready: false
         }
@@ -19,7 +20,12 @@ class ImageLabelingPage extends React.Component {
     }
 
     componentDidMount() {
-        this.getBoundingBoxes()
+        let parsedQueryString = queryString.parse(this.props.location.search)
+        const requestId = parsedQueryString.rid
+        const imageUrl = decodeURI(parsedQueryString.imgUrl)
+        this.setState({ requestId: requestId, imageUrl: imageUrl})
+
+        this.getBoundingBoxes(requestId)
         this.updateLabelingStatus("IN_PROGRESS");
     }
 
@@ -27,9 +33,9 @@ class ImageLabelingPage extends React.Component {
         this.updateLabelingStatus(this.state.boundingBoxes.length > 0 ? "LABELED" : "INCOMPLETE");
     }
 
-    getBoundingBoxes() {
+    getBoundingBoxes(requestId) {
         let imageBoundingsBoxes = []
-        fetch(this.apiHostname + "/storedRequests/getBoundingBoxes?rid=" + this.state.requestId, { mode: "cors" })
+        fetch(this.apiHostname + "/storedRequests/getBoundingBoxes?rid=" + requestId, { mode: "cors" })
             .then(results => {
                 return results.json()
             })
@@ -68,15 +74,15 @@ class ImageLabelingPage extends React.Component {
         url += "&v=" + status
 
         fetch(url, { mode: "cors" })
-        .then(results => {
-            return results.json()
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            .then(results => {
+                return results.json()
+            })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     redirect(path) {
@@ -127,7 +133,7 @@ class ImageLabelingPage extends React.Component {
                 })
                 .then(response => {
                     if (response["status"] === "success") {
-                        this.redirect("/view?rid=" + images[0].name)
+                        this.redirect("/requests/view?rid=" + images[0].name)
                     } else {
                         alert("Error: " + response["description"])
                     }
@@ -135,7 +141,7 @@ class ImageLabelingPage extends React.Component {
                 .catch(err => {
                 })
         } else {
-            this.redirect("/view?rid=" + images[0].name)
+            this.redirect("/requests/view?rid=" + images[0].name)
         }
         this.updateLabelingStatus(numBoundingBoxes > 0 ? "LABELED" : "INCOMPLETE")
     }

@@ -9,4 +9,9 @@ RUN npm install -g serve
 
 EXPOSE 5000
 
+USER root
+RUN adduser -D appUser
+
+USER appUser
+
 ENTRYPOINT ["serve", "-s", "build"]
