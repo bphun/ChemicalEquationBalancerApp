@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  prometheus:
+    build: .
+    ports: 
+      - "9090:9090"
+    volumes:
+      - ./prometheusData:/prometheus
+    image: "bphun/chemical-equation-balancer:prometheus"
+    container_name: prometheus
+    networks:
+        - chemBalancerNet
+
+networks:
+  chemBalancerNet:

@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  grafana:
+    build: .
+    ports:
+      - "9091:3000"
+    volumes: 
+      - ./grafana:/var/lib/grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini
+    image: "bphun/chemical-equation-balancer:grafana"
+    container_name: grafana
+    networks:
+      - chemBalancerNet
+                
+networks:
+  chemBalancerNet:
