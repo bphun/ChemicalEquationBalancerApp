@@ -14,7 +14,9 @@ repositories {
 
 dependencies {
     compile 'mysql:mysql-connector-java'
-    
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
