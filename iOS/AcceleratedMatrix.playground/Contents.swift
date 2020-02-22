@@ -165,8 +165,8 @@ func balanceChemicalEquation(_ input: String?) -> Vector<Double>? {
 }
 
 //print(balanceChemicalEquation("NO+H2->NH3+H2O")!)
-//print(balanceChemicalEquation("CH4+O2->CO2+H2O")!)
-print("CH4+O2->CO2+H2O".addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+print(balanceChemicalEquation("NH4Cl+NaOH->NH4OH+NaCl")!)
+//print("CH4+O2->CO2+H2O".addingPercentEncoding(withAllowedCharacters: .alphanumerics))
 
 //    for compound in lhs {
 //        var column = [Double](repeating: 0, count: rows)
