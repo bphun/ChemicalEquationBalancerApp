@@ -70,7 +70,7 @@ public class RequestInfoController {
             responseBody = imageProcessorRequestRepository.updateOnDeviceImageProcessDeviceName(id, value);
             break;
         case "labelingStatus":
-            responseBody = imageProcessorRequestRepository.updateStatusForRequest(id, value);
+            responseBody = imageProcessorRequestRepository.updateLabelingStatusForRequest(id, value);
             break;
         default:
             responseBody = new StoredRequestInfoApiResponse("error", "Invalid value ID");
@@ -82,15 +82,15 @@ public class RequestInfoController {
 
     @CrossOrigin(origins = frontendHostname)
     @PostMapping("/updateBoundingBoxes")
-    public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBoxDiff boundingBoxes) {
+    public StoredRequestInfoApiResponse updateBoundingBoxes(@RequestBody BoundingBoxDiff boundingBoxes) {
         return imageProcessorRequestRepository.updateBoundingBoxes(boundingBoxes);
     }
 
-    @CrossOrigin(origins = frontendHostname)
-    @PostMapping("/addBoundingBox")
-    public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBox boundingBox) {
-        return imageProcessorRequestRepository.addBoundingBox(boundingBox);
-    }
+    // @CrossOrigin(origins = frontendHostname)
+    // @PostMapping("/addBoundingBox")
+    // public StoredRequestInfoApiResponse addBoundingBox(@RequestBody BoundingBox boundingBox) {
+    //     return imageProcessorRequestRepository.addBoundingBox(boundingBox);
+    // }
 
     @CrossOrigin(origins = frontendHostname)
     @GetMapping("/getBoundingBoxes")

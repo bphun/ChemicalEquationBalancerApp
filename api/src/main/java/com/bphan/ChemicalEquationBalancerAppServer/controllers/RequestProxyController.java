@@ -80,7 +80,7 @@ class RequestProxyController {
         try {
             return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
-            System.out.println(e.getLocalizedMessage());
+            
         }
         return value;
     }
