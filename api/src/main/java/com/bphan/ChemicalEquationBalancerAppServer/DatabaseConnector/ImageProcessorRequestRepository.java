@@ -61,7 +61,7 @@ public class ImageProcessorRequestRepository {
     public RequestLabelingStatus getLabelingStatusForRequest(String requestId, String statusStr) {
         RequestLabelingStatus labelingStatus = RequestLabelingStatus.INCOMPLETE;
         int numBoundingBoxes = numBoundingBoxesForRequest(requestId);
-        
+
         if (statusStr == null) {
             if (numBoundingBoxes >= 1) {
                 labelingStatus = RequestLabelingStatus.LABELED;
@@ -75,11 +75,13 @@ public class ImageProcessorRequestRepository {
 
     public int numBoundingBoxesForRequest(String requestId) {
         RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
-        jdbcTemplate.query("SELECT * FROM ChemicalEquationBoundingBox WHERE imageProcessorRequestInfoId=\'" + requestId +"\';", countCallback);
+        jdbcTemplate.query(
+                "SELECT * FROM ChemicalEquationBoundingBox WHERE imageProcessorRequestInfoId=\'" + requestId + "\';",
+                countCallback);
         return countCallback.getRowCount();
     }
 
-    public StoredRequestInfoApiResponse updateStatusForRequest(String requestId, String status) {
+    public StoredRequestInfoApiResponse updateLabelingStatusForRequest(String requestId, String status) {
         return doValueUpdate(requestId, "labelingStatus", status);
     }
 
@@ -107,7 +109,7 @@ public class ImageProcessorRequestRepository {
         return doValueUpdate(id, "onDeviceImageProcessDeviceName", value);
     }
 
-    public StoredRequestInfoApiResponse deleteBoundingBox(BoundingBox boundingBox) {
+    private StoredRequestInfoApiResponse deleteBoundingBox(BoundingBox boundingBox) {
         StoredRequestInfoApiResponse response;
 
         try {
@@ -126,7 +128,7 @@ public class ImageProcessorRequestRepository {
         return response;
     }
 
-    public StoredRequestInfoApiResponse addBoundingBox(BoundingBox boundingBox) {
+    private StoredRequestInfoApiResponse addBoundingBox(BoundingBox boundingBox) {
         if (boundingBox.getId() == null || boundingBox.getId().equals("")) {
             boundingBox.setId(UUID.randomUUID().toString());
         }
@@ -156,10 +158,10 @@ public class ImageProcessorRequestRepository {
         return response;
     }
 
-    public StoredRequestInfoApiResponse updateBoundingBoxes(BoundingBoxDiff boundingBoxes) {
+    public StoredRequestInfoApiResponse updateBoundingBoxes(BoundingBoxDiff boundingBoxDiff) {
         StoredRequestInfoApiResponse response = null;
 
-        for (BoundingBox boundingBox : boundingBoxes.getModified()) {
+        for (BoundingBox boundingBox : boundingBoxDiff.getModified()) {
             response = addBoundingBox(boundingBox);
 
             if (response.getStatus() == "error") {
@@ -167,13 +169,16 @@ public class ImageProcessorRequestRepository {
             }
         }
 
-        for (BoundingBox boundingBox : boundingBoxes.getDeleted()) {
+        for (BoundingBox boundingBox : boundingBoxDiff.getDeleted()) {
             response = deleteBoundingBox(boundingBox);
 
             if (response.getStatus() == "error") {
                 break;
             }
         }
+
+        String requestId = boundingBoxDiff.getRequestId();
+        updateLabelingStatusForRequest(requestId, numBoundingBoxesForRequest(requestId) > 0 ? "LABELED" : "INCOMPLETE");
 
         return response;
     }
@@ -220,34 +225,44 @@ public class ImageProcessorRequestRepository {
     public StoredRequestInfoApiResponse deleteRequest(String requestId) {
         StoredRequestInfoApiResponse response;
 
-        try {
-            int rowsAffected = jdbcTemplate.update("DELETE FROM ImageProcessorRequestInfo WHERE id = ?", requestId);
-            if (rowsAffected > 0) {
-                response = new StoredRequestInfoApiResponse("success", "");
-            } else {
-                response = new StoredRequestInfoApiResponse("error", "SQL error");
+        if (requestId != null && requestId.trim().length() > 0) {
+            try {
+                int rowsAffected = jdbcTemplate.update("DELETE FROM ImageProcessorRequestInfo WHERE id = ?", requestId);
+                if (rowsAffected > 0) {
+                    response = new StoredRequestInfoApiResponse("success", "");
+                } else {
+                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                }
+            } catch (Exception e) {
+                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
             }
-        } catch (Exception e) {
-            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+        } else {
+            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
         }
 
         return response;
     }
 
-    private StoredRequestInfoApiResponse doValueUpdate(String id, String valueId, Object value) {
+    private StoredRequestInfoApiResponse doValueUpdate(String requestId, String valueId, Object value) {
         StoredRequestInfoApiResponse response;
-        try {
-            int changedRows = jdbcTemplate.update(
-                    "UPDATE ImageProcessorRequestInfo " + "SET " + valueId.toString() + " = ? " + "WHERE id = ?", value,
-                    id);
-            if (changedRows > 0) {
-                response = new StoredRequestInfoApiResponse("success", "");
-            } else {
-                response = new StoredRequestInfoApiResponse("error", "SQL error");
+
+        if (requestId != null && requestId.trim().length() > 0) {
+            try {
+                int changedRows = jdbcTemplate.update(
+                        "UPDATE ImageProcessorRequestInfo " + "SET " + valueId.toString() + " = ? " + "WHERE id = ?",
+                        value, requestId);
+                if (changedRows > 0) {
+                    response = new StoredRequestInfoApiResponse("success", "");
+                } else {
+                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                }
+            } catch (DataAccessException e) {
+                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
             }
-        } catch (DataAccessException e) {
-            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+        } else {
+            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
         }
+
         return response;
     }
 }

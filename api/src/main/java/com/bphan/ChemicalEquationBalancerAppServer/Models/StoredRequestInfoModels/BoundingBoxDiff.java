@@ -3,12 +3,24 @@ package com.bphan.ChemicalEquationBalancerAppServer.Models.StoredRequestInfoMode
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BoundingBoxDiff {
+    String requestId;
     BoundingBox[] modified;
     BoundingBox[] deleted;
 
-    BoundingBoxDiff(BoundingBox[] modified, BoundingBox[] deleted) {
+    BoundingBoxDiff(String requestId, BoundingBox[] modified, BoundingBox[] deleted) {
+        this.requestId = requestId;
         this.modified = modified;
         this.deleted = deleted;
+    }
+
+    @JsonProperty("requestId")
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    @JsonProperty("requestId")
+    public String getRequestId() {
+        return this.requestId;
     }
 
     @JsonProperty("modified")

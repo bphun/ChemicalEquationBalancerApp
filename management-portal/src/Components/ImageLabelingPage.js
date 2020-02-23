@@ -23,14 +23,10 @@ class ImageLabelingPage extends React.Component {
         let parsedQueryString = queryString.parse(this.props.location.search)
         const requestId = parsedQueryString.rid
         const imageUrl = decodeURI(parsedQueryString.imgUrl)
-        this.setState({ requestId: requestId, imageUrl: imageUrl})
+        this.setState({ requestId: requestId, imageUrl: imageUrl })
 
         this.getBoundingBoxes(requestId)
-        this.updateLabelingStatus("IN_PROGRESS");
-    }
-
-    componentWillUnmount() {
-        this.updateLabelingStatus(this.state.boundingBoxes.length > 0 ? "LABELED" : "INCOMPLETE");
+        this.setInProgressLabelingStatus(requestId);
     }
 
     getBoundingBoxes(requestId) {
@@ -61,27 +57,19 @@ class ImageLabelingPage extends React.Component {
                 this.setState({ boundingBoxes: imageBoundingsBoxes, ready: true })
             })
             .catch(err => {
-                console.log(err)
+                console.err(err)
             })
     }
 
-    updateLabelingStatus(status) {
-        if (!status) { return }
-
+    setInProgressLabelingStatus(requestId) {
         let url = this.apiHostname + "/storedRequests/updateValue"
-        url += "?rid=" + this.state.requestId
+        url += "?rid=" + requestId
         url += "&vid=labelingStatus"
-        url += "&v=" + status
+        url += "&v=IN_PROGRESS"
 
         fetch(url, { mode: "cors" })
-            .then(results => {
-                return results.json()
-            })
-            .then(response => {
-                console.log(response)
-            })
             .catch(err => {
-                console.log(err)
+                console.err(err)
             })
     }
 
@@ -99,51 +87,52 @@ class ImageLabelingPage extends React.Component {
     }
 
     onExitClick(images) {
-        let numBoundingBoxes = 0;
-        if (images && images[0].regions) {
-            let boundingBoxes = []
-            for (let i in images[0].regions) {
-                const region = images[0].regions[i]
-                const boundingBox = {
-                    id: region.id,
-                    requestInfoId: images[0].name,
-                    originX: 450 * region.x,
-                    width: 450 * region.w,
-                    originY: 700 * region.y,
-                    height: 700 * region.h,
-                    tags: region.tags ? region.tags : []
-                }
-                boundingBoxes.push(boundingBox)
+        let boundingBoxes = []
+        for (let i in images[0].regions) {
+            const region = images[0].regions[i]
+            const boundingBox = {
+                id: region.id,
+                requestInfoId: this.state.requestId,
+                originX: 450 * region.x,
+                width: 450 * region.w,
+                originY: 700 * region.y,
+                height: 700 * region.h,
+                tags: region.tags ? region.tags : []
             }
-
-            numBoundingBoxes = boundingBoxes.length
-
-            const config = {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ modified: boundingBoxes, deleted: this.state.boundingBoxes.filter(this.comparer(boundingBoxes)) })
-            }
-
-            fetch(this.apiHostname + "/storedRequests/updateBoundingBoxes", config)
-                .then(results => {
-                    return results.json()
-                })
-                .then(response => {
-                    if (response["status"] === "success") {
-                        this.redirect("/requests/view?rid=" + images[0].name)
-                    } else {
-                        alert("Error: " + response["description"])
-                    }
-                })
-                .catch(err => {
-                })
-        } else {
-            this.redirect("/requests/view?rid=" + images[0].name)
+            boundingBoxes.push(boundingBox)
         }
-        this.updateLabelingStatus(numBoundingBoxes > 0 ? "LABELED" : "INCOMPLETE")
+
+        if (boundingBoxes.length <= 0) {
+            this.redirect("/requests/view?rid=" + this.state.requestId)
+        }
+
+        const boundingBoxDiff = {
+            requestId: this.state.requestId,
+            modified: boundingBoxes,
+            deleted: this.state.boundingBoxes.filter(this.comparer(boundingBoxes))
+        }
+        const config = {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(boundingBoxDiff)
+        }
+
+        fetch(this.apiHostname + "/storedRequests/updateBoundingBoxes", config)
+            .then(results => {
+                return results.json()
+            })
+            .then(response => {
+                if (response["status"] === "success") {
+                    this.redirect("/requests/view?rid=" + this.state.requestId)
+                } else {
+                    alert("Error: " + response["description"])
+                }
+            })
+            .catch(err => {
+            })
     }
 
     render() {

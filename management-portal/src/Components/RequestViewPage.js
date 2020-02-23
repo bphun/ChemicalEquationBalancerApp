@@ -36,7 +36,7 @@ class RequestViewPage extends React.Component {
                     this.fetchNextAndPreviousRequestInfo()
                 })
             }).catch(err => {
-                console.log(err);
+                console.err(err);
             })
 
     }
@@ -51,7 +51,7 @@ class RequestViewPage extends React.Component {
                         this.setState({ nextRequestId: response.id, hasNextRequest: true })
                     }
                 }).catch(err => {
-                    console.log(err);
+                    console.errr(err);
                 })
         }
         if (!this.state.previousRequestId) {
@@ -63,7 +63,7 @@ class RequestViewPage extends React.Component {
                         this.setState({ previousRequestId: response.id, hasPreviousRequest: true })
                     }
                 }).catch(err => {
-                    console.log(err);
+                    console.errr(err);
                 })
         }
     }
@@ -86,7 +86,7 @@ class RequestViewPage extends React.Component {
                     this.updateVerifiedEquationString(this.state.modalTextInputValue)
                 }
             }).catch(err => {
-                console.log(err);
+                console.errr(err);
             })
         window.location.reload(); // Yes i know very nice
     }
@@ -127,7 +127,6 @@ class RequestViewPage extends React.Component {
                 return results.json()
             })
             .then(response => {
-                console.log(response)
                 if (response.status === "success") {
                     this.props.history.push({ pathname: "/requests/list" })
                     window.location.reload();
@@ -136,12 +135,11 @@ class RequestViewPage extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.errr(err);
             })
     }
 
     showImageLabelingView() {
-        console.log(this.state.storedRequest.s3ImageUrl)
         this.props.history.push({
             pathname: "/requests/label?rid=" + this.state.storedRequest.id + "&imgUrl=" + encodeURI(this.state.storedRequest.s3ImageUrl),
             // state: { imageUrl: this.state.storedRequest.s3ImageUrl, requestId: this.state.storedRequest.id }
