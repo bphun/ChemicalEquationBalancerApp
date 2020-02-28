@@ -1,1 +1,3 @@
-rootProject.name = 'ChemicalEquationBalancerAppServer'
+rootProject.name = 'apiCommon' 
+include 'common'
+include 'imageProcessorRequestsServer'
