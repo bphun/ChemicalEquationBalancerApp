@@ -7,7 +7,7 @@ public class BoundingBoxDiff {
     BoundingBox[] modified;
     BoundingBox[] deleted;
 
-    BoundingBoxDiff(String requestId, BoundingBox[] modified, BoundingBox[] deleted) {
+    public BoundingBoxDiff(String requestId, BoundingBox[] modified, BoundingBox[] deleted) {
         this.requestId = requestId;
         this.modified = modified;
         this.deleted = deleted;

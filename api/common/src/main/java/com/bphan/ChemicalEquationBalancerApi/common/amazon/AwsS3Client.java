@@ -65,10 +65,10 @@ public class AwsS3Client {
     public String deleteImageByName(String s3ImageFileName) {
         try {
             s3Client.deleteObject(new DeleteObjectRequest(bucketName, s3ImageFileName + ".png"));
+            return "success";
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
-        return "success";
     }
 
     private File generateImageFileFromBase64String(String s3ImageFileName, String base64EncodedImage) {
@@ -88,22 +88,6 @@ public class AwsS3Client {
         }
 
         return imageFile;
-        // File imageFile = null;
-        // byte[] imageBytes;
-
-        // try {
-        //     imageBytes = Base64.getDecoder().decode(base64EncodedImage);
-        //     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
-
-        //     imageFile = new File(s3ImageFileName + ".png");
-        //     ImageIO.write(ImageIO.read(byteArrayInputStream), ".png", imageFile);
-
-        //     byteArrayInputStream.close();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-
-        // return imageFile;
     }
 
     private String base64EncodeImageFile(File imageFile) {

@@ -32,13 +32,18 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
-    runtimeOnly 'com.h2database:h2'
-
+    // runtimeOnly 'com.h2database:h2'
+    
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    testImplementation('junit:junit:4.13')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    testImplementation('org.springframework.boot:spring-boot-starter-data-jdbc')
+    
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
