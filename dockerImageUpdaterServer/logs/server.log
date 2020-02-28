@@ -532,3 +532,26 @@
 2020-02-03 04:44:56,493 [$BOLDDEBUG         $RESET]  killed container with image bphun/chemical-equation-balancer:nginx
 2020-02-03 04:44:56,493 [$BOLDINFO          $RESET]  pulling latest version of bphun/chemical-equation-balancer:nginx
 2020-02-03 04:44:58,023 [$BOLDINFO          $RESET]  restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-20 09:24:06,195 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-20 09:24:06,196 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-20 09:24:06,534 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-20 09:24:06,558 [$BOLDINFO          $RESET]   * Debugger PIN: 222-100-647
+2020-02-20 09:24:16,534 [$BOLDERROR         $RESET]  Error parsing json
+2020-02-20 09:24:16,545 [$BOLDINFO          $RESET]  127.0.0.1 - - [20/Feb/2020 09:24:16] "[35m[1mPOST /hooks HTTP/1.1[0m" 500 -
+2020-02-20 09:24:38,170 [$BOLDINFO          $RESET]   * Detected change in '/Users/brandonphan/Desktop/Code/ChemicalEquationBalancer/dockerImageUpdaterServer/server.py', reloading
+2020-02-20 09:24:38,234 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-20 09:24:39,590 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-20 09:24:39,591 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-20 09:24:39,869 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-20 09:24:39,886 [$BOLDINFO          $RESET]   * Debugger PIN: 222-100-647
+2020-02-20 09:24:45,019 [$BOLDERROR         $RESET]  Error parsing json
+2020-02-20 09:24:45,019 [$BOLDINFO          $RESET]  127.0.0.1 - - [20/Feb/2020 09:24:45] "[37mPOST /hooks HTTP/1.1[0m" 200 -
+2020-02-20 09:35:17,182 [$BOLDINFO          $RESET]   * Running on http://0.0.0.0:8081/ (Press CTRL+C to quit)
+2020-02-20 09:35:17,182 [$BOLDINFO          $RESET]   * Restarting with stat
+2020-02-20 09:35:17,463 [$BOLDWARNING       $RESET]   * Debugger is active!
+2020-02-20 09:35:17,482 [$BOLDINFO          $RESET]   * Debugger PIN: 222-100-647
+2020-02-20 09:35:20,299 [$BOLDINFO          $RESET]  Image named bphun/chemical-equation-balancer:nginx pushed to repo by bphun at 2020-01-31 17:27:18 UTC
+2020-02-20 09:35:20,315 [$BOLDERROR         $RESET]  Image with name bphun/chemical-equation-balancer:nginx not found. Starting new container runtime
+2020-02-20 09:35:20,315 [$BOLDINFO          $RESET]  Pulling latest version of bphun/chemical-equation-balancer:nginx
+2020-02-20 09:35:23,084 [$BOLDINFO          $RESET]  Restarted bphun/chemical-equation-balancer:nginx with latest revision of image
+2020-02-20 09:35:23,086 [$BOLDINFO          $RESET]  127.0.0.1 - - [20/Feb/2020 09:35:23] "[37mPOST /hooks HTTP/1.1[0m" 200 -

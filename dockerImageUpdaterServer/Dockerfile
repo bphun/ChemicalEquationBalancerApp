@@ -16,4 +16,11 @@ COPY wsgi.py dockerImageUpdater/wsgi.py
 EXPOSE 8081
 WORKDIR dockerImageUpdater
 
+USER root
+RUN groupadd -r appGroup && \
+    useradd -r -g appGroup appUser && \
+    chown -R appUser:appUser dockerImageUpdater/
+
+USER appUser
+
 ENTRYPOINT ["gunicorn", "--workers", "1", "--bind", "0.0.0.0:8081", "-m", "007", "wsgi:app"]

@@ -40,6 +40,7 @@ def reloadImage(requestBody):
             try:
                 containerPorts = container.ports
                 container.kill()
+                
                 logger.debug("Killed container with image {}".format(imageName))
                 break
             except Exception as e:
@@ -56,7 +57,7 @@ def reloadImage(requestBody):
     logger.info("Pulling latest version of {}".format(imageName))
     client.images.pull(imageName)
     try:
-        container = client.containers.run(imageName, detach=True, ports=portMappings, restart_policy={"name": "always"}, )
+        container = client.containers.run(imageName, detach=True, network="chemBalancerNet", name=requestBody.push_data.tag, ports=portMappings, restart_policy={"name": "always"}, )
         logger.info("Restarted {} with latest revision of image".format(imageName))
     except Exception as e:
         logger.info("Failed to start container with image {}. error: {}".format(imageName, e))
