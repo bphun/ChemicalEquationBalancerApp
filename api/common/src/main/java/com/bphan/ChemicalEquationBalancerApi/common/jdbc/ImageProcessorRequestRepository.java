@@ -24,11 +24,31 @@ public class ImageProcessorRequestRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime, long requestEndTime,
-            String equationString) {
-        jdbcTemplate.update("INSERT INTO ImageProcessorRequestInfo"
-                + "(id, s3ImageUrl, gcpRequestStartTimeMs, gcpRequestEndTimeMs, userInputtedChemicalEquationString)"
-                + "VALUES (?, ?, ?, ?, ?)", requestId, s3ImageUrl, requestStartTime, requestEndTime, equationString);
+    public StoredRequestInfoApiResponse uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime,
+            long requestEndTime, String equationString) {
+
+        StoredRequestInfoApiResponse response;
+
+        if (requestId != null && requestId.trim().length() > 0) {
+            try {
+                int changedRows = jdbcTemplate.update(
+                        "INSERT INTO ImageProcessorRequestInfo"
+                                + "(id, s3ImageUrl, gcpRequestStartTimeMs, gcpRequestEndTimeMs, "
+                                + "userInputtedChemicalEquationString)" + " VALUES (?, ?, ?, ?, ?)",
+                        requestId, s3ImageUrl, requestStartTime, requestEndTime, equationString);
+                if (changedRows > 0) {
+                    response = new StoredRequestInfoApiResponse("success", "");
+                } else {
+                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                }
+            } catch (DataAccessException e) {
+                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+            }
+        } else {
+            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
+        }
+
+        return response;
     }
 
     public List<StoredRequestInfo> getRequestList() {
@@ -75,9 +95,11 @@ public class ImageProcessorRequestRepository {
 
     public int numBoundingBoxesForRequest(String requestId) {
         RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
+
         jdbcTemplate.query(
                 "SELECT * FROM ChemicalEquationBoundingBox WHERE imageProcessorRequestInfoId=\'" + requestId + "\';",
                 countCallback);
+
         return countCallback.getRowCount();
     }
 
@@ -161,19 +183,26 @@ public class ImageProcessorRequestRepository {
     public StoredRequestInfoApiResponse updateBoundingBoxes(BoundingBoxDiff boundingBoxDiff) {
         StoredRequestInfoApiResponse response = null;
 
-        for (BoundingBox boundingBox : boundingBoxDiff.getModified()) {
-            response = addBoundingBox(boundingBox);
+        BoundingBox[] boundingBoxesToUpdate = boundingBoxDiff.getModified();
+        BoundingBox[] boundingBoxesToRemove = boundingBoxDiff.getDeleted();
 
-            if (response.getStatus() == "error") {
-                break;
+        if (boundingBoxesToUpdate != null) {
+            for (BoundingBox boundingBox : boundingBoxDiff.getModified()) {
+                response = addBoundingBox(boundingBox);
+
+                if (response.getStatus() == "error") {
+                    break;
+                }
             }
         }
 
-        for (BoundingBox boundingBox : boundingBoxDiff.getDeleted()) {
-            response = deleteBoundingBox(boundingBox);
+        if (boundingBoxesToRemove != null) {
+            for (BoundingBox boundingBox : boundingBoxDiff.getDeleted()) {
+                response = deleteBoundingBox(boundingBox);
 
-            if (response.getStatus() == "error") {
-                break;
+                if (response.getStatus() == "error") {
+                    break;
+                }
             }
         }
 

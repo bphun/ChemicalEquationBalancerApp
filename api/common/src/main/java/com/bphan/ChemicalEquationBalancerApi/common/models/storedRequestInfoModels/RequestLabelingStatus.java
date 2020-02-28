@@ -1,7 +1,7 @@
 package com.bphan.ChemicalEquationBalancerApi.common.models.storedRequestInfoModels;
 
 public enum RequestLabelingStatus {
-    INCOMPLETE("INCOMPLETE"), IN_PROGRESS("IN_PROGRESS"), LABELED("LABELED");
+    INCOMPLETE("INCOMPLETE"), IN_PROGRESS("IN_PROGRESS"), LABELED("LABELED"), TEST_STATUS("TEST_STATUS");
 
     private String status;
 
