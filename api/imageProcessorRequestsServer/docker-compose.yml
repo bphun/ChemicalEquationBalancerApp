@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  image-processor-requests-server:
+    build: .
+    ports:
+      - "8080:8080"
+    image: "bphun/chemical-equation-balancer:image-processor-requests-server"
+    container_name: image-processor-requests-server
+    networks:
+      - chemBalancerNet
+
+networks:
+  chemBalancerNet:

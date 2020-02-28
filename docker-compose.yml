@@ -1,10 +1,10 @@
 version: '2'
 
 services:
-  api-server:
+  image-processor-requests-server:
     extends:
-      file: api/docker-compose.yml
-      service: api-server
+      file: api/imageProcessorRequestsServer/docker-compose.yml
+      service: image-processor-requests-server
       #docker-image-updater:
       #extends:
       #file: dockerImageUpdaterServer/docker-compose.yml
@@ -19,14 +19,14 @@ services:
       service: prometheus
   management-portal:
     extends:
-      file: image-labeling-portal/docker-compose.yml
+      file: management-portal/docker-compose.yml
       service: management-portal
   nginx:
     extends:
       file: nginx/docker-compose.yml
       service: nginx
     depends_on:
-        - api-server
+        - image-processor-requests-server
           # - docker-image-updater
         - grafana
         - prometheus
