@@ -1,6 +1,6 @@
 # Chemical Equation Balancer App
 
-### Background
+## Background
 In chemistry, chemical reactions are represented using chemical equations consisting of chemical compounds and elements present in a reaction. These equations can be broken up into two parts, reactants and products. In order to make use of these chemical equations, there must be an equal amount of every element on the reactant and product side -- a process known as balancing. This iOS application aims to use image recognition technology to identify and balance chemical equations in an image. 
 
 ### Problem
