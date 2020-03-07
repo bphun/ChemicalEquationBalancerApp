@@ -1,7 +1,7 @@
 package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.Threads;
 
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc.ImageProcessorRequestRepository;
 import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
-import com.bphan.ChemicalEquationBalancerApi.common.jdbc.ImageProcessorRequestRepository;
 
 public class RequestInfoUploadRunner implements Runnable {
     private String requestId, base64EncodedImage, equationString;

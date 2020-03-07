@@ -8,10 +8,10 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.Threads.RequestInfoUploadRunner;
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc.ImageProcessorRequestRepository;
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.requestModels.ImageProcessorRequest;
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.responseModels.ImageProcessorResponse;
 import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
-import com.bphan.ChemicalEquationBalancerApi.common.jdbc.ImageProcessorRequestRepository;
-import com.bphan.ChemicalEquationBalancerApi.common.models.requestModels.ImageProcessorRequest;
-import com.bphan.ChemicalEquationBalancerApi.common.models.responseModels.ImageProcessorResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -31,8 +31,9 @@ import org.springframework.web.client.RestTemplate;
 class RequestProxyController {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String URL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCjcvFqGbD6kaQWy9g5kGLxWK0wvhr4l6k";
-    private final String frontendHostname = "${crossOrigin.frontendHostname}";
+    private String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNKE28nRi-Qt1QeOtsPUBAFHBDN8ikhcI";
+
+    private final String frontendHostname = "*";
 
     @Autowired
     private ImageProcessorRequestRepository imageProcessorRequestRepository;
@@ -61,7 +62,7 @@ class RequestProxyController {
         postEntity = new HttpEntity<>(requestBody, gcpApiRequestHeaders);
 
         requestStartTime = System.currentTimeMillis();
-        imageProcessorResponse = this.restTemplate.postForObject(URL, postEntity, ImageProcessorResponse.class);
+        imageProcessorResponse = this.restTemplate.postForObject(url, postEntity, ImageProcessorResponse.class);
         requestEndTime = System.currentTimeMillis();
 
         imageProcessorResponse.setRequestId(requestId);
