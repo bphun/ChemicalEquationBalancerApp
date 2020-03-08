@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  image-processor-requests-server:
+    extends:
+      file: api/imageProcessorRequestsServer/docker-compose.yml
+      service: image-processor-requests-server
+      #docker-image-updater:
+      #extends:
+      #file: dockerImageUpdaterServer/docker-compose.yml
+      #service: docker-image-updater
+  grafana:
+    extends:
+      file: grafana/docker-compose.yml
+      service: grafana
+  prometheus:
+    extends:
+      file: prometheus/docker-compose.yml
+      service: prometheus
+  management-portal:
+    extends:
+      file: management-portal/docker-compose.yml
+      service: management-portal
+  nginx:
+    extends:
+      file: nginx/docker-compose.yml
+      service: nginx
+    depends_on:
+        - image-processor-requests-server
+          # - docker-image-updater
+        - grafana
+        - prometheus
+        - management-portal
+
+networks:
+  chemBalancerNet:
