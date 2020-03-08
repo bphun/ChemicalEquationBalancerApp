@@ -13,7 +13,6 @@ Since there are no existing hand written chemical equation datasets, I must make
 ### Running the iOS application
 Open the ChemicalEquationBalancerApp.xcodeproj project in Xcode located in the iOS folder of the root project directory. This application can be used to balance chemical equations which you enter manually and to upload images of chemical equations to a server(detailed below).
 
-### Running the API server and image labeling portal
 ### Configure the API server
 Create the `application.yml` file in `$PROJECT_ROOT_DIRECTORY/api/imageProcessorRequestsServer/src/main/resources/`
 Add the the following snippet to the `application.yml` file you just created. Replace strings with the `${*}` pattern with the appropriate strings. 
@@ -41,7 +40,7 @@ management:
                 include: health,info,prometheus,auditevents,caches,conditions,httptrace,metrics,scheduledtasks,heapdump
 ```
 
-### Using Docker to run the backend services
+### Run the server using Docker
 ```
 cd $PROJECT_ROOT_DIRECTORY
 docker-compose up --build
@@ -52,7 +51,7 @@ Since this process will also start a docker container running an Nginx proxy, th
 
 The Grafana dashboard will be accessible from the management portal
 
-### Run the backend services directly on your computer
+### Run the server directly on your computer
 Note: this method will not start the Grafana dashboard, prometheus server, or Nginx reverse proxy.
 To run the API server locally you will need to install Gradle and the Java JDK on your system. Once these packages are installed, you can run:
 ```
