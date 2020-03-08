@@ -1,3 +1,4 @@
-rootProject.name = 'apiCommon' 
+rootProject.name = 'api' 
 include 'common'
 include 'imageProcessorRequestsServer'
+include 'imageRegionProcessor'

@@ -40,7 +40,7 @@ class ImageLabelingPage extends React.Component {
                     let currResponse = fetchedBoundingBoxes[i]
                     const randColor = Math.random() * 360
                     let boundingBox = {
-                        cls: "CHEM_EQUATION_NO_EQU",
+                        cls: currResponse.regionClass,
                         color: `hsl(${randColor},100%,50%)`,
                         w: currResponse.width / 450,
                         x: currResponse.originX / 450,
@@ -52,6 +52,7 @@ class ImageLabelingPage extends React.Component {
                         editingLabels: false,
                         highlighted: false,
                     }
+
                     imageBoundingsBoxes.push(boundingBox)
                 }
                 this.setState({ boundingBoxes: imageBoundingsBoxes, ready: true })
@@ -90,15 +91,18 @@ class ImageLabelingPage extends React.Component {
         let boundingBoxes = []
         for (let i in images[0].regions) {
             const region = images[0].regions[i]
+            
             const boundingBox = {
                 id: region.id,
                 requestInfoId: this.state.requestId,
-                originX: 450 * region.x,
-                width: 450 * region.w,
-                originY: 700 * region.y,
-                height: 700 * region.h,
+                regionClass: region.cls,
+                width: region.w * 450,
+                originX: region.x * 450,
+                height: region.h * 700,
+                originY: region.y * 700,
                 tags: region.tags ? region.tags : []
             }
+
             boundingBoxes.push(boundingBox)
         }
 
@@ -142,7 +146,7 @@ class ImageLabelingPage extends React.Component {
                 selectedImage={this.state.imageUrl}
                 taskDescription="# Draw region around each chemical equation"
                 images={[{ src: this.state.imageUrl, name: this.state.requestId, regions: this.state.boundingBoxes }]}
-                regionTagList={["HAND_WRITTEN", "COMPUTER_SCREEN", "DIR_BLUR", "LOW_RES", "OBFUSCATED", "LOW_LIGHT", "HIGH_LIGHT", "OFF_FOCUS"]}
+                regionTagList={["HAND_WRITTEN", "COMPUTER_SCREEN", "DIR_BLUR", "LOW_RES", "OBFUSCATED", "LOW_LIGHT", "HIGH_LIGHT", "OFF_FOCUS", "HAS_COEFFICIENTS"]}
                 regionClsList={["CHEM_EQUATION_NO_EQU", "CHEM_EQUATION_EQU"]}
                 pointDistancePrecision={2}
                 enabledTools={["select", "create-box",]}
