@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  image-region-processor-server:
+    build: .
+    ports:
+      - "8081:8081"
+    image: "bphun/chemical-equation-balancer:image-region-processor-server"
+    container_name: image-region-processor-server
+    networks:
+      - chemBalancerNet
+
+networks:
+  chemBalancerNet:

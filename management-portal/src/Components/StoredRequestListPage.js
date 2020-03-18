@@ -54,7 +54,7 @@ class StoredRequestListPage extends React.Component {
 
     getStoredRequests() {
         const requests = []
-        fetch(this.apihostname + "/storedRequests/list", { mode: "cors" })
+        fetch(this.apihostname + "/requests/list", { mode: "cors" })
             .then(results => {
                 return results.json();
             }).then(storedRequests => {

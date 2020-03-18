@@ -76,7 +76,7 @@ struct ImageProcessResource: ApiResource {
         }
         print(queryItems)
         urlComponents.queryItems = queryItems
-        print(urlComponents.url)
+        print(urlComponents.url ?? "Empty URL")
         urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = method.rawValue
         urlRequest.httpBody = data

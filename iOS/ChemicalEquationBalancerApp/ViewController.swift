@@ -15,13 +15,32 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var uploadImageSwitch: UISwitch!
     @IBOutlet weak var shouldUseProdApiSwitch: UISwitch!
+    @IBOutlet weak var rapidCaptureSwitch: UISwitch!
+    @IBOutlet weak var activeUploadsLabel: UILabel!
+    @IBOutlet weak var queueDepthLabel: UILabel!
     
     var frameExtractor: FrameExtractor!
     var shouldCaptureFrame = false
     var requestInProgress = false
     var hasEquationStr = false
     var equationStr: String?
+
+    var enqueuedCaptures = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.queueDepthLabel.text = "Queue depth: \(self.enqueuedCaptures)"
+            }
+        }
+    }
     
+    var activeUploadSessions = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.activeUploadsLabel.text = "Upload sessions: \(self.activeUploadSessions)"
+            }
+        }
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         frameExtractor = FrameExtractor()
@@ -30,7 +49,9 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     }
     
     @IBAction func imageCaptureButtonAction(_ sender: Any) {
-        self.shouldCaptureFrame = true
+        let rapidCaptureEnabled = self.rapidCaptureSwitch.isOn
+
+        self.shouldCaptureFrame = rapidCaptureEnabled || (!rapidCaptureEnabled && !requestInProgress)
     }
     
     @IBAction func manualEntryAction(_ sender: Any) {
@@ -47,7 +68,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
              
                 let resultAlert = UIAlertController(title: "Results", message: result, preferredStyle: .alert)
                 resultAlert.addAction(UIAlertAction(title: "Done", style: .cancel ,handler: nil))
-                resultAlert.addAction(UIAlertAction(title: "Upload Image", style: .default, handler: { [weak alert] (_) in
+                resultAlert.addAction(UIAlertAction(title: "Upload Image", style: .default, handler: { (_) in
                     self.equationStr = textField.text!
                     DispatchQueue.main.async {
                         resultAlert.resignFirstResponder()
@@ -69,7 +90,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     func captured(image: UIImage) {
         self.imageView.image = image
         
-        if shouldCaptureFrame && !requestInProgress {
+        if shouldCaptureFrame {
             let shouldUploadImage = self.uploadImageSwitch.isOn
             let useProdApi = self.shouldUseProdApiSwitch.isOn
             
@@ -81,12 +102,15 @@ class ViewController: UIViewController, FrameExtractorDelegate {
                 print("Request start")
                 self.processImage(image, shouldUploadImage: shouldUploadImage, useProdApi: useProdApi)
             }
+            
+            enqueuedCaptures += 1
         }
     }
     
     func processImage(_ image: UIImage, shouldUploadImage: Bool, useProdApi: Bool) {
         guard let base64EncodedImageString = image.toBase64() else { return }
         imageRequest(base64EncodedImage: base64EncodedImageString, shouldUploadImage: shouldUploadImage, useProdApi: useProdApi)
+        enqueuedCaptures -= 1
     }
     
     func imageRequest(base64EncodedImage: String, shouldUploadImage: Bool, useProdApi: Bool) {
@@ -98,6 +122,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr, useProdApi: useProdApi))
         
         requestInProgress = true
+        activeUploadSessions += 1
 //        print(requestBodyJson.prettyPrintedJSONString)
         imageProcessingRequest.run(withCompletionHandler: { (processorOutput) in
 //            print(processorOutput)
@@ -116,7 +141,8 @@ class ViewController: UIViewController, FrameExtractorDelegate {
             }
             self.requestInProgress = false
             self.equationStr = nil
-            print("Request finished. Capture available")
+            self.activeUploadSessions -= 1
+            print("Request finished.")
             DispatchQueue.main.async {
                 self.hideActivityIndicator()
             }

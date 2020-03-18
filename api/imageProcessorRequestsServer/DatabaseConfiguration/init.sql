@@ -1,6 +1,6 @@
 USE ChemicalEquationBalancerDatabase;
 
-DROP TABLE IF EXISTS ChemicalEquationBoundingBox;
+DROP TABLE IF EXISTS ChemicalEquationRegion;
 DROP TABLE IF EXISTS ImageProcessorRequestInfo;
 CREATE TABLE ImageProcessorRequestInfo(
     id                                      						CHAR(36) NOT NULL PRIMARY KEY,
@@ -15,7 +15,7 @@ CREATE TABLE ImageProcessorRequestInfo(
     onDeviceImageProcessDeviceName      VARCHAR(255)
 ) ENGINE=INNODB;
 
-CREATE TABLE ChemicalEquationBoundingBox(
+CREATE TABLE ChemicalEquationRegion(
 	id                                      						CHAR(36) NOT NULL PRIMARY KEY,
 	imageProcessorRequestInfoId				CHAR(36),
 	originX														INT,

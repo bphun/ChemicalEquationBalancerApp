@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,20 @@ public class AwsS3Client {
             File file = generateImageFileFromBase64String(s3ImageFileName, base64EncodedImage);
             fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
             uploadTos3Bucket(s3ImageFileName, file);
-            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return fileUrl;
+    }
+
+    public String uploadImage(String s3ImageFileName, BufferedImage image) {
+        String fileUrl = "";
+
+        try {
+            File file = convertTofile(s3ImageFileName, image);
+            fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
+            uploadTos3Bucket(s3ImageFileName, file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,6 +104,18 @@ public class AwsS3Client {
         return imageFile;
     }
 
+    private File convertTofile(String fileName, BufferedImage image) {
+        File outputFile = new File(fileName);
+
+        try {
+            ImageIO.write(image, "png", outputFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return outputFile;
+    }
+
     private String base64EncodeImageFile(File imageFile) {
         String base64EncodedImage = "";
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -107,7 +133,18 @@ public class AwsS3Client {
     }
 
     private void uploadTos3Bucket(String filename, File file) {
-        s3Client.putObject(
-                new PutObjectRequest(bucketName, filename + ".png", file).withCannedAcl(CannedAccessControlList.PublicRead));
+        Thread uploaderThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                s3Client.putObject(new PutObjectRequest(bucketName, filename + ".png", file)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                file.delete();
+            }
+        });
+        uploaderThread.start();
+    }
+
+    public S3Object getObjectFromS3Bucket(String filename) {
+        return s3Client.getObject(bucketName, filename);
     }
 }

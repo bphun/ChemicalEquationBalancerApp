@@ -1,8 +1,9 @@
 package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels;
 
+import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StoredRequestInfoId extends StoredRequestInfoApiResponse {
+public class StoredRequestInfoId extends ApiResponse {
     private String id;
 
     public StoredRequestInfoId(String id) {

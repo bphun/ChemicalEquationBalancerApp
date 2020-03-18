@@ -1,3 +1,7 @@
 nginx/htpasswd
 docker-compose
 api/bin
+.DS_Store
+*.class
+Application.yml
+api/imageRegionProcessor/src/main/resources/

@@ -3,6 +3,7 @@ import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge } 
 import "../App.css"
 import queryString from 'query-string';
 import { withRouter } from "react-router";
+import LoadingView from './LoadingView';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class RequestViewPage extends React.Component {
@@ -28,7 +29,7 @@ class RequestViewPage extends React.Component {
     componentDidMount() {
         const requestId = queryString.parse(this.props.location.search).rid
 
-        fetch(this.apiHostname + "/storedRequests/view?rid=" + requestId, { mode: "cors" })
+        fetch(this.apiHostname + "/requests/info?rid=" + requestId, { mode: "cors" })
             .then(results => {
                 return results.json()
             }).then(response => {
@@ -36,14 +37,14 @@ class RequestViewPage extends React.Component {
                     this.fetchNextAndPreviousRequestInfo()
                 })
             }).catch(err => {
-                console.err(err);
+                console.error(err);
             })
 
     }
 
     fetchNextAndPreviousRequestInfo() {
         if (!this.state.nextRequestId) {
-            fetch(this.apiHostname + "/storedRequests/nextRequest?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+            fetch(this.apiHostname + "/requests/next?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -51,11 +52,11 @@ class RequestViewPage extends React.Component {
                         this.setState({ nextRequestId: response.id, hasNextRequest: true })
                     }
                 }).catch(err => {
-                    console.errr(err);
+                    console.error(err);
                 })
         }
         if (!this.state.previousRequestId) {
-            fetch(this.apiHostname + "/storedRequests/previousRequest?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+            fetch(this.apiHostname + "/requests/previous?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -63,14 +64,14 @@ class RequestViewPage extends React.Component {
                         this.setState({ previousRequestId: response.id, hasPreviousRequest: true })
                     }
                 }).catch(err => {
-                    console.errr(err);
+                    console.error(err);
                 })
         }
     }
 
     handleValueEditModalSubmit() {
         if (this.state.editTargetValueId === "" || this.state.modalTextInputValue === "") { return }
-        let url = this.apiHostname + "/storedRequests/updateValue?rid=" +
+        let url = this.apiHostname + "/requests/updateValue?rid=" +
             this.state.storedRequest.id + "&vid=" + this.state.editTargetValueId +
             "&v=" + encodeURIComponent(this.state.modalTextInputValue)
         fetch(url)
@@ -86,7 +87,7 @@ class RequestViewPage extends React.Component {
                     this.updateVerifiedEquationString(this.state.modalTextInputValue)
                 }
             }).catch(err => {
-                console.errr(err);
+                console.error(err);
             })
         window.location.reload(); // Yes i know very nice
     }
@@ -122,7 +123,7 @@ class RequestViewPage extends React.Component {
     }
 
     deleteRequest() {
-        fetch(this.apiHostname + "/storedRequests/deleteRequest?rid=" + this.state.storedRequest.id, { mode: "cors" })
+        fetch(this.apiHostname + "/requests/delete?rid=" + this.state.storedRequest.id, { mode: "cors" })
             .then(results => {
                 return results.json()
             })
@@ -135,7 +136,7 @@ class RequestViewPage extends React.Component {
                 }
             })
             .catch(err => {
-                console.errr(err);
+                console.error(err);
             })
     }
 
@@ -148,7 +149,7 @@ class RequestViewPage extends React.Component {
     }
 
     render() {
-        return !this.state.shouldDisplay ? <div></div> : this.displayView();
+        return !this.state.shouldDisplay ? <LoadingView loadingText="Loading Request..." /> : this.displayView();
     }
 
     displayView() {
@@ -165,7 +166,7 @@ class RequestViewPage extends React.Component {
         }
 
         const request = this.state.storedRequest
-        const pageTitle = "Image Review (" + request.id + ")"
+        const pageTitle = "Image Review"
         const requestDate = new Date(request.gcpRequestStartTimeMs)
 
         var requestStatusBadge;
@@ -242,6 +243,9 @@ class RequestViewPage extends React.Component {
                                 >
                                     <Card.Section title="Execution Date">
                                         <p>{requestDate.toLocaleDateString("en-US") + " " + requestDate.toLocaleTimeString("en-US")}</p>
+                                    </Card.Section>
+                                    <Card.Section title="Request ID">
+                                        <p>{request.id}</p>
                                     </Card.Section>
                                     <Card.Section title="GCP Execution Time (ms)">
                                         <p>{request.gcpRequestEndTimeMs - request.gcpRequestStartTimeMs}</p>

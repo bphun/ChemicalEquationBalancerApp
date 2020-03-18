@@ -5,10 +5,10 @@ services:
     extends:
       file: api/imageProcessorRequestsServer/docker-compose.yml
       service: image-processor-requests-server
-      #docker-image-updater:
-      #extends:
-      #file: dockerImageUpdaterServer/docker-compose.yml
-      #service: docker-image-updater
+  image-region-processor-server:
+    extends:
+      file: api/imageRegionProcessor/docker-compose.yml
+      service: image-region-processor-server
   grafana:
     extends:
       file: grafana/docker-compose.yml

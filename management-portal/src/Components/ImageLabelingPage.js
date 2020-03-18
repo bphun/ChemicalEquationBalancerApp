@@ -31,7 +31,7 @@ class ImageLabelingPage extends React.Component {
 
     getBoundingBoxes(requestId) {
         let imageBoundingsBoxes = []
-        fetch(this.apiHostname + "/storedRequests/getBoundingBoxes?rid=" + requestId, { mode: "cors" })
+        fetch(this.apiHostname + "/regions/?rid=" + requestId, { mode: "cors" })
             .then(results => {
                 return results.json()
             })
@@ -58,19 +58,19 @@ class ImageLabelingPage extends React.Component {
                 this.setState({ boundingBoxes: imageBoundingsBoxes, ready: true })
             })
             .catch(err => {
-                console.err(err)
+                console.error(err)
             })
     }
 
     setInProgressLabelingStatus(requestId) {
-        let url = this.apiHostname + "/storedRequests/updateValue"
+        let url = this.apiHostname + "/requests/updateValue/"
         url += "?rid=" + requestId
         url += "&vid=labelingStatus"
         url += "&v=IN_PROGRESS"
 
         fetch(url, { mode: "cors" })
             .catch(err => {
-                console.err(err)
+                console.error(err)
             })
     }
 
@@ -100,7 +100,11 @@ class ImageLabelingPage extends React.Component {
                 originX: region.x * 450,
                 height: region.h * 700,
                 originY: region.y * 700,
-                tags: region.tags ? region.tags : []
+                tags: region.tags ? region.tags : [],
+                viewportWidth: 450,
+                viewportHeight: 700,
+                parentImageWidth: 1080,
+                parentImageHeight: 1920
             }
 
             boundingBoxes.push(boundingBox)
@@ -124,7 +128,7 @@ class ImageLabelingPage extends React.Component {
             body: JSON.stringify(boundingBoxDiff)
         }
 
-        fetch(this.apiHostname + "/storedRequests/updateBoundingBoxes", config)
+        fetch(this.apiHostname + "/regions/update/", config)
             .then(results => {
                 return results.json()
             })

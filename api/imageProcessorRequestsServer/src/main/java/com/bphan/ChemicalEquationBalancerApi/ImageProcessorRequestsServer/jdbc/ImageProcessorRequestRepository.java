@@ -3,12 +3,12 @@ package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc;
 import java.util.List;
 import java.util.UUID;
 
-import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.BoundingBox;
-import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.BoundingBoxDiff;
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.RegionDiff;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.RequestLabelingStatus;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfo;
-import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfoApiResponse;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfoId;
+import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
+import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +24,10 @@ public class ImageProcessorRequestRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public StoredRequestInfoApiResponse uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime,
+    public ApiResponse uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime,
             long requestEndTime, String equationString) {
 
-        StoredRequestInfoApiResponse response;
+        ApiResponse response;
 
         if (requestId != null && requestId.trim().length() > 0) {
             try {
@@ -37,15 +37,15 @@ public class ImageProcessorRequestRepository {
                                 + "userInputtedChemicalEquationString)" + " VALUES (?, ?, ?, ?, ?)",
                         requestId, s3ImageUrl, requestStartTime, requestEndTime, equationString);
                 if (changedRows > 0) {
-                    response = new StoredRequestInfoApiResponse("success", "");
+                    response = new ApiResponse("success", "");
                 } else {
-                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                    response = new ApiResponse("error", "SQL error");
                 }
             } catch (DataAccessException e) {
-                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+                response = new ApiResponse("error", e.getLocalizedMessage());
             }
         } else {
-            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
+            response = new ApiResponse("error", "Invalid request ID");
         }
 
         return response;
@@ -64,6 +64,10 @@ public class ImageProcessorRequestRepository {
                         getLabelingStatusForRequest(resource.getString("id"), resource.getString("labelingStatus"))));
     }
 
+    public List<String> getRequestIdList() {
+        return jdbcTemplate.queryForList("select id from ImageProcessorRequestInfo", String.class);
+    }
+
     public StoredRequestInfo getRequestWithId(String requestId) {
         return jdbcTemplate.query("SELECT * FROM ImageProcessorRequestInfo " + "WHERE id='" + requestId + "'",
                 (resource, rowNum) -> new StoredRequestInfo(resource.getString("id"), resource.getString("s3ImageUrl"),
@@ -80,10 +84,10 @@ public class ImageProcessorRequestRepository {
 
     public RequestLabelingStatus getLabelingStatusForRequest(String requestId, String statusStr) {
         RequestLabelingStatus labelingStatus = RequestLabelingStatus.INCOMPLETE;
-        int numBoundingBoxes = numBoundingBoxesForRequest(requestId);
+        int numRegions = numRegionsForRequest(requestId);
 
         if (statusStr == null) {
-            if (numBoundingBoxes >= 1) {
+            if (numRegions >= 1) {
                 labelingStatus = RequestLabelingStatus.LABELED;
             }
         } else {
@@ -93,102 +97,105 @@ public class ImageProcessorRequestRepository {
         return labelingStatus;
     }
 
-    public int numBoundingBoxesForRequest(String requestId) {
+    public int numRegionsForRequest(String requestId) {
         RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
 
         jdbcTemplate.query(
-                "SELECT * FROM ChemicalEquationBoundingBox WHERE imageProcessorRequestInfoId=\'" + requestId + "\';",
+                "SELECT * FROM ChemicalEquationRegions WHERE imageProcessorRequestInfoId=\'" + requestId + "\';",
                 countCallback);
 
         return countCallback.getRowCount();
     }
 
-    public StoredRequestInfoApiResponse updateLabelingStatusForRequest(String requestId, String status) {
+    public ApiResponse updateLabelingStatusForRequest(String requestId, String status) {
         return doValueUpdate(requestId, "labelingStatus", status);
     }
 
-    public StoredRequestInfoApiResponse updateUserInputtedChemicalEquationString(String id, String value) {
+    public ApiResponse updateUserInputtedChemicalEquationString(String id, String value) {
         return doValueUpdate(id, "userInputtedChemicalEquationString", value);
     }
 
-    public StoredRequestInfoApiResponse updateVerifiedChemicalEquationString(String id, String value) {
+    public ApiResponse updateVerifiedChemicalEquationString(String id, String value) {
         return doValueUpdate(id, "verifiedChemicalEquationString", value);
     }
 
-    public StoredRequestInfoApiResponse updateGcpIdentifiedChemicalEquationString(String id, String value) {
+    public ApiResponse updateGcpIdentifiedChemicalEquationString(String id, String value) {
         return doValueUpdate(id, "gcpIdentifiedChemicalEquationString", value);
     }
 
-    public StoredRequestInfoApiResponse updateOnDeviceImageProcessStartTime(String id, String value) {
+    public ApiResponse updateOnDeviceImageProcessStartTime(String id, String value) {
         return doValueUpdate(id, "onDeviceImageProcessStartTime", value);
     }
 
-    public StoredRequestInfoApiResponse updateOnDeviceImageProcessEndTime(String id, String value) {
+    public ApiResponse updateOnDeviceImageProcessEndTime(String id, String value) {
         return doValueUpdate(id, "onDeviceImageProcessEndTime", value);
     }
 
-    public StoredRequestInfoApiResponse updateOnDeviceImageProcessDeviceName(String id, String value) {
+    public ApiResponse updateOnDeviceImageProcessDeviceName(String id, String value) {
         return doValueUpdate(id, "onDeviceImageProcessDeviceName", value);
     }
 
-    private StoredRequestInfoApiResponse deleteBoundingBox(BoundingBox boundingBox) {
-        StoredRequestInfoApiResponse response;
+    private ApiResponse deleteRegion(ImageRegion region) {
+        ApiResponse response;
 
         try {
-            String query = "DELETE FROM ChemicalEquationBoundingBox WHERE id=?";
-            int changedRows = jdbcTemplate.update(query, boundingBox.getId());
+            String query = "DELETE FROM ChemicalEquationRegions WHERE id=?";
+            int changedRows = jdbcTemplate.update(query, region.getId());
 
             if (changedRows > 0) {
-                response = new StoredRequestInfoApiResponse("success", "");
+                response = new ApiResponse("success", "");
             } else {
-                response = new StoredRequestInfoApiResponse("error", "SQL error");
+                response = new ApiResponse("error", "SQL error");
             }
         } catch (Exception e) {
-            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+            response = new ApiResponse("error", e.getLocalizedMessage());
         }
 
         return response;
     }
 
-    private StoredRequestInfoApiResponse addBoundingBox(BoundingBox boundingBox) {
-        if (boundingBox.getId() == null || boundingBox.getId().equals("")) {
-            boundingBox.setId(UUID.randomUUID().toString());
+    private ApiResponse addRegion(ImageRegion region) {
+        if (region.getId() == null || region.getId().equals("")) {
+            region.setId(UUID.randomUUID().toString());
         }
-        StoredRequestInfoApiResponse response;
+        ApiResponse response;
 
         try {
-            String query = "INSERT INTO ChemicalEquationBoundingBox"
-                    + "(id, imageProcessorRequestInfoId, regionClass, originX, originY, width, height, tags)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE regionClass=?, originX=?,"
-                    + "originY=?, width=?, height=?, tags=?";
+            String query = "INSERT INTO ChemicalEquationRegions"
+                    + "(id, imageProcessorRequestInfoId, regionClass, originX, originY, width, height, viewportWidth, viewportHeight, parentImageWidth, parentImageHeight, tags)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE regionClass=?, originX=?,"
+                    + "originY=?, width=?, height=?, viewportWidth=?, viewportHeight=?, parentImageWidth=?, parentImageHeight=?, tags=?";
 
-            int changedRows = jdbcTemplate.update(query, boundingBox.getId(), boundingBox.getRequestInfoId(), boundingBox.getRegionClass(),
-                    boundingBox.getOriginX(), boundingBox.getOriginY(), boundingBox.getWidth(), boundingBox.getHeight(),
-                    boundingBox.tagStr(), boundingBox.getRegionClass(), boundingBox.getOriginX(), boundingBox.getOriginY(), boundingBox.getWidth(),
-                    boundingBox.getHeight(), boundingBox.tagStr());
+            int changedRows = jdbcTemplate.update(query, region.getId(), region.getRequestInfoId(),
+                    region.getRegionClass(), region.getOriginX(), region.getOriginY(), region.getWidth(),
+                    region.getHeight(), region.getViewportWidth(), region.getViewportHeight(),
+                    region.getParentImageWidth(), region.getParentImageHeight(), region.tagStr(),
+                    region.getRegionClass(), region.getOriginX(), region.getOriginY(), region.getWidth(),
+                    region.getHeight(), region.getViewportWidth(), region.getViewportHeight(),
+                    region.getParentImageWidth(), region.getParentImageHeight(), region.tagStr());
 
             if (changedRows > 0) {
-                response = new StoredRequestInfoApiResponse("success", "");
+                response = new ApiResponse("success", "");
             } else {
-                response = new StoredRequestInfoApiResponse("error", "SQL error");
+                response = new ApiResponse("error", "SQL error");
             }
 
         } catch (Exception e) {
-            response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+            response = new ApiResponse("error", e.getLocalizedMessage());
         }
 
         return response;
     }
 
-    public StoredRequestInfoApiResponse updateBoundingBoxes(BoundingBoxDiff boundingBoxDiff) {
-        StoredRequestInfoApiResponse response = null;
+    public ApiResponse updateRegions(RegionDiff regionDiff) {
+        ApiResponse response = null;
 
-        BoundingBox[] boundingBoxesToUpdate = boundingBoxDiff.getModified();
-        BoundingBox[] boundingBoxesToRemove = boundingBoxDiff.getDeleted();
+        ImageRegion[] regionsToUpdate = regionDiff.getModified();
+        ImageRegion[] regionsToRemove = regionDiff.getDeleted();
 
-        if (boundingBoxesToUpdate != null) {
-            for (BoundingBox boundingBox : boundingBoxDiff.getModified()) {
-                response = addBoundingBox(boundingBox);
+        if (regionsToUpdate != null) {
+            for (ImageRegion region : regionDiff.getModified()) {
+                response = addRegion(region);
 
                 if (response.getStatus() == "error") {
                     break;
@@ -196,9 +203,9 @@ public class ImageProcessorRequestRepository {
             }
         }
 
-        if (boundingBoxesToRemove != null) {
-            for (BoundingBox boundingBox : boundingBoxDiff.getDeleted()) {
-                response = deleteBoundingBox(boundingBox);
+        if (regionsToRemove != null) {
+            for (ImageRegion region : regionDiff.getDeleted()) {
+                response = deleteRegion(region);
 
                 if (response.getStatus() == "error") {
                     break;
@@ -206,23 +213,36 @@ public class ImageProcessorRequestRepository {
             }
         }
 
-        String requestId = boundingBoxDiff.getRequestId();
-        updateLabelingStatusForRequest(requestId, numBoundingBoxesForRequest(requestId) > 0 ? "LABELED" : "INCOMPLETE");
+        String requestId = regionDiff.getRequestId();
+        updateLabelingStatusForRequest(requestId, numRegionsForRequest(requestId) > 0 ? "LABELED" : "INCOMPLETE");
 
         return response;
     }
 
-    public List<BoundingBox> getBoundingBoxesForRequest(String requestId) {
+    public List<ImageRegion> getRegionsForRequest(String requestId) {
         return jdbcTemplate.query(
-                "SELECT * FROM ChemicalEquationBoundingBox" + " WHERE imageProcessorRequestInfoId='" + requestId + "'",
-                (resource, rowNum) -> new BoundingBox(resource.getString("id"),
-                        resource.getString("imageProcessorRequestInfoId"), resource.getString("regionClass"), resource.getInt("originX"),
-                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height"),
+                "SELECT * FROM ChemicalEquationRegions" + " WHERE imageProcessorRequestInfoId='" + requestId + "'",
+                (resource, rowNum) -> new ImageRegion(resource.getString("id"),
+                        resource.getString("imageProcessorRequestInfoId"), resource.getString("regionClass"),
+                        resource.getInt("originX"), resource.getInt("originY"), resource.getInt("width"),
+                        resource.getInt("height"), resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
+                        resource.getInt("parentImageWidth"), resource.getInt("parentImageHeight"),
                         resource.getString("tags").split(",")));
     }
 
-    public StoredRequestInfoApiResponse getNextRequestIdAfterTimestamp(String timestamp) {
-        StoredRequestInfoApiResponse response;
+    public List<ImageRegion> getAllRegions() {
+        return jdbcTemplate.query(
+                "SELECT * FROM ChemicalEquationRegions",
+                (resource, rowNum) -> new ImageRegion(resource.getString("id"),
+                        resource.getString("imageProcessorRequestInfoId"), resource.getString("regionClass"),
+                        resource.getInt("originX"), resource.getInt("originY"), resource.getInt("width"),
+                        resource.getInt("height"), resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
+                        resource.getInt("parentImageWidth"), resource.getInt("parentImageHeight"),
+                        resource.getString("tags").split(",")));
+    }
+
+    public ApiResponse getNextRequestIdAfterTimestamp(String timestamp) {
+        ApiResponse response;
 
         try {
             response = jdbcTemplate.query(
@@ -230,14 +250,14 @@ public class ImageProcessorRequestRepository {
                             + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs ASC LIMIT 0,1;",
                     (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
         } catch (Exception e) {
-            response = new StoredRequestInfoApiResponse("error", "No available requests");
+            response = new ApiResponse("error", "No available requests");
         }
 
         return response;
     }
 
-    public StoredRequestInfoApiResponse getPreviousRequestIdBeforeTimestamp(String timestamp) {
-        StoredRequestInfoApiResponse response;
+    public ApiResponse getPreviousRequestIdBeforeTimestamp(String timestamp) {
+        ApiResponse response;
 
         try {
             response = jdbcTemplate.query(
@@ -245,35 +265,35 @@ public class ImageProcessorRequestRepository {
                             + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs DESC LIMIT 0,1;",
                     (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
         } catch (Exception e) {
-            response = new StoredRequestInfoApiResponse("error", "No available requests");
+            response = new ApiResponse("error", "No available requests");
         }
 
         return response;
     }
 
-    public StoredRequestInfoApiResponse deleteRequest(String requestId) {
-        StoredRequestInfoApiResponse response;
+    public ApiResponse deleteRequest(String requestId) {
+        ApiResponse response;
 
         if (requestId != null && requestId.trim().length() > 0) {
             try {
                 int rowsAffected = jdbcTemplate.update("DELETE FROM ImageProcessorRequestInfo WHERE id = ?", requestId);
                 if (rowsAffected > 0) {
-                    response = new StoredRequestInfoApiResponse("success", "");
+                    response = new ApiResponse("success", "");
                 } else {
-                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                    response = new ApiResponse("error", "SQL error");
                 }
             } catch (Exception e) {
-                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+                response = new ApiResponse("error", e.getLocalizedMessage());
             }
         } else {
-            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
+            response = new ApiResponse("error", "Invalid request ID");
         }
 
         return response;
     }
 
-    private StoredRequestInfoApiResponse doValueUpdate(String requestId, String valueId, Object value) {
-        StoredRequestInfoApiResponse response;
+    private ApiResponse doValueUpdate(String requestId, String valueId, Object value) {
+        ApiResponse response;
 
         if (requestId != null && requestId.trim().length() > 0) {
             try {
@@ -281,15 +301,15 @@ public class ImageProcessorRequestRepository {
                         "UPDATE ImageProcessorRequestInfo " + "SET " + valueId.toString() + " = ? " + "WHERE id = ?",
                         value, requestId);
                 if (changedRows > 0) {
-                    response = new StoredRequestInfoApiResponse("success", "");
+                    response = new ApiResponse("success", "");
                 } else {
-                    response = new StoredRequestInfoApiResponse("error", "SQL error");
+                    response = new ApiResponse("error", "SQL error");
                 }
             } catch (DataAccessException e) {
-                response = new StoredRequestInfoApiResponse("error", e.getLocalizedMessage());
+                response = new ApiResponse("error", e.getLocalizedMessage());
             }
         } else {
-            response = new StoredRequestInfoApiResponse("error", "Invalid request ID");
+            response = new ApiResponse("error", "Invalid request ID");
         }
 
         return response;
