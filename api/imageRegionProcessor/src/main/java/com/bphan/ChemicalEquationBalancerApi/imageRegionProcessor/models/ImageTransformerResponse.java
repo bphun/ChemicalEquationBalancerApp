@@ -14,6 +14,13 @@ public class ImageTransformerResponse extends ApiResponse {
         this.regionId = "";
     }
 
+    public ImageTransformerResponse(String status, String description, String requestId, String regionId, String fileUrl) {
+        super(status, description);
+        this.fileUrl = fileUrl;
+        this.requestId = requestId;
+        this.regionId = regionId;
+    }
+
     @JsonProperty("fileUrl")
     public String getFileUrl() {
         return this.fileUrl;

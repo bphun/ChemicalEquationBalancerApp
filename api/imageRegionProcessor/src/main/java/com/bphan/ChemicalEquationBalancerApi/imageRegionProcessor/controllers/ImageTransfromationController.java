@@ -1,6 +1,9 @@
 package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.controllers;
 
-import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageTransformer;
+import java.awt.image.BufferedImage;
+
+import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageOperations;
+import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageTransceiver;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.models.ImageTransformerResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class ImageTransfromationController {
 
     @Autowired
-    private ImageTransformer imageTransformer;
+    private ImageOperations imageOperations;
+
+    @Autowired
+    private ImageTransceiver imageTransceiver;
 
     @RequestMapping("/rotate")
     public ImageTransformerResponse rotateImage(@RequestParam(value = "rid", required = true) String requestId,
             @RequestParam(value = "r", required = true) double radians,
             @RequestParam(value = "n", required = false) String newFilename) {
+        BufferedImage image = imageTransceiver.download(requestId + ".png");
 
-        return this.imageTransformer.rotate(requestId, newFilename, radians);
+        BufferedImage rotatedImage = imageOperations.rotate(image, radians);
+
+        String fileName = newFilename != null ? newFilename : requestId;
+        String fileUrl = imageTransceiver.upload(fileName, rotatedImage);
+
+        boolean success = fileUrl != null;
+
+        return new ImageTransformerResponse(success ? "success" : "error", "", requestId, fileUrl);
     }
 
     @RequestMapping("/scale")
@@ -31,6 +45,15 @@ public class ImageTransfromationController {
             @RequestParam(value = "soy", required = false, defaultValue = "0") int scaleOriginY,
             @RequestParam(value = "n", required = false) String newFilename) {
 
-        return this.imageTransformer.scale(requestId, newFilename, scaleWidth, scaleHeight, scaleOriginX, scaleOriginY);
+        BufferedImage image = imageTransceiver.download(requestId + ".png");
+
+        BufferedImage scaledImage = imageOperations.scale(image, scaleOriginX, scaleOriginY, scaleWidth, scaleHeight);
+
+        String fileName = newFilename != null ? newFilename : requestId;
+        String fileUrl = imageTransceiver.upload(fileName, scaledImage);
+
+        boolean success = fileUrl != null;
+
+        return new ImageTransformerResponse(success ? "success" : "error", "", requestId, fileUrl);
     }
 }

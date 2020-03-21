@@ -1,12 +1,14 @@
 package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageRegionProcessor;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
-import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageTransformer;
+import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageOperations;
+import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageTransceiver;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.models.ImageTransformerResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +16,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ImageRegionExtractor {
 
     @Autowired
-    private ImageTransformer imageTransformer;
+    private ImageTransceiver imageTransceiver;
+    
+    @Autowired
+    private ImageOperations imageOperations;
 
     public ImageRegionExtractor() {
     }
 
     public Map<String, List<ImageTransformerResponse>> createRegionImages(List<ImageRegion> regions) {
         Map<String, List<ImageTransformerResponse>> response = new HashMap<>();
-        
+        Map<String, BufferedImage> imageCache = new HashMap<>(); // This is going to require a lot of memory once there
+                                                                 // are alot of images
+
         regions.parallelStream().forEach(region -> {
             String requestId = region.getRequestInfoId();
+            BufferedImage regionParentImage = imageCache.get(requestId);
+
+            if (regionParentImage == null) {
+                regionParentImage = imageTransceiver.download(requestId + ".png");
+                imageCache.put(requestId, regionParentImage);
+            } else {
+                System.out.println("Using image cache");
+            }
 
             if (response.get(requestId) == null) {
-                List<ImageTransformerResponse> responses = new ArrayList<>();
-                response.put(requestId, responses);
+                response.put(requestId, new ArrayList<>());
             }
-            
-            response.get(requestId).add(createRegionImage(requestId, region));
+
+            BufferedImage regionImage = createRegionImage(requestId, regionParentImage, region);
+
+            boolean success = regionImage != null;
+            String newFileName = requestId + "_" + region.getId();
+            String regionImageUrl = "";
+
+            if (success) {
+                regionImageUrl = imageTransceiver.upload(newFileName, regionImage);
+            }
+
+            ImageTransformerResponse transformerResponse = new ImageTransformerResponse(success ? "success" : "error",
+                    "", requestId, region.getId(), regionImageUrl);
+
+            response.get(requestId).add(transformerResponse);
         });
 
         return response;
     }
 
-    public ImageTransformerResponse createRegionImage(String requestId, ImageRegion region) {
-
-        String newFileName = requestId + "_" + region.getId();
-
+    public BufferedImage createRegionImage(String requestId, BufferedImage image, ImageRegion region) {
         // Have to do some transformations of the region origin and dimensions since the
         // image displayed in the management console is not the full size image.
 
@@ -58,20 +82,14 @@ public class ImageRegionExtractor {
         double scaleOriginX = widthScaleFactor * region.getOriginX();
         double scaleOriginY = (heightScaleFactor * region.getOriginY());
 
-        ImageTransformerResponse scaleResponse;
+        BufferedImage resultImage = null;
 
-        if (parentImageWidth <= 0 || parentImageHeight <= 0 || viewportWidth <= 0 || viewportHeight <= 0
-                || regionWidth <= 0 || regionHeight <= 0) {
-            scaleResponse = new ImageTransformerResponse("error", "Inalid viewport, parent image, or region dimension",
-                    requestId, "");
-        } else {
-            scaleResponse = imageTransformer.scale(requestId, newFileName, regionWidth, regionHeight, scaleOriginX,
-                    scaleOriginY);
+        if (parentImageWidth > 0 && parentImageHeight > 0 && viewportWidth > 0 && viewportHeight > 0 && regionWidth > 0
+                && regionHeight > 0) {
+            resultImage = imageOperations.scale(image, scaleOriginX, scaleOriginY, regionWidth, regionHeight);
         }
 
-        scaleResponse.setRegionId(region.getId());
-
-        return scaleResponse;
+        return resultImage;
     }
 
 }
