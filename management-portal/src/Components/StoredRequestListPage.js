@@ -74,7 +74,7 @@ class StoredRequestListPage extends React.Component {
                         requestStatusBadge = <Badge status="warning">Unavailable</Badge>
                     }
 
-                    storedRequestInfo[0] = <Link onClick={() => this.onChange(currRequest)}> {currRequest.id} </Link >;
+                    storedRequestInfo[0] = <Link onClick={() => this.onChange(currRequest)} > {currRequest.id} </Link >;
                     storedRequestInfo[1] = <Link url={currRequest.s3ImageUrl}> Link </Link>;
                     storedRequestInfo[2] = requestStatusBadge
                     storedRequestInfo[3] = requestDate.toLocaleDateString("en-US") + " " + requestDate.toLocaleTimeString("en-US")

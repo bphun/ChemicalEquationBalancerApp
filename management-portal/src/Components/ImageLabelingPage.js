@@ -25,11 +25,11 @@ class ImageLabelingPage extends React.Component {
         const imageUrl = decodeURI(parsedQueryString.imgUrl)
         this.setState({ requestId: requestId, imageUrl: imageUrl })
 
-        this.getBoundingBoxes(requestId)
+        this.getRegions(requestId)
         this.setInProgressLabelingStatus(requestId);
     }
 
-    getBoundingBoxes(requestId) {
+    getRegions(requestId) {
         let imageBoundingsBoxes = []
         fetch(this.apiHostname + "/regions/?rid=" + requestId, { mode: "cors" })
             .then(results => {

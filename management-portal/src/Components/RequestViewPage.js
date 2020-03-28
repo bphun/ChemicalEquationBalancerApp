@@ -1,8 +1,9 @@
 import React from 'react'
-import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge } from "@shopify/polaris";
+import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge, Spinner } from "@shopify/polaris";
 import "../App.css"
 import queryString from 'query-string';
 import { withRouter } from "react-router";
+import { CircleLeftMajorMonotone, CircleRightMajorMonotone, WandMajorMonotone, EditMajorMonotone, FolderDownMajorMonotone } from '@shopify/polaris-icons';
 import LoadingView from './LoadingView';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
@@ -11,10 +12,12 @@ class RequestViewPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            processingRegions: false,
             shouldDisplayEditValueModal: false,
-            editTargetValueId: "",
+            editActionTargetRegion: "",
             modalTextInputValue: "",
             storedRequest: undefined,
+            regions: undefined,
             viewInfoReady: false,
             shouldDisplay: false,
             previousRequestId: undefined,
@@ -24,6 +27,7 @@ class RequestViewPage extends React.Component {
         }
 
         this.apiHostname = process.env.REACT_APP_API_HOSTNAME
+        this.regionProcessorApiHostname = process.env.REACT_APP_REGION_PROCESSOR_API_HOSTNAME
     }
 
     componentDidMount() {
@@ -33,13 +37,42 @@ class RequestViewPage extends React.Component {
             .then(results => {
                 return results.json()
             }).then(response => {
-                this.setState({ storedRequest: response, shouldDisplay: true }, () => {
+                this.setState({ storedRequest: response }, () => {
                     this.fetchNextAndPreviousRequestInfo()
+                    this.getRegions(response.id)
                 })
             }).catch(err => {
                 console.error(err);
             })
 
+    }
+
+    getRegions(requestId) {
+        let imageRegions = []
+        fetch(this.apiHostname + "/regions/?rid=" + requestId, { mode: "cors" })
+            .then(results => {
+                return results.json()
+            })
+            .then(fetchedBoundingBoxes => {
+                for (let i in fetchedBoundingBoxes) {
+                    let currResponse = fetchedBoundingBoxes[i]
+                    let boundingBox = {
+                        cls: currResponse.regionClass,
+                        s3ImageUrl: currResponse.s3ImageUrl,
+                        w: currResponse.width,
+                        h: currResponse.height,
+                        id: currResponse.id,
+                        tags: currResponse.tags,
+                        equationStr: currResponse.equationStr
+                    }
+
+                    imageRegions.push(boundingBox)
+                }
+                this.setState({ regions: imageRegions, shouldDisplay: true })
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 
     fetchNextAndPreviousRequestInfo() {
@@ -70,9 +103,9 @@ class RequestViewPage extends React.Component {
     }
 
     handleValueEditModalSubmit() {
-        if (this.state.editTargetValueId === "" || this.state.modalTextInputValue === "") { return }
-        let url = this.apiHostname + "/requests/updateValue?rid=" +
-            this.state.storedRequest.id + "&vid=" + this.state.editTargetValueId +
+        if (this.state.editActionTargetRegion === "" || this.state.modalTextInputValue === "") { return }
+        let url = this.apiHostname + "/regions/updateValue?rid=" +
+            this.state.editActionTargetRegion + "&vid=equStr" +
             "&v=" + encodeURIComponent(this.state.modalTextInputValue)
         fetch(url)
             .then(results => {
@@ -128,16 +161,21 @@ class RequestViewPage extends React.Component {
                 return results.json()
             })
             .then(response => {
-                if (response.status === "success") {
+                if (response.status && response.status === "success") {
                     this.props.history.push({ pathname: "/requests/list" })
                     window.location.reload();
-                } else {
-                    alert("Error: " + response.description);
+                } else if ((response.status && response.status !== "success") || response.status === 500) {
+                    alert("Error: " + (response.description ?? response.error));
+                    return
                 }
             })
             .catch(err => {
                 console.error(err);
             })
+    }
+
+    downloadExportedRegions() {
+        console.log("export")
     }
 
     showImageLabelingView() {
@@ -148,8 +186,82 @@ class RequestViewPage extends React.Component {
         window.location.reload();
     }
 
+    processRegions() {
+        this.setState({ processingRegions: true })
+        fetch(this.regionProcessorApiHostname + "/imageProcessor/extract/regions?rid=" + this.state.storedRequest.id)
+            .then(results => {
+                return results.json()
+            })
+            .then(responses => {
+                let response = responses[this.state.storedRequest.id]
+                for (let i in response) {
+                    let currRegionExtractionresponse = response[i]
+
+                    if ((currRegionExtractionresponse.status && currRegionExtractionresponse.status !== "success") || currRegionExtractionresponse.status === 500) {
+                        alert("Error: " + (currRegionExtractionresponse.description ?? currRegionExtractionresponse.error));
+                        return
+                    }
+                }
+
+                this.setState({ processingRegions: false })
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
+
+    rotateRegion(regionId, radians) {
+        // Rotated image may not display after this call because the browser might use a cached version of the image
+        fetch(this.regionProcessorApiHostname + "/imageProcessor/transform/rotate/?rid=" +
+            this.state.storedRequest.id + "_" + regionId + "&r=" + radians)
+            .then(results => {
+                return results.json()
+            })
+            .then(response => {
+                console.log(response)
+                if ((response.status && response.status !== "success") || response.status === 500) {
+                    alert("Error: " + (response.description ?? response.error));
+                    return
+                }
+                window.location.reload();
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }
+
     render() {
         return !this.state.shouldDisplay ? <LoadingView loadingText="Loading Request..." /> : this.displayView();
+    }
+
+    displayRegions() {
+        let regionDisplay = []
+
+        for (let i in this.state.regions) {
+            const currRegion = this.state.regions[i]
+
+            regionDisplay.push(
+                <Stack.Item>
+                    <Image source={currRegion.s3ImageUrl} />
+                    <Card
+                        title="Region Info"
+                    >
+                        <Card.Section title="Region ID">
+                            {currRegion.id}
+                        </Card.Section>
+                        <Card.Section title="Equation String" actions={[{ icon: EditMajorMonotone, onAction: () => this.setState({ shouldDisplayEditValueModal: true, editActionTargetRegion: currRegion.id }) }]}>
+                            {currRegion.equationStr === "" ? "Unavailable" : currRegion.equationStr}
+                        </Card.Section>
+                        <Card.Section title="S3 Image URL">
+                            <Link url={currRegion.s3ImageUrl}> Link </Link>
+                        </Card.Section>
+                        <Card.Section title="Rotate" actions={[{ icon: CircleLeftMajorMonotone, onAction: () => this.rotateRegion(currRegion.id, 1.57079632679) }, { icon: CircleRightMajorMonotone, onAction: () => this.rotateRegion(currRegion.id, -1.57079632679) }]} />
+                    </Card>
+                </Stack.Item>
+            )
+        }
+
+        return regionDisplay
     }
 
     displayView() {
@@ -159,11 +271,6 @@ class RequestViewPage extends React.Component {
             height: 700,
             resizeMode: 'contain'
         };
-
-        const idMappings = {
-            "verifiedChemicalEquationString": "verified equation string",
-            "userInputtedChemicalEquationString": "user chemical equation string"
-        }
 
         const request = this.state.storedRequest
         const pageTitle = "Image Review"
@@ -201,7 +308,7 @@ class RequestViewPage extends React.Component {
                         }}>
                         <Modal
                             open={this.state.shouldDisplayEditValueModal}
-                            onClose={() => this.setState({ shouldDisplayEditValueModal: false, editTargetValueId: "" })}
+                            onClose={() => this.setState({ shouldDisplayEditValueModal: false, editActionTargetRegion: "" })}
                             title="Edit Value"
                             primaryAction={{
                                 content: "Submit",
@@ -212,14 +319,13 @@ class RequestViewPage extends React.Component {
                                 <TextField
                                     value={this.state.modalTextInputValue}
                                     onChange={(value) => this.setState({ modalTextInputValue: value })}
-                                    label={"Edit " + idMappings[this.state.editTargetValueId]}
+                                    label={"Edit equation string"}
                                 />
                             </Modal.Section>
                         </Modal>
                         <Stack>
                             <Stack.Item>
                                 <Card>
-
                                     <Image source={request.s3ImageUrl} style={imageStyle} />
                                 </Card>
                             </Stack.Item>
@@ -250,26 +356,24 @@ class RequestViewPage extends React.Component {
                                     <Card.Section title="GCP Execution Time (ms)">
                                         <p>{request.gcpRequestEndTimeMs - request.gcpRequestStartTimeMs}</p>
                                     </Card.Section>
-                                    <Card.Section title="GCP Equation String">
-                                        <p>{request.gcpIdentifiedChemicalEquationString ? request.gcpIdentifiedChemicalEquationString : "Unavailable"}</p>
-                                    </Card.Section>
                                     <Card.Section title="OD Execution Time (ms)">
                                         <p>{request.onDeviceImageProcessEndTime - request.onDeviceImageProcessStartTime}</p>
                                     </Card.Section>
                                     <Card.Section title="Labeling Status">
                                         {requestStatusBadge}
                                     </Card.Section>
-                                    <Card.Section title="Verified Equation String" actions={[{ content: "Edit", onAction: () => this.setState({ shouldDisplayEditValueModal: true, editTargetValueId: "verifiedChemicalEquationString" }) }]}>
-                                        <p>{request.verifiedChemicalEquationString ? decodeURI(request.verifiedChemicalEquationString) : "Unavailable"}</p>
-                                    </Card.Section>
-                                    <Card.Section title="User Equation String" actions={[{ content: "Edit", onAction: () => this.setState({ shouldDisplayEditValueModal: true, editTargetValueId: "userInputtedChemicalEquationString" }) }]}>
-                                        <p>{request.userInputtedChemicalEquationString ? decodeURI(request.userInputtedChemicalEquationString) : "Unavailable"}</p>
-                                    </Card.Section>
                                     <Card.Section title="S3 Image URL">
                                         <Link url={request.s3ImageUrl}> Link </Link>
                                     </Card.Section>
+                                    <Card.Section title="Extract Region(s)" actions={[{ disabled: this.state.processingRegions, icon: WandMajorMonotone, onAction: () => this.processRegions() }]}>
+                                        {this.state.processingRegions ? <Spinner size="large" color="teal" /> : ""}
+                                    </Card.Section>
+                                    <Card.Section title="Download Region Data" actions={[{ icon: FolderDownMajorMonotone, onAction: () => this.downloadExportedRegions() }]} />
                                 </Card>
                             </Stack.Item>
+                        </Stack>
+                        <Stack>
+                            {this.displayRegions()}
                         </Stack>
                     </Page>
                 </AppProvider>

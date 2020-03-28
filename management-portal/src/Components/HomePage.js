@@ -1,5 +1,6 @@
 import React from 'react'
 import { AppProvider, Page, Navigation } from "@shopify/polaris";
+import { AnalyticsMajorMonotone, HomeMajorTwotone, ImagesMajorMonotone } from '@shopify/polaris-icons';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class HomePage extends React.Component {
@@ -20,14 +21,17 @@ class HomePage extends React.Component {
                                     {
                                         url: "/",
                                         label: "Home",
+                                        icon: HomeMajorTwotone
                                     },
                                     {
                                         url: "/requests/list",
-                                        label: "Image Labeling Tool"                                        
+                                        label: "Image Labeling Tool",
+                                        icon: ImagesMajorMonotone                                  
                                     },
                                     {
                                         url: "/metrics",
-                                        label: "Grafana Metrics Dashboard"
+                                        label: "Grafana Metrics Dashboard",
+                                        icon: AnalyticsMajorMonotone
                                     }
                                 ]}
                             />
