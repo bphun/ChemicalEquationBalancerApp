@@ -21,13 +21,6 @@ public class ChemicalEquationBalancerAppServerApplication {
         SpringApplication.run(ChemicalEquationBalancerAppServerApplication.class, args);
     }
 
-    // @Bean
-    // InitializingBean forcePrometheusPostProcessor(BeanPostProcessor
-    // meterRegistryPostProcessor, PrometheusMeterRegistry registry) {
-    // return () ->
-    // meterRegistryPostProcessor.postProcessAfterInitialization(registry, "");
-    // }
-
     @Bean
     public ServletRegistrationBean<DispatcherServlet> dispatcherRegistration() {
         return new ServletRegistrationBean<DispatcherServlet>(dispatcherServlet());

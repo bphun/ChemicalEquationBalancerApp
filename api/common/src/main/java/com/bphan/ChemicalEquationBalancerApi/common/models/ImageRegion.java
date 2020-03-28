@@ -12,6 +12,8 @@ public class ImageRegion {
     private String id;
     private String requestInfoId;
     private String regionClass;
+    private String s3ImageUrl;
+    private String equationStr;
     private double originX;
     private double originY;
     private double width;
@@ -48,11 +50,13 @@ public class ImageRegion {
         this.tags = Arrays.asList(tags.split(","));
     }
 
-    public ImageRegion(String id, String requestInfoId, String regionClass, double originX, double originY,
+    public ImageRegion(String id, String requestInfoId, String regionClass, String s3ImageUrl, String equationStr, double originX, double originY,
             double width, double height, double viewportWidth, double viewportHeight, int parentImageWidth, int parentImageHeight, String tags) {
         this.id = id;
         this.requestInfoId = requestInfoId;
         this.regionClass = regionClass;
+        this.s3ImageUrl = s3ImageUrl;
+        this.equationStr = equationStr != null ? equationStr : "";
         this.originX = originX;
         this.originY = originY;
         this.width = width;
@@ -64,11 +68,13 @@ public class ImageRegion {
         this.tags = Arrays.asList(tags.split(","));
     }
 
-    public ImageRegion(String id, String requestInfoId, String regionClass, double originX, double originY,
+    public ImageRegion(String id, String requestInfoId, String regionClass, String s3ImageUrl, String equationStr, double originX, double originY,
             double width, double height, double viewportWidth, double viewportHeight, int parentImageWidth, int parentImageHeight, String[] tags) {
         this.id = id;
         this.requestInfoId = requestInfoId;
         this.regionClass = regionClass;
+        this.s3ImageUrl = s3ImageUrl;
+        this.equationStr = equationStr != null ? equationStr : "";
         this.originX = originX;
         this.originY = originY;
         this.width = width;
@@ -120,6 +126,26 @@ public class ImageRegion {
     @JsonProperty("regionClass")
     public void setRegionClass(String regionClass) {
         this.regionClass = regionClass;
+    }
+
+    @JsonProperty("s3ImageUrl")
+    private String getS3ImageUrl() {
+        return this.s3ImageUrl;
+    }
+
+    @JsonProperty("s3ImageUrl")
+    private void setS3ImageUrl(String s3ImageUrl) {
+        this.s3ImageUrl = s3ImageUrl;
+    }
+
+    @JsonProperty("equationStr")
+    private String getEquationStr() {
+        return this.equationStr;
+    }
+
+    @JsonProperty("equationStr")
+    private void setEquationStr(String equationStr) {
+        this.equationStr = equationStr;
     }
 
     @JsonProperty("originX")

@@ -8,6 +8,7 @@ import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfo;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfoId;
 import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
+import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ImageProcessorRequestRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private AwsS3Client s3Client;
 
     public ApiResponse uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime,
             long requestEndTime, String equationString) {
@@ -107,32 +111,40 @@ public class ImageProcessorRequestRepository {
         return countCallback.getRowCount();
     }
 
+    public ApiResponse updateS3ImageUrlForRegion(String regionId, String url) {
+        return doValueUpdate(regionId, "ChemicalEquationRegions", "s3ImageUrl", url);
+    }
+
+    public ApiResponse updateEquationStrForRegion(String regionId, String equationStr) {
+        return doValueUpdate(regionId, "ChemicalEquationRegions", "equationStr", equationStr);
+    }
+
     public ApiResponse updateLabelingStatusForRequest(String requestId, String status) {
-        return doValueUpdate(requestId, "labelingStatus", status);
+        return doValueUpdate(requestId, "ImageProcessorRequestInfo", "labelingStatus", status);
     }
 
     public ApiResponse updateUserInputtedChemicalEquationString(String id, String value) {
-        return doValueUpdate(id, "userInputtedChemicalEquationString", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "userInputtedChemicalEquationString", value);
     }
 
     public ApiResponse updateVerifiedChemicalEquationString(String id, String value) {
-        return doValueUpdate(id, "verifiedChemicalEquationString", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "verifiedChemicalEquationString", value);
     }
 
     public ApiResponse updateGcpIdentifiedChemicalEquationString(String id, String value) {
-        return doValueUpdate(id, "gcpIdentifiedChemicalEquationString", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "gcpIdentifiedChemicalEquationString", value);
     }
 
     public ApiResponse updateOnDeviceImageProcessStartTime(String id, String value) {
-        return doValueUpdate(id, "onDeviceImageProcessStartTime", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "onDeviceImageProcessStartTime", value);
     }
 
     public ApiResponse updateOnDeviceImageProcessEndTime(String id, String value) {
-        return doValueUpdate(id, "onDeviceImageProcessEndTime", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "onDeviceImageProcessEndTime", value);
     }
 
     public ApiResponse updateOnDeviceImageProcessDeviceName(String id, String value) {
-        return doValueUpdate(id, "onDeviceImageProcessDeviceName", value);
+        return doValueUpdate(id, "ImageProcessorRequestInfo", "onDeviceImageProcessDeviceName", value);
     }
 
     private ApiResponse deleteRegion(ImageRegion region) {
@@ -161,10 +173,10 @@ public class ImageProcessorRequestRepository {
         ApiResponse response;
 
         try {
-            String query = "INSERT INTO ChemicalEquationRegions"
-                    + "(id, imageProcessorRequestInfoId, regionClass, originX, originY, width, height, viewportWidth, viewportHeight, parentImageWidth, parentImageHeight, tags)"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE regionClass=?, originX=?,"
-                    + "originY=?, width=?, height=?, viewportWidth=?, viewportHeight=?, parentImageWidth=?, parentImageHeight=?, tags=?";
+            String query = "INSERT INTO ChemicalEquationRegions "
+                    + "(id, imageProcessorRequestInfoId, regionClass, originX, originY, width, height, viewportWidth, viewportHeight, parentImageWidth, parentImageHeight, tags) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE regionClass=?, originX=?, "
+                    + "originY=?, width=?, height=?, viewportWidth=?, viewportHeight=?, parentImageWidth=?, parentImageHeight=?, tags=?;";
 
             int changedRows = jdbcTemplate.update(query, region.getId(), region.getRequestInfoId(),
                     region.getRegionClass(), region.getOriginX(), region.getOriginY(), region.getWidth(),
@@ -196,7 +208,7 @@ public class ImageProcessorRequestRepository {
         if (regionsToUpdate != null) {
             for (ImageRegion region : regionDiff.getModified()) {
                 response = addRegion(region);
-
+                
                 if (response.getStatus() == "error") {
                     break;
                 }
@@ -206,7 +218,8 @@ public class ImageProcessorRequestRepository {
         if (regionsToRemove != null) {
             for (ImageRegion region : regionDiff.getDeleted()) {
                 response = deleteRegion(region);
-
+                s3Client.deleteImageByName(region.getRequestInfoId() + "_" + region.getId());
+                
                 if (response.getStatus() == "error") {
                     break;
                 }
@@ -224,19 +237,20 @@ public class ImageProcessorRequestRepository {
                 "SELECT * FROM ChemicalEquationRegions" + " WHERE imageProcessorRequestInfoId='" + requestId + "'",
                 (resource, rowNum) -> new ImageRegion(resource.getString("id"),
                         resource.getString("imageProcessorRequestInfoId"), resource.getString("regionClass"),
-                        resource.getInt("originX"), resource.getInt("originY"), resource.getInt("width"),
-                        resource.getInt("height"), resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
+                        resource.getString("s3ImageUrl"), resource.getString("equationStr"), resource.getInt("originX"),
+                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height"),
+                        resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
                         resource.getInt("parentImageWidth"), resource.getInt("parentImageHeight"),
                         resource.getString("tags").split(",")));
     }
 
     public List<ImageRegion> getAllRegions() {
-        return jdbcTemplate.query(
-                "SELECT * FROM ChemicalEquationRegions",
+        return jdbcTemplate.query("SELECT * FROM ChemicalEquationRegions",
                 (resource, rowNum) -> new ImageRegion(resource.getString("id"),
                         resource.getString("imageProcessorRequestInfoId"), resource.getString("regionClass"),
-                        resource.getInt("originX"), resource.getInt("originY"), resource.getInt("width"),
-                        resource.getInt("height"), resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
+                        resource.getString("s3ImageUrl"), resource.getString("equationStr"), resource.getInt("originX"),
+                        resource.getInt("originY"), resource.getInt("width"), resource.getInt("height"),
+                        resource.getInt("viewportWidth"), resource.getInt("viewportHeight"),
                         resource.getInt("parentImageWidth"), resource.getInt("parentImageHeight"),
                         resource.getString("tags").split(",")));
     }
@@ -292,14 +306,14 @@ public class ImageProcessorRequestRepository {
         return response;
     }
 
-    private ApiResponse doValueUpdate(String requestId, String valueId, Object value) {
+    private ApiResponse doValueUpdate(String requestId, String tableName, String valueId, Object value) {
         ApiResponse response;
 
         if (requestId != null && requestId.trim().length() > 0) {
             try {
                 int changedRows = jdbcTemplate.update(
-                        "UPDATE ImageProcessorRequestInfo " + "SET " + valueId.toString() + " = ? " + "WHERE id = ?",
-                        value, requestId);
+                        "UPDATE " + tableName + " SET " + valueId.toString() + " = ? " + "WHERE id = ?", value,
+                        requestId);
                 if (changedRows > 0) {
                     response = new ApiResponse("success", "");
                 } else {

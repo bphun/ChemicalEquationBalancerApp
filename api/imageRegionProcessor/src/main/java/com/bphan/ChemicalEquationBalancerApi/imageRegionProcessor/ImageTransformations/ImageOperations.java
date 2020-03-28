@@ -1,5 +1,7 @@
 package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -35,12 +37,37 @@ public class ImageOperations {
         AffineTransform at = new AffineTransform();
 
         at.translate(-scaleOriginX, -scaleOriginY);
+        // at.scale(scaledWidth, scaledHeight);
 
         AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
 
         scaleOp.filter(image, scaledImage);
 
         return scaledImage;
+    }
+
+    public BufferedImage resize(BufferedImage image, int scaledWidth, int scaledHeight) {
+        // Make sure the aspect ratio is maintained, so the image is not distorted
+        double thumbRatio = (double) scaledWidth / (double) scaledHeight;
+        int imageWidth = image.getWidth(null);
+        int imageHeight = image.getHeight(null);
+        double aspectRatio = (double) imageWidth / (double) imageHeight;
+
+        if (thumbRatio < aspectRatio) {
+            scaledHeight = (int) (scaledWidth / aspectRatio);
+        } else {
+            scaledWidth = (int) (scaledHeight * aspectRatio);
+        }
+
+        // Draw the scaled image
+        BufferedImage newImage = new BufferedImage(scaledWidth, scaledHeight, image.getType());
+        Graphics2D graphics2D = newImage.createGraphics();
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics2D.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
+
+        return newImage;
     }
 
 }

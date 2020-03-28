@@ -7,6 +7,11 @@ public class ApiResponse {
     String status;
     String description;
     
+    public ApiResponse() {
+        this.status = "";
+        this.description = "";
+    }
+
     public ApiResponse(String status, String description) {
         this.status = status;
         this.description = description;

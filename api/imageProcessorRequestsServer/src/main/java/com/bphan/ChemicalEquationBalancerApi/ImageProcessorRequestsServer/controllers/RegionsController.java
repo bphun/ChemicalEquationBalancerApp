@@ -2,6 +2,8 @@ package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.contr
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc.ImageProcessorRequestRepository;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.RegionDiff;
 import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
@@ -35,6 +37,26 @@ public class RegionsController {
     @GetMapping("/all/")
     public List<ImageRegion> allRegions() {
         return imageProcessorRequestRepository.getAllRegions();
+    }
+
+    @GetMapping("/updateValue")
+    public ApiResponse setS3ImageUrl(@RequestParam(value = "rid", required = true) String id,
+            @RequestParam(value = "vid", required = true) String valueId,
+            @RequestParam(value = "v", required = true) String value, HttpServletResponse response) {
+        ApiResponse responseBody;
+
+        switch (valueId) {
+            case "imgUrl":
+                responseBody = imageProcessorRequestRepository.updateS3ImageUrlForRegion(id, value);
+                break;
+            case "equStr":
+                responseBody = imageProcessorRequestRepository.updateEquationStrForRegion(id, value);
+            default:
+                responseBody = new ApiResponse("error", "Invalid value ID");
+                break;
+        }
+
+        return responseBody;
     }
 
     // @CrossOrigin(origins = frontendHostname)

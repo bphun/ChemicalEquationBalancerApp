@@ -7,6 +7,7 @@ import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransform
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.models.ImageTransformerResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,9 @@ public class ImageTransfromationController {
     @Autowired
     private ImageTransceiver imageTransceiver;
 
+    private final String frontendHostname = "*";
+    
+    @CrossOrigin(origins = frontendHostname)
     @RequestMapping("/rotate")
     public ImageTransformerResponse rotateImage(@RequestParam(value = "rid", required = true) String requestId,
             @RequestParam(value = "r", required = true) double radians,
@@ -37,6 +41,7 @@ public class ImageTransfromationController {
         return new ImageTransformerResponse(success ? "success" : "error", "", requestId, fileUrl);
     }
 
+    @CrossOrigin(origins = frontendHostname)
     @RequestMapping("/scale")
     public ImageTransformerResponse scaleImage(@RequestParam(value = "rid", required = true) String requestId,
             @RequestParam(value = "sx", required = true) int scaleWidth,

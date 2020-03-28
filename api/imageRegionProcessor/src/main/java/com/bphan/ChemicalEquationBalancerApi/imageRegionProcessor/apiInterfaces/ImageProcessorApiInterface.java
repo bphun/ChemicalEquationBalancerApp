@@ -1,0 +1,59 @@
+package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.apiInterfaces;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
+import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
+
+public class ImageProcessorApiInterface {
+    
+    @Value("${requestsApi.hostname}")
+    private String requestsApiHostname;
+
+    @Value("${requestsApi.allRegionsEndpoint}")
+    private String allRegionsEndpoint;
+
+    @Value("${requestsApi.selectRegionsEndpoint}")
+    private String selectRegionsEndpoint;
+
+    @Value("${requestsApi.updateValueEndpoint}")
+    private String updateValueEndpoint;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private String selectRegionFetchUrl = "";
+    private String allRegionsFetchUrl = "";
+    private String updateValueUrl = "";
+
+    @PostConstruct
+    public void init() {
+        selectRegionFetchUrl = requestsApiHostname + selectRegionsEndpoint;
+        allRegionsFetchUrl = requestsApiHostname + allRegionsEndpoint;
+        updateValueUrl = requestsApiHostname + updateValueEndpoint;
+    }
+
+    public List<ImageRegion> getRegionsForRequest(String requestId) {
+        String url = selectRegionFetchUrl + "?rid=" + requestId;
+       
+        return fetchRegionsFromUrl(url);
+    }
+
+    public List<ImageRegion> getAllRegions() {
+        return fetchRegionsFromUrl(allRegionsFetchUrl);
+    }
+
+    public void setImageUrlForRegion(String regionId, String imageUrl) {
+        String requestUrl = updateValueUrl + "?rid=" + regionId + "&vid=imgUrl&v=" + imageUrl;
+        this.restTemplate.getForObject(requestUrl, ApiResponse.class);
+    }
+
+    private List<ImageRegion> fetchRegionsFromUrl(String url) {
+        return Arrays.asList(this.restTemplate.getForObject(url, ImageRegion[].class));
+    }
+}

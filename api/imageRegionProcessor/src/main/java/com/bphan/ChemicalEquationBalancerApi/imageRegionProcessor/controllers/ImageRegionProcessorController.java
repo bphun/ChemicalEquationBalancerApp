@@ -1,75 +1,118 @@
 package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.controllers;
 
-import java.util.Arrays;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageRegionProcessor.ImageRegionExtractor;
+import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.apiInterfaces.ImageProcessorApiInterface;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.models.ImageTransformerResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("imageProcessor/extract")
 public class ImageRegionProcessorController {
 
     @Autowired
-    ImageRegionExtractor imageRegionExtractor;
+    private ImageRegionExtractor imageRegionExtractor;
 
-    @Value("${requestsApi.hostname}")
-    private String requestsApiHostname;
+    @Autowired
+    private ImageProcessorApiInterface imageProcessorApiInterface;
 
-    @Value("${requestsApi.allRegionsEndpoint}")
-    private String allRegionsEndpoint;
+    private final String frontendHostname = "*";
 
-    @Value("${requestsApi.selectRegionsEndpoint}")
-    private String selectRegionsEndpoint;
-
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    private String selectRegionFetchUrl = "";
-    private String allRegionsFetchUrl = "";
-
-    @PostConstruct
-    public void init() {
-        selectRegionFetchUrl = requestsApiHostname + selectRegionsEndpoint;
-        allRegionsFetchUrl = requestsApiHostname + allRegionsEndpoint;
-    }
-
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/regions")
     public Map<String, List<ImageTransformerResponse>> getCroppedRegionsForRequest(
-            @RequestParam(value = "rid", required = true) String requestId) {
-        String url = selectRegionFetchUrl + "?rid=" + requestId;
-        List<ImageRegion> regions = fetchRegionsFromUrl(url);
+            @RequestParam(value = "rid", required = true) String requestId,
+            @RequestParam(value = "ir", required = false) boolean includeRegionInResponse) {
+        List<ImageRegion> regions = imageProcessorApiInterface.getRegionsForRequest(requestId);
 
-        return extractRegionImagesFromRegionList(regions);
+        return extractRegionImagesFromRegionList(regions, includeRegionInResponse);
     }
 
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/regions/all")
-    public Map<String, List<ImageTransformerResponse>> getAllCroppedRegions() {
-        List<ImageRegion> regions = fetchRegionsFromUrl(allRegionsFetchUrl);
+    public Map<String, List<ImageTransformerResponse>> getAllCroppedRegions(
+            @RequestParam(value = "ir", required = false) boolean includeRegionInResponse) {
+        List<ImageRegion> regions = imageProcessorApiInterface.getAllRegions();
 
-        return extractRegionImagesFromRegionList(regions);
+        return extractRegionImagesFromRegionList(regions, includeRegionInResponse);
     }
 
-    private Map<String, List<ImageTransformerResponse>> extractRegionImagesFromRegionList(List<ImageRegion> regions) {
+    @CrossOrigin(origins = frontendHostname)
+    @GetMapping(value = "/regions/download", produces = "application/zip")
+    public byte[] downloadCroppedRegionsForRequest(@RequestParam(value = "rid", required = true) String requestId,
+            HttpServletResponse response) {
+        Map<String, List<ImageTransformerResponse>> regions = getCroppedRegionsForRequest(requestId, true);
+
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + requestId + "_regions.zip\"");
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+
+        List<File> files = new ArrayList<>();
+        // populate files
+
+        try {
+            for (File file : files) {
+                zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
+                FileInputStream fileInputStream = new FileInputStream(file);
+
+                IOUtils.copy(fileInputStream, zipOutputStream);
+
+                fileInputStream.close();
+                zipOutputStream.closeEntry();
+            }
+
+            if (zipOutputStream != null) {
+                zipOutputStream.finish();
+                zipOutputStream.flush();
+                IOUtils.closeQuietly(zipOutputStream);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        IOUtils.closeQuietly(bufferedOutputStream);
+        IOUtils.closeQuietly(byteArrayOutputStream);
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    @CrossOrigin(origins = frontendHostname)
+    @GetMapping(value = "/regions/download/all", produces = "application/zip")
+    public void downloadAllCroppedRegions(HttpServletResponse response) {
+        Map<String, List<ImageTransformerResponse>> regions = getAllCroppedRegions(true);
+
+        response.addHeader("Content-Disposition", "attachment; filename=\"all_regions.zip\"");
+
+    }
+
+    private Map<String, List<ImageTransformerResponse>> extractRegionImagesFromRegionList(List<ImageRegion> regions,
+            boolean includeRegionInResponse) {
         if (regions.size() == 0) {
             return null;
         }
 
-        return imageRegionExtractor.createRegionImages(regions);
-    }
-
-    private List<ImageRegion> fetchRegionsFromUrl(String url) {
-        return Arrays.asList(this.restTemplate.getForObject(url, ImageRegion[].class));
+        return imageRegionExtractor.createRegionImages(regions, includeRegionInResponse);
     }
 }
