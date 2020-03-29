@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc.ImageProcessorRequestRepository;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.requestModels.ImageProcessorRequest;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.responseModels.ImageProcessorResponse;
 import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
@@ -32,6 +33,9 @@ class RequestProxyController {
     private String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNKE28nRi-Qt1QeOtsPUBAFHBDN8ikhcI";
 
     private final String frontendHostname = "*";
+    
+    @Autowired
+    private ImageProcessorRequestRepository imageProcessorRequestRepository;
 
     @Autowired
     private AwsS3Client amazonClient;
@@ -47,7 +51,7 @@ class RequestProxyController {
         HttpHeaders gcpApiRequestHeaders = new HttpHeaders();
         HttpEntity<ImageProcessorRequest> postEntity;
         ImageProcessorResponse imageProcessorResponse;
-        // long requestStartTime, requestEndTime;
+        long requestStartTime, requestEndTime;
         String requestId = UUID.randomUUID().toString();
         String base64EncodedImage = requestBody.getRequests().get(0).getImage().getContent();
 
@@ -55,14 +59,15 @@ class RequestProxyController {
         gcpApiRequestHeaders.setContentType(MediaType.APPLICATION_JSON);
         postEntity = new HttpEntity<>(requestBody, gcpApiRequestHeaders);
 
-        // requestStartTime = System.currentTimeMillis();
+        requestStartTime = System.currentTimeMillis();
         imageProcessorResponse = this.restTemplate.postForObject(url, postEntity, ImageProcessorResponse.class);
-        // requestEndTime = System.currentTimeMillis();
+        requestEndTime = System.currentTimeMillis();
 
         imageProcessorResponse.setRequestId(requestId);
 
         if (shouldUploadImg) {
-            amazonClient.uploadImage(requestId, base64EncodedImage);
+            String imageUrl = amazonClient.uploadImage(requestId, base64EncodedImage);
+            this.imageProcessorRequestRepository.uploadRequestInfo(requestId, imageUrl, requestStartTime, requestEndTime, equationString);
         }
 
         return ResponseEntity.ok(imageProcessorResponse);

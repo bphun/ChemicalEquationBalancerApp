@@ -9,13 +9,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
-
 @SpringBootApplication(scanBasePackages = "com.bphan.ChemicalEquationBalancerApi")
 public class ChemicalEquationBalancerAppServerApplication {
-
-    PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
     public static void main(String[] args) {
         SpringApplication.run(ChemicalEquationBalancerAppServerApplication.class, args);

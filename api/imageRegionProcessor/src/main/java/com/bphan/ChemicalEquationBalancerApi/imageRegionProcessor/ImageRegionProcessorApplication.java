@@ -10,15 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.DispatcherServlet;
-
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
 
 @SpringBootApplication(scanBasePackages = "com.bphan.ChemicalEquationBalancerApi")
 public class ImageRegionProcessorApplication {
-
-    PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
     
     public static void main(String[] args) {
         SpringApplication.run(ImageRegionProcessorApplication.class, args);
@@ -48,4 +45,12 @@ public class ImageRegionProcessorApplication {
     public DispatcherServlet dispatcherServlet() {
         return new LoggableDispatcherServlet();
     }
+
+    @Bean  
+    public TaskExecutor taskExecutor() {  
+      ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();  
+      threadPoolTaskExecutor.setCorePoolSize(1);  
+      threadPoolTaskExecutor.setMaxPoolSize(5);  
+      return threadPoolTaskExecutor;  
+    }  
 }

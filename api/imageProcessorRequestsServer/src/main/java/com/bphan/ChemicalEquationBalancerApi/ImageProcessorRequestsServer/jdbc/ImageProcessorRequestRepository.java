@@ -2,6 +2,8 @@ package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.RegionDiff;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.RequestLabelingStatus;
@@ -9,6 +11,7 @@ import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels.StoredRequestInfoId;
 import com.bphan.ChemicalEquationBalancerApi.common.ResponseModels.ApiResponse;
 import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
+import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsSqsClient;
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,16 @@ public class ImageProcessorRequestRepository {
     @Autowired
     private AwsS3Client s3Client;
 
+    @Autowired
+    private AwsSqsClient sqsClient;
+
+    private Logger logger = Logger.getLogger(ImageProcessorRequestRepository.class.getName());
+
     public ApiResponse uploadRequestInfo(String requestId, String s3ImageUrl, long requestStartTime,
             long requestEndTime, String equationString) {
-
+        
         ApiResponse response;
-
+                
         if (requestId != null && requestId.trim().length() > 0) {
             try {
                 int changedRows = jdbcTemplate.update(
@@ -46,7 +54,10 @@ public class ImageProcessorRequestRepository {
                     response = new ApiResponse("error", "SQL error");
                 }
             } catch (DataAccessException e) {
-                response = new ApiResponse("error", e.getLocalizedMessage());
+                String errorMessage = e.getLocalizedMessage();
+                logger.log(Level.WARNING, errorMessage);
+                e.printStackTrace();
+                response = new ApiResponse("error", errorMessage);
             }
         } else {
             response = new ApiResponse("error", "Invalid request ID");
@@ -160,7 +171,10 @@ public class ImageProcessorRequestRepository {
                 response = new ApiResponse("error", "SQL error");
             }
         } catch (Exception e) {
-            response = new ApiResponse("error", e.getLocalizedMessage());
+            String errorMessage = e.getLocalizedMessage();
+            logger.log(Level.WARNING, errorMessage);
+            e.printStackTrace();
+            response = new ApiResponse("error", errorMessage);
         }
 
         return response;
@@ -193,7 +207,10 @@ public class ImageProcessorRequestRepository {
             }
 
         } catch (Exception e) {
-            response = new ApiResponse("error", e.getLocalizedMessage());
+            String errorMessage = e.getLocalizedMessage();
+            logger.log(Level.WARNING, errorMessage);
+            e.printStackTrace();
+            response = new ApiResponse("error", errorMessage);
         }
 
         return response;
@@ -227,6 +244,7 @@ public class ImageProcessorRequestRepository {
         }
 
         String requestId = regionDiff.getRequestId();
+        sqsClient.putMessage(requestId);
         updateLabelingStatusForRequest(requestId, numRegionsForRequest(requestId) > 0 ? "LABELED" : "INCOMPLETE");
 
         return response;
@@ -264,7 +282,10 @@ public class ImageProcessorRequestRepository {
                             + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs ASC LIMIT 0,1;",
                     (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
         } catch (Exception e) {
-            response = new ApiResponse("error", "No available requests");
+            String errorMessage = e.getLocalizedMessage();
+            logger.log(Level.WARNING, errorMessage);
+            e.printStackTrace();
+            response = new ApiResponse("error", errorMessage);
         }
 
         return response;
@@ -279,7 +300,10 @@ public class ImageProcessorRequestRepository {
                             + Long.parseLong(timestamp) + " ORDER BY " + "gcpRequestStartTimeMs DESC LIMIT 0,1;",
                     (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id"))).get(0);
         } catch (Exception e) {
-            response = new ApiResponse("error", "No available requests");
+            String errorMessage = e.getLocalizedMessage();
+            logger.log(Level.WARNING, errorMessage);
+            e.printStackTrace();
+            response = new ApiResponse("error", errorMessage);
         }
 
         return response;
@@ -297,7 +321,10 @@ public class ImageProcessorRequestRepository {
                     response = new ApiResponse("error", "SQL error");
                 }
             } catch (Exception e) {
-                response = new ApiResponse("error", e.getLocalizedMessage());
+                String errorMessage = e.getLocalizedMessage();
+                logger.log(Level.WARNING, errorMessage);
+                e.printStackTrace();
+                response = new ApiResponse("error", errorMessage);
             }
         } else {
             response = new ApiResponse("error", "Invalid request ID");
@@ -320,7 +347,9 @@ public class ImageProcessorRequestRepository {
                     response = new ApiResponse("error", "SQL error");
                 }
             } catch (DataAccessException e) {
-                response = new ApiResponse("error", e.getLocalizedMessage());
+                String errorMessage = e.getLocalizedMessage();
+                logger.log(Level.WARNING, errorMessage);
+                response = new ApiResponse("error", errorMessage);
             }
         } else {
             response = new ApiResponse("error", "Invalid request ID");

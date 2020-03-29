@@ -59,21 +59,6 @@ public class RegionsController {
         return responseBody;
     }
 
-    // @CrossOrigin(origins = frontendHostname)
-    // @GetMapping("/all/")
-    // public HashMap<String, List<ImageRegion>> allRegions() {
-    // List<String> requestIds = imageProcessorRequestRepository.getRequestIdList();
-    // HashMap<String, List<ImageRegion>> regions = new HashMap<String,
-    // List<ImageRegion>>();
-
-    // for (String requestId : requestIds) {
-    // regions.put(requestId,
-    // imageProcessorRequestRepository.getRegionsForRequest(requestId));
-    // }
-
-    // return regions;
-    // }
-
     @CrossOrigin(origins = frontendHostname)
     @PostMapping("/update/")
     public ApiResponse updateRegions(@RequestBody RegionDiff regionDiff) {

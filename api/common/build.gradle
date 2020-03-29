@@ -21,9 +21,6 @@ repositories {
 }
 
 dependencies {
-    // compile 'mysql:mysql-connector-java'
-    // implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
 
@@ -33,7 +30,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3'
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
 
-    // runtimeOnly 'com.h2database:h2'
+    compile group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '1.0.7'
     
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
     testImplementation('junit:junit:4.13')

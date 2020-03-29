@@ -1,6 +1,8 @@
 package com.bphan.ChemicalEquationBalancerApi.common.amazon;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -27,6 +29,8 @@ public class AwsSqsClient {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private Logger logger = Logger.getLogger(AwsSqsClient.class.getName());
+
     @Value("${amazonProperties.accessKey}")
     private String accessKey;
 
@@ -50,7 +54,10 @@ public class AwsSqsClient {
         try {
             messageStr = objectMapper.writeValueAsString(message);
             sendMessageRequest = new SendMessageRequest().withQueueUrl(sqsUrl).withMessageBody(messageStr);
+
+            logger.log(Level.INFO, "Added message to SQS queue");
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -58,15 +65,7 @@ public class AwsSqsClient {
     }
 
     public SendMessageResult putMessageStr(String message) {
-        SendMessageRequest sendMessageRequest = null;
-
-        try {
-            sendMessageRequest = new SendMessageRequest().withQueueUrl(sqsUrl).withMessageBody(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return sqs.sendMessage(sendMessageRequest);
+        return putMessage(message);
     }
 
     public List<Message> popMessages(int maxNumMessages) {
@@ -75,43 +74,39 @@ public class AwsSqsClient {
 
         List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
 
-        for (Message message : messages) {
-            sqs.deleteMessage(
-                    new DeleteMessageRequest().withQueueUrl(sqsUrl).withReceiptHandle(message.getReceiptHandle()));
+        if (messages.size() > 0) {
+            logger.log(Level.INFO, "Popped " + messages.size() + " messages from SQS queue");
+
+            for (Message message : messages) {
+                try {
+                    sqs.deleteMessage(
+                            new DeleteMessageRequest().withQueueUrl(sqsUrl).withReceiptHandle(message.getReceiptHandle()));
+                } catch (Exception e) {
+                    logger.warning(e.getLocalizedMessage());
+                }
+            }
         }
 
-        return messages;
+        return null;
     }
 
     public Message popMessage() {
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(sqsUrl).withMaxNumberOfMessages(1)
-                .withWaitTimeSeconds(10);
-        List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+        List<Message> messages = popMessages(1);
 
-        if (messages.size() > 0) {
-            Message message = messages.get(0);
-            sqs.deleteMessage(
-                    new DeleteMessageRequest().withQueueUrl(sqsUrl).withReceiptHandle(message.getReceiptHandle()));
-            return message;
+        if (messages != null && messages.size() > 0) {
+            return messages.get(0);
         }
 
         return null;
     }
 
     public String popMessageStr() {
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(sqsUrl).withMaxNumberOfMessages(1)
-                .withWaitTimeSeconds(10);
-        List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+        Message message = popMessage();
 
-        if (messages.size() > 0) {
-            Message message = messages.get(0);
-
-            sqs.deleteMessage(
-                    new DeleteMessageRequest().withQueueUrl(sqsUrl).withReceiptHandle(message.getReceiptHandle()));
-
+        if (message != null) {
             return message.getBody();
         }
 
-        return null;
+        return "";
     }
 }

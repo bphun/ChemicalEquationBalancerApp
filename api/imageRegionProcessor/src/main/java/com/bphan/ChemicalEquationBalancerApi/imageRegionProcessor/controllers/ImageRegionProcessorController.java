@@ -10,8 +10,10 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsSqsClient;
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageRegionProcessor.ImageRegionExtractor;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.apiInterfaces.ImageProcessorApiInterface;
@@ -19,6 +21,7 @@ import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.models.ImageTr
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +38,28 @@ public class ImageRegionProcessorController {
     @Autowired
     private ImageProcessorApiInterface imageProcessorApiInterface;
 
+    @Autowired
+    private TaskExecutor regionExtractorTaskExecutor;
+
+    @Autowired
+    private AwsSqsClient sqsClient;
+
     private final String frontendHostname = "*";
+
+    @PostConstruct
+    public void init() {
+        regionExtractorTaskExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    String requestId = sqsClient.popMessageStr();
+                    if (requestId != null && requestId.trim() != "") {
+                        getCroppedRegionsForRequest(requestId, false);
+                    }
+                }
+            }
+        });
+    }
 
     @CrossOrigin(origins = frontendHostname)
     @GetMapping("/regions")

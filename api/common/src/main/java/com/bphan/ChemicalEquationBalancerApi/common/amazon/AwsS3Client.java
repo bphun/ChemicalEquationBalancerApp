@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Base64;
 import java.util.Base64.Decoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Service;
 public class AwsS3Client {
 
     private AmazonS3 s3Client;
+
+    private Logger logger = Logger.getLogger(AwsS3Client.class.getName());
 
     @Value("${amazonProperties.endpointUrl}")
     private String endpointUrl;
@@ -55,7 +59,10 @@ public class AwsS3Client {
             File file = generateImageFileFromBase64String(s3ImageFileName, base64EncodedImage);
             fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
             uploadTos3Bucket(s3ImageFileName, file);
+
+            logger.log(Level.INFO, "Uploaded image " + s3ImageFileName + ".png to S3 (" + bucketName + ")");
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -69,7 +76,10 @@ public class AwsS3Client {
             File file = convertTofile(s3ImageFileName, image);
             fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
             uploadTos3Bucket(s3ImageFileName, file);
+
+            logger.log(Level.INFO, "Uploaded image " + s3ImageFileName + ".png to S3 (" + bucketName + ")");
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -79,9 +89,12 @@ public class AwsS3Client {
     public String deleteImageByName(String s3ImageFileName) {
         try {
             s3Client.deleteObject(new DeleteObjectRequest(bucketName, s3ImageFileName + ".png"));
+            logger.log(Level.INFO, "Deleted image " + s3ImageFileName + ".png from S3 (" + bucketName + ")");
             return "success";
         } catch (Exception e) {
-            return e.getLocalizedMessage();
+            String errorMessage = e.getLocalizedMessage();
+            logger.warning(e.getLocalizedMessage());
+            return errorMessage;
         }
     }
 
@@ -98,6 +111,7 @@ public class AwsS3Client {
             bis.close();
             ImageIO.write(image, "png", imageFile);
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -110,6 +124,7 @@ public class AwsS3Client {
         try {
             ImageIO.write(image, "png", outputFile);
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -126,6 +141,7 @@ public class AwsS3Client {
 
             byteArrayOutputStream.close();
         } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
         }
 

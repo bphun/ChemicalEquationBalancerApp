@@ -2,6 +2,8 @@ package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.apiInterfaces
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -12,7 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
 public class ImageProcessorApiInterface {
-    
+
+    private Logger logger = Logger.getLogger(ImageProcessorApiInterface.class.getName());
+
     @Value("${requestsApi.hostname}")
     private String requestsApiHostname;
 
@@ -40,7 +44,7 @@ public class ImageProcessorApiInterface {
 
     public List<ImageRegion> getRegionsForRequest(String requestId) {
         String url = selectRegionFetchUrl + "?rid=" + requestId;
-       
+
         return fetchRegionsFromUrl(url);
     }
 
@@ -56,4 +60,19 @@ public class ImageProcessorApiInterface {
     private List<ImageRegion> fetchRegionsFromUrl(String url) {
         return Arrays.asList(this.restTemplate.getForObject(url, ImageRegion[].class));
     }
+
+    public <T> T getForObject(String url, Class<T> responseType) {
+        T response = null;
+
+        try {
+            response = this.restTemplate.getForObject(url, responseType);
+            logger.log(Level.INFO, "Remote REST request to " + url + " 200");
+        } catch (Exception e) {
+            logger.warning(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
 }

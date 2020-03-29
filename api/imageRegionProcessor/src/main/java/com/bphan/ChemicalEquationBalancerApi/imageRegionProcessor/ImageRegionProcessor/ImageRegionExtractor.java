@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.bphan.ChemicalEquationBalancerApi.common.models.ImageRegion;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageOperations;
@@ -24,7 +26,9 @@ public class ImageRegionExtractor {
 
     @Autowired
     private ImageProcessorApiInterface imageProcessorApiInterface;
-    
+
+    private Logger logger = Logger.getLogger(ImageRegionExtractor.class.getName());
+
     public ImageRegionExtractor() {
     }
 
@@ -33,6 +37,11 @@ public class ImageRegionExtractor {
         Map<String, List<ImageTransformerResponse>> response = new HashMap<>();
         Map<String, BufferedImage> imageCache = new HashMap<>(); // This is going to require a lot of memory once there
                                                                  // are alot of images
+        int numRegions = regions.size();
+        long processStartTime, processEndTime;
+
+        logger.log(Level.INFO, "Extracting region images for " + numRegions + " regions");
+        processStartTime = System.currentTimeMillis();
 
         regions.parallelStream().forEach(region -> {
             String requestId = region.getRequestInfoId();
@@ -68,6 +77,10 @@ public class ImageRegionExtractor {
             response.get(requestId).add(transformerResponse);
         });
 
+        processEndTime = System.currentTimeMillis();
+        logger.log(Level.INFO,
+                "Finished extracting " + numRegions + " regions in " + (processEndTime - processStartTime) + "ms");
+
         return response;
     }
 
@@ -96,9 +109,11 @@ public class ImageRegionExtractor {
                 && regionHeight > 0) {
             resultImage = imageOperations.scale(image, scaleOriginX, scaleOriginY, regionWidth, regionHeight);
             if ((regionWidth > regionHeight) && (regionWidth > 600 || regionHeight > 100)) {
-                resultImage = imageOperations.resize(resultImage, (int)(regionWidth / widthScaleFactor), (int)(regionHeight / heightScaleFactor));
+                resultImage = imageOperations.resize(resultImage, (int) (regionWidth / widthScaleFactor),
+                        (int) (regionHeight / heightScaleFactor));
             } else if ((regionWidth < regionHeight) && (regionWidth > 100 || regionHeight > 600)) {
-                resultImage = imageOperations.resize(resultImage, (int)(regionWidth / widthScaleFactor), (int)(regionHeight / heightScaleFactor));
+                resultImage = imageOperations.resize(resultImage, (int) (regionWidth / widthScaleFactor),
+                        (int) (regionHeight / heightScaleFactor));
             }
         }
 
