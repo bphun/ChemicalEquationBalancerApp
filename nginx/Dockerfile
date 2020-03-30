@@ -5,12 +5,12 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY htpasswd /etc/apache2/.htpasswd
 
-#COPY self-signed.conf /etc/nginx/self-signed.conf
-#COPY ssl-params.conf /etc/nginx/ssl-params.conf
+COPY self-signed.conf /etc/nginx/snippets/self-signed.conf
+COPY ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 
-#COPY self-signed.crt /etc/ssl/certs/self-signed.crt
-#COPY self-signed.key /etc/ssl/private/self-signed.key
-#COPY dhparam.pem /etc/ssl/certs/dhparam.pem
+COPY nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+COPY nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+COPY dhparam.pem /etc/ssl/certs/dhparam.pem
 
 #USER root
 
@@ -22,3 +22,4 @@ COPY htpasswd /etc/apache2/.htpasswd
 #USER appUser
 
 EXPOSE 80
+EXPOSE 443
