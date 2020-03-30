@@ -22,7 +22,7 @@ public class ImageTransceiver {
         S3Object imageObject = s3Client.getObjectFromS3Bucket(filename);
         BufferedImage image = convertToBufferedImage(imageObject);
 
-        closeS3Object(imageObject);
+        // closeS3Object(imageObject);
         
         return image;
     }

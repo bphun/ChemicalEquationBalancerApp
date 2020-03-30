@@ -2,6 +2,7 @@ package com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageRegionPr
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,8 +79,10 @@ public class ImageRegionExtractor {
         });
 
         processEndTime = System.currentTimeMillis();
+        int numResponseRegions = response.values().stream().mapToInt(Collection::size).sum();
         logger.log(Level.INFO,
-                "Finished extracting " + numRegions + " regions in " + (processEndTime - processStartTime) + "ms");
+                "Finished extracting " + numResponseRegions + " regions in " + (processEndTime - processStartTime)
+                        + "ms. Failed to extract " + (numRegions - numResponseRegions) + " regions.");
 
         return response;
     }
