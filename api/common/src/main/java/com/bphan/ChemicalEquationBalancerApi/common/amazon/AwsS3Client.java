@@ -54,30 +54,30 @@ public class AwsS3Client {
 
     public String uploadImage(String s3ImageFileName, String base64EncodedImage) {
         String fileUrl = "";
+        File file = generateImageFileFromBase64String(s3ImageFileName, base64EncodedImage);
 
-        try {
-            File file = generateImageFileFromBase64String(s3ImageFileName, base64EncodedImage);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
-            uploadTos3Bucket(s3ImageFileName, file);
-
-            logger.log(Level.INFO, "Uploaded image " + s3ImageFileName + ".png to S3 (" + bucketName + ")");
-        } catch (Exception e) {
-            logger.warning(e.getLocalizedMessage());
-            e.printStackTrace();
-        }
+        fileUrl = uploadFile(s3ImageFileName, file);
 
         return fileUrl;
     }
 
     public String uploadImage(String s3ImageFileName, BufferedImage image) {
         String fileUrl = "";
+        File file = convertTofile(s3ImageFileName, image);
+        
+        fileUrl = uploadFile(s3ImageFileName, file);
+
+        return fileUrl;
+    }
+
+    public String uploadFile(String filename, File file) {
+        String fileUrl = "";
 
         try {
-            File file = convertTofile(s3ImageFileName, image);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + s3ImageFileName + ".png";
-            uploadTos3Bucket(s3ImageFileName, file);
+            fileUrl = endpointUrl + "/" + bucketName + "/" + filename + ".png";
+            uploadTos3Bucket(filename, file);
 
-            logger.log(Level.INFO, "Uploaded image " + s3ImageFileName + ".png to S3 (" + bucketName + ")");
+            logger.log(Level.INFO, "Uploaded file " + filename + " (" + bucketName + ")");
         } catch (Exception e) {
             logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class AwsS3Client {
     public String deleteImageByName(String s3ImageFileName) {
         try {
             s3Client.deleteObject(new DeleteObjectRequest(bucketName, s3ImageFileName + ".png"));
-            logger.log(Level.INFO, "Deleted image " + s3ImageFileName + ".png from S3 (" + bucketName + ")");
+            logger.log(Level.INFO, "Deleted image " + s3ImageFileName + ".png (" + bucketName + ")");
             return "success";
         } catch (Exception e) {
             String errorMessage = e.getLocalizedMessage();

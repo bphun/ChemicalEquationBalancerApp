@@ -36,7 +36,7 @@ struct ImageProcessResource: ApiResource {
     var urlRequest: URLRequest
 
     init(data: Data? = nil, useProdApi: Bool) {
-        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        hostUrl = "https://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
         
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = path
@@ -49,7 +49,7 @@ struct ImageProcessResource: ApiResource {
     }
     
     init(data: Data? = nil, shouldUploadImage: Bool, useProdApi: Bool) {
-        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        hostUrl = "https://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
         
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = path
@@ -65,7 +65,7 @@ struct ImageProcessResource: ApiResource {
     }
     
     init(data: Data? = nil, shouldUploadImage: Bool, equationStr: String?, useProdApi: Bool) {
-        hostUrl = "http://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
+        hostUrl = "https://" + (useProdApi ? Environment.productionApiHostname : Environment.localTestingHostname)
         
         var urlComponents = URLComponents(string: hostUrl)!
         urlComponents.path = useProdApi ? "/api/v1" + path : path

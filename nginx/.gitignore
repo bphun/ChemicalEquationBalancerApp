@@ -2,5 +2,3 @@ dhparam.pem
 htpasswd
 nginx-selfsigned.crt
 nginx-selfsigned.key
-self-signed.conf
-ssl-params.conf
