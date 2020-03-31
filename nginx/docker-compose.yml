@@ -4,8 +4,8 @@ services:
   nginx:
     build: .
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:7080"
+      - "443:7443"
     image: "bphun/chemical-equation-balancer:nginx"
     container_name: nginx
     networks:

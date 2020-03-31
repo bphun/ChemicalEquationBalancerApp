@@ -29,7 +29,7 @@ class HomePage extends React.Component {
                                         icon: ImagesMajorMonotone                                  
                                     },
                                     {
-                                        url: "/metrics",
+                                        url: "https://54.153.23.243/metrics/",
                                         label: "Grafana Metrics Dashboard",
                                         icon: AnalyticsMajorMonotone
                                     }

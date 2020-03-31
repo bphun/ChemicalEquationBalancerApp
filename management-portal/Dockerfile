@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY build/ ./build/
 COPY .env.production ./.env.production
+COPY .env.staging ./.env.staging
 
 RUN npm install -g serve
 

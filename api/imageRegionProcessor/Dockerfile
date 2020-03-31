@@ -6,10 +6,12 @@ COPY src/main/resources/application-prod.yml ./application-prod.yml
 
 EXPOSE 8081
 
-#USER root
-#RUN adduser -D appUser
+USER root
+RUN adduser -D imageRegionProcessorUser
 
-#USER appUser
+RUN chown -R imageRegionProcessorUser:imageRegionProcessorUser /ImageRegionProcessorServer
+
+USER imageRegionProcessorUser
 
 ENV spring.profiles.active=prod
 
