@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactImageAnnotate from "react-image-annotate"
 import queryString from 'query-string';
+import { formatUrl } from "../Utility/Utility";
 import "../App.css"
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
@@ -31,7 +32,10 @@ class ImageLabelingPage extends React.Component {
 
     getRegions(requestId) {
         let imageBoundingsBoxes = []
-        fetch(this.apiHostname + "/regions/?rid=" + requestId, { mode: "cors" })
+        let url = formatUrl(this.apiHostname + "/regions/", {
+            rid: requestId
+        })
+        fetch(url, { mode: "cors" })
             .then(results => {
                 return results.json()
             })
@@ -63,10 +67,11 @@ class ImageLabelingPage extends React.Component {
     }
 
     setInProgressLabelingStatus(requestId) {
-        let url = this.apiHostname + "/requests/updateValue/"
-        url += "?rid=" + requestId
-        url += "&vid=labelingStatus"
-        url += "&v=IN_PROGRESS"
+        let url = formatUrl(this.apiHostname + "/requests/updateValue/", {
+            rid: requestId,
+            vid: "labelingStatus",
+            v: "IN_PROGRESS"
+        })
 
         fetch(url, { mode: "cors" })
             .catch(err => {
@@ -111,7 +116,10 @@ class ImageLabelingPage extends React.Component {
         }
 
         if (boundingBoxes.length <= 0) {
-            this.redirect("/requests/view?rid=" + this.state.requestId)
+            let url = formatUrl("/requests/view", {
+                rid: this.state.requestId
+            })
+            this.redirect(url)
         }
 
         const boundingBoxDiff = {

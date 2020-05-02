@@ -1,6 +1,7 @@
 import React from 'react'
 import { AppProvider, Page, Card, Image, Link, TextField, Stack, Modal, Badge, Spinner } from "@shopify/polaris";
 import "../App.css"
+import { formatUrl } from "../Utility/Utility";
 import queryString from 'query-string';
 import { withRouter } from "react-router";
 import { CircleLeftMajorMonotone, CircleRightMajorMonotone, WandMajorMonotone, EditMajorMonotone, FolderDownMajorMonotone } from '@shopify/polaris-icons';
@@ -33,7 +34,7 @@ class RequestViewPage extends React.Component {
     componentDidMount() {
         const requestId = queryString.parse(this.props.location.search).rid
 
-        fetch(this.apiHostname + "/requests/info?rid=" + requestId, { mode: "cors" })
+        fetch(formatUrl(this.apiHostname + "/requests/info", { rid: requestId }), { mode: "cors" })
             .then(results => {
                 return results.json()
             }).then(response => {
@@ -77,7 +78,10 @@ class RequestViewPage extends React.Component {
 
     fetchNextAndPreviousRequestInfo() {
         if (!this.state.nextRequestId) {
-            fetch(this.apiHostname + "/requests/next?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+            const url = formatUrl(this.apiHostname + "/requests/next", {
+                t: this.state.storedRequest.gcpRequestStartTimeMs
+            })
+            fetch(url, { mode: "cors" })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -89,7 +93,10 @@ class RequestViewPage extends React.Component {
                 })
         }
         if (!this.state.previousRequestId) {
-            fetch(this.apiHostname + "/requests/previous?t=" + this.state.storedRequest.gcpRequestStartTimeMs, { mode: "cors" })
+            const url = formatUrl(this.apiHostname + "/requests/previous", {
+                t: this.state.storedRequest.gcpRequestStartTimeMs
+            })
+            fetch(url, { mode: "cors" })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -104,9 +111,11 @@ class RequestViewPage extends React.Component {
 
     handleValueEditModalSubmit() {
         if (this.state.editActionTargetRegion === "" || this.state.modalTextInputValue === "") { return }
-        let url = this.apiHostname + "/regions/updateValue?rid=" +
-            this.state.editActionTargetRegion + "&vid=equStr" +
-            "&v=" + encodeURIComponent(this.state.modalTextInputValue)
+        let url = formatUrl(this.apiHostname + "/regions/updateValue", {
+            rid: this.state.editActionTargetRegion,
+            vid: "equStr",
+            v: encodeURIComponent(this.state.modalTextInputValue)
+        })
         fetch(url)
             .then(results => {
                 return results.json()
@@ -156,7 +165,10 @@ class RequestViewPage extends React.Component {
     }
 
     deleteRequest() {
-        fetch(this.apiHostname + "/requests/delete?rid=" + this.state.storedRequest.id, { mode: "cors" })
+        const url = formatUrl(this.apiHostname + "/requests/delete", {
+            rid: this.state.storedRequest.id
+        })
+        fetch(url, { mode: "cors" })
             .then(results => {
                 return results.json()
             })
@@ -179,16 +191,22 @@ class RequestViewPage extends React.Component {
     }
 
     showImageLabelingView() {
+        const path = formatUrl("/requests/label", {
+            rid: this.state.storedRequest.id,
+            imgUrl: encodeURI(this.state.storedRequest.s3ImageUrl)
+        })
         this.props.history.push({
-            pathname: "/requests/label?rid=" + this.state.storedRequest.id + "&imgUrl=" + encodeURI(this.state.storedRequest.s3ImageUrl),
-            // state: { imageUrl: this.state.storedRequest.s3ImageUrl, requestId: this.state.storedRequest.id }
+            pathname: path,
         })
         window.location.reload();
     }
 
     processRegions() {
         this.setState({ processingRegions: true })
-        fetch(this.regionProcessorApiHostname + "/imageProcessor/extract/regions?rid=" + this.state.storedRequest.id)
+        const url = formatUrl(this.regionProcessorApiHostname + "/imageProcessor/extract/regions", {
+            rid: this.state.storedRequest.id
+        })
+        fetch(url)
             .then(results => {
                 return results.json()
             })
@@ -212,8 +230,11 @@ class RequestViewPage extends React.Component {
 
     rotateRegion(regionId, radians) {
         // Rotated image may not display after this call because the browser might use a cached version of the image
-        fetch(this.regionProcessorApiHostname + "/imageProcessor/transform/rotate/?rid=" +
-            this.state.storedRequest.id + "_" + regionId + "&r=" + radians)
+        const url = formatUrl(this.regionProcessorApiHostname + "/imageProcessor/transform/rotate/", {
+            rid: this.state.storedRequest.id + "_" + regionId,
+            r: radians
+        })
+        fetch(url)
             .then(results => {
                 return results.json()
             })

@@ -1,4 +1,5 @@
 import React from 'react'
+import { formatUrl } from "../Utility/Utility";
 import { AppProvider, Page, Card, DataTable, Link, Badge, Spinner } from "@shopify/polaris";
 import LoadingView from './LoadingView';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
@@ -49,12 +50,13 @@ class StoredRequestListPage extends React.Component {
 
     onChange = (storedRequest) => {
         const { history } = this.props;
-        history.push("/requests/view?rid=" + storedRequest.id)
+
+        history.push(formatUrl("/requests/view", { rid: storedRequest.id }))
     }
 
     getStoredRequests() {
         const requests = []
-        fetch(this.apihostname + "/requests/list", { mode: "cors" })
+        fetch(formatUrl(this.apihostname + "/requests/list"))
             .then(results => {
                 return results.json();
             }).then(storedRequests => {
