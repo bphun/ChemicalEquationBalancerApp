@@ -73,7 +73,7 @@ class RequestProxyController {
         return ResponseEntity.ok(imageProcessorResponse);
     }
 
-    // Decodes a URL encoded string using `UTF-8`
+    // Decodes a URL encoded string 
     public static String decodeValue(String value) {
         try {
             return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());

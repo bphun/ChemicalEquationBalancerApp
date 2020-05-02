@@ -12,27 +12,28 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @EnableWebSecurity
 public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private JwtConfig jwtConfig;
+    @Autowired
+    private JwtConfig jwtConfig;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.exceptionHandling()
-				.authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and()
-				.addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests()
-                .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
-				.antMatchers("/gallery" + "/admin/**").hasRole("ADMIN")
-				.anyRequest().authenticated();
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .exceptionHandling()
+                .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and()
+                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests().antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
+                .antMatchers("/regions/**").hasRole("USER")
+                .antMatchers("/requests/**").hasRole("USER")
+                .antMatchers("/imageProcessor/**").hasRole("USER")
+                .anyRequest().authenticated();
+    }
 
-	@Bean
-	public JwtConfig jwtConfig() {
-		return new JwtConfig();
-	}
+    @Bean
+    public JwtConfig jwtConfig() {
+        return new JwtConfig();
+    }
 }

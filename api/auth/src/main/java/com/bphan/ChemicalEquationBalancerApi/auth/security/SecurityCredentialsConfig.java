@@ -51,19 +51,6 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated()
         .and()
         .logout().permitAll();
-
-        // http.csrf().disable()
-        //     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        //     .exceptionHandling()
-        //     .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED)).and()
-        //     .addFilter(new UserSignupFilter(authenticationManager(), jwtConfig))
-        //     .authorizeRequests()
-        //     .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
-        //     .and()
-        //     .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
-        //     .authorizeRequests()
-        //     .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
-        //     .anyRequest().authenticated();
     }
 
     @Override
