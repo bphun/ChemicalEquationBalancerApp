@@ -1,0 +1,11 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.dependency.syncWithFolderExplorer": true,
+    "java.dependency.packagePresentation": "flat",
+
+    "java.project.referencedLibraries": [
+        "../common/build/libs/*.jar",
+        "../common/bin/main/com/bphan/ChemicalEquationBalancerApi/common/*/*.class",
+        "../common/src/main/java/com/bphan/ChemicalEquationBalancerApi/common/*/*.java"
+    ]
+}

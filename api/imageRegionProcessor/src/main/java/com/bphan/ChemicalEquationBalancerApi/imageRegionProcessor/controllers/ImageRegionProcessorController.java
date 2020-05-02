@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -46,14 +48,17 @@ public class ImageRegionProcessorController {
 
     private final String frontendHostname = "*";
 
+    private Logger logger = Logger.getLogger(ImageRegionProcessorController.class.getName());
+
     @PostConstruct
     public void init() {
         regionExtractorTaskExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    String requestId = sqsClient.popMessageStr();
+                    String requestId = sqsClient.popMessageStr().replace("\"", "");
                     if (requestId != null && requestId.trim() != "") {
+                        logger.log(Level.INFO, "Received region extraction request req_id=" + requestId);
                         getCroppedRegionsForRequest(requestId, false);
                     }
                 }

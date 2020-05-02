@@ -21,3 +21,12 @@ img {
     flex-direction: column;
     background-color: #fff;
 }
+
+/* .Polaris-Page {
+    max-width: calc(410px + 4rem);
+    min-height: calc(100vh - 5rem);
+    margin: 0 auto;
+    padding: 0 2rem;
+    padding-top: 20vh;
+    padding-bottom: 6rem;
+} */

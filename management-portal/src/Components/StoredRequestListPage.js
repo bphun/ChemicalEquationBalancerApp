@@ -124,7 +124,7 @@ class StoredRequestListPage extends React.Component {
                 <AppProvider>
                     <Page
                         title={"Stored Requests (" + this.state.storedRequestInfo.length + " total)"}
-                        breadcrumbs={[{ content: "Home", url: "/" }]}
+                        breadcrumbs={[{ content: "Home", url: "/home" }]}
                     >
                         <Card>
                             <DataTable

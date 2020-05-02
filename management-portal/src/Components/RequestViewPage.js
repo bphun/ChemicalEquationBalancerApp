@@ -119,10 +119,10 @@ class RequestViewPage extends React.Component {
                 } else if (this.state.editTargetValueId === "verifiedChemicalEquationString") {
                     this.updateVerifiedEquationString(this.state.modalTextInputValue)
                 }
+                window.location.reload(); // Yes i know very nice
             }).catch(err => {
                 console.error(err);
             })
-        window.location.reload(); // Yes i know very nice
     }
 
     updateVerifiedEquationString(str) {

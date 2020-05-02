@@ -41,7 +41,7 @@ public class ImageRegionExtractor {
         int numRegions = regions.size();
         long processStartTime, processEndTime;
 
-        logger.log(Level.INFO, "Extracting region images for " + numRegions + " regions");
+        logger.log(Level.INFO, "Extracting region images for " + numRegions + " region(s)");
         processStartTime = System.currentTimeMillis();
 
         regions.parallelStream().forEach(region -> {
@@ -81,7 +81,7 @@ public class ImageRegionExtractor {
         processEndTime = System.currentTimeMillis();
         int numResponseRegions = response.values().stream().mapToInt(Collection::size).sum();
         logger.log(Level.INFO,
-                "Finished extracting " + numResponseRegions + " regions in " + (processEndTime - processStartTime)
+                "Extracted " + numResponseRegions + " region(s) in " + (processEndTime - processStartTime)
                         + "ms. Failed to extract " + (numRegions - numResponseRegions) + " regions.");
 
         return response;

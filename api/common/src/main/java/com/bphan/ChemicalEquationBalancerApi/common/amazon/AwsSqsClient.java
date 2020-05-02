@@ -55,7 +55,7 @@ public class AwsSqsClient {
             messageStr = objectMapper.writeValueAsString(message);
             sendMessageRequest = new SendMessageRequest().withQueueUrl(sqsUrl).withMessageBody(messageStr);
 
-            logger.log(Level.INFO, "Added message to SQS queue");
+            logger.log(Level.INFO, "Added message to SQS queue. Body=" + message);
         } catch (Exception e) {
             logger.warning(e.getLocalizedMessage());
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class AwsSqsClient {
 
         List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
 
-        if (messages.size() > 0) {
+        if (messages != null && messages.size() > 0) {
             logger.log(Level.INFO, "Popped " + messages.size() + " messages from SQS queue");
 
             for (Message message : messages) {
@@ -87,12 +87,12 @@ public class AwsSqsClient {
             }
         }
 
-        return null;
+        return messages;
     }
 
     public Message popMessage() {
         List<Message> messages = popMessages(1);
-
+        
         if (messages != null && messages.size() > 0) {
             return messages.get(0);
         }

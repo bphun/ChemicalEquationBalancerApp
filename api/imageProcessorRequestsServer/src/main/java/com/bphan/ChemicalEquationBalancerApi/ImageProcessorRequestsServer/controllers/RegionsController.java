@@ -39,6 +39,7 @@ public class RegionsController {
         return imageProcessorRequestRepository.getAllRegions();
     }
 
+    @CrossOrigin(origins = frontendHostname)
     @GetMapping("/updateValue")
     public ApiResponse setS3ImageUrl(@RequestParam(value = "rid", required = true) String id,
             @RequestParam(value = "vid", required = true) String valueId,

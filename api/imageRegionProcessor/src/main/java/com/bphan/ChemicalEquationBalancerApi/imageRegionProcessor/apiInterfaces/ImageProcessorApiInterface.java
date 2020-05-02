@@ -44,7 +44,6 @@ public class ImageProcessorApiInterface {
 
     public List<ImageRegion> getRegionsForRequest(String requestId) {
         String url = selectRegionFetchUrl + "?rid=" + requestId;
-
         return fetchRegionsFromUrl(url);
     }
 
