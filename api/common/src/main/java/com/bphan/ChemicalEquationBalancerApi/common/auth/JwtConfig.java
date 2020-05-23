@@ -13,7 +13,7 @@ public class JwtConfig {
     private String prefix;
 
     @Value("${security.jwt.expiration:#{24*60*60}}")
-    private int expiration;
+    private long expiration;
 
     @Value("${security.jwt.secret:JwtSecretKey}")
     private String secret;
@@ -30,7 +30,7 @@ public class JwtConfig {
         return this.prefix;
     }
 
-    public int getExpiration() {
+    public long getExpiration() {
         return this.expiration;
     }
 

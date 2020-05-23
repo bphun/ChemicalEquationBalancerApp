@@ -1,12 +1,20 @@
 import React from 'react'
 import "../App.css"
 import { AppProvider, TextField, FormLayout, Page, Form, Button, Caption } from "@shopify/polaris";
+import Auth from '../Utility/Auth';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class LoginPage extends React.Component {
 
     constructor(props) {
         super(props)
+
+        if (Auth.isLoggedIn()) {
+            this.props.history.push({
+                pathname: "/home"
+            })
+            window.location.reload();
+        }
 
         this.state = {
             usernameText: "",
@@ -20,48 +28,49 @@ class LoginPage extends React.Component {
 
     clearAuthStatusCaptionAfterDelay(delay) {
         setTimeout(() => {
-            this.setState({authStatusCaptionText: ""})
+            this.setState({ authStatusCaptionText: "" })
         }, delay)
     }
 
     handleSubmit() {
         if (this.state.usernameText === "" || this.state.passwordText === "") {
-            this.setState({authStatusCaptionText: "All fields must be filled"})
+            this.setState({ authStatusCaptionText: "All fields must be filled" })
             this.clearAuthStatusCaptionAfterDelay(10000)
             return;
         }
 
-        const requestBody = {
-            "username": this.state.usernameText,
-            "password": this.state.passwordText
-        }
         const requestConfig = {
             method: "POST",
             mode: "cors",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": 'application/json',
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify({
+                "username": this.state.usernameText,
+                "password": this.state.passwordText
+            })
         }
 
         fetch(this.apiHostname + "/auth/login", requestConfig)
-        .then(results => {
-            return results.json()
-        })
-        .then(response => {
-            console.log(response)
-            if (response["status"] === "success") {
-                this.props.history.push({
-                    pathname: "/home"
-                })
-                window.location.reload();
-            } else {
-                this.setState({authStatusCaptionText: response.description})
-                this.clearAuthStatusCaptionAfterDelay(10000)
-            }
-        })
-        .catch(err => {
-        })
+            .then(results => {
+                return results.json()
+            })
+            .then(response => {
+                if (response["status"] === "success") {
+                    Auth.writeAuthCookie(response.token)
+                    this.props.history.push({
+                        pathname: "/home"
+                    })
+                    window.location.reload();
+                } else {
+                    this.setState({ authStatusCaptionText: response.description })
+                    this.clearAuthStatusCaptionAfterDelay(10000)
+                }
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 
     render() {

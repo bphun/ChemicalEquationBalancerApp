@@ -239,7 +239,6 @@ class RequestViewPage extends React.Component {
                 return results.json()
             })
             .then(response => {
-                console.log(response)
                 if ((response.status && response.status !== "success") || response.status === 500) {
                     alert("Error: " + (response.description ?? response.error));
                     return

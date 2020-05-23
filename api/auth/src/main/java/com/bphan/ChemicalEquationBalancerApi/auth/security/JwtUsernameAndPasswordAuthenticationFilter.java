@@ -48,7 +48,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             UserCredentials creds = new ObjectMapper().readValue(request.getInputStream(), UserCredentials.class);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(),
                     creds.getPassword(), Collections.emptyList());
-            
+
             return authManager.authenticate(authToken);
 
         } catch (IOException e) {
@@ -63,18 +63,20 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         String token = Jwts.builder().setSubject(auth.getName())
                 .claim("authorities",
                         auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .setIssuedAt(new Date(now)).setExpiration(new Date(now + jwtConfig.getExpiration() * 1000))
+                .setIssuedAt(new Date(now)).setExpiration(new Date(now + jwtConfig.getExpiration() * 1000L))
                 .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes()).compact();
 
+        System.out.println(new Date(now + jwtConfig.getExpiration() * 1000L));
+        System.out.println(now + jwtConfig.getExpiration() * 1000L);
+            
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
         response.setContentType("application/json");
 
-        AuthenticationResponse responseBody = new AuthenticationResponse("success", "");
+        AuthenticationResponse responseBody = new AuthenticationResponse("success", "", token);
 
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));
         response.flushBuffer();
     }
-
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,

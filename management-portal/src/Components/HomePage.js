@@ -1,6 +1,8 @@
 import React from 'react'
 import { AppProvider, Page, Navigation } from "@shopify/polaris";
 import { AnalyticsMajorMonotone, HomeMajorTwotone, ImagesMajorMonotone } from '@shopify/polaris-icons';
+import Auth from '../Utility/Auth';
+
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class HomePage extends React.Component {
