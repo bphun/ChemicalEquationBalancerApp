@@ -1,16 +1,25 @@
 import Cookies from "js-cookie"
 const decodeJwt = require('jwt-decode');
 
+const authTokenName = "token"
+
 function writeAuthCookie(cookie) {
-    Cookies.set("token", cookie)
+    let decodedJwt = decodeJwt(cookie)
+    let now = new Date().getTime()
+    let expireTime = decodedJwt.exp * 1000
+    let timeToExpire = expireTime - now
+
+    console.log({ now: now, exp: expireTime, tte: timeToExpire, expireDay: timeToExpire / 86400 })
+
+    Cookies.set(authTokenName, cookie, { expires: timeToExpire / 86400 })
 }
 
 function signout() {
-    Cookies.remove("token")
+    Cookies.remove(authTokenName)
 }
 
 function getAuthToken() {
-    return Cookies.get("token")
+    return Cookies.get(authTokenName)
 }
 
 function isLoggedIn() {
