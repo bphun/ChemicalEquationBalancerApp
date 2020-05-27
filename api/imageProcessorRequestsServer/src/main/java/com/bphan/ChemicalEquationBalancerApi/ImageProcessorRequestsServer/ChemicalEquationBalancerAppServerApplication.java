@@ -1,7 +1,6 @@
 package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer;
 
 import com.bphan.ChemicalEquationBalancerApi.common.logging.LoggableDispatcherServlet;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
@@ -14,17 +13,17 @@ import org.springframework.web.servlet.DispatcherServlet;
 @EnableEurekaClient
 public class ChemicalEquationBalancerAppServerApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ChemicalEquationBalancerAppServerApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(ChemicalEquationBalancerAppServerApplication.class, args);
+  }
 
-    @Bean
-    public ServletRegistrationBean<DispatcherServlet> dispatcherRegistration() {
-        return new ServletRegistrationBean<DispatcherServlet>(dispatcherServlet());
-    }
+  @Bean
+  public ServletRegistrationBean<DispatcherServlet> dispatcherRegistration() {
+    return new ServletRegistrationBean<DispatcherServlet>(dispatcherServlet());
+  }
 
-    @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
-    public DispatcherServlet dispatcherServlet() {
-        return new LoggableDispatcherServlet();
-    }
+  @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+  public DispatcherServlet dispatcherServlet() {
+    return new LoggableDispatcherServlet();
+  }
 }

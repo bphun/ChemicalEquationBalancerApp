@@ -5,7 +5,6 @@ import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageRegionPro
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageOperations;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.ImageTransformations.ImageTransceiver;
 import com.bphan.ChemicalEquationBalancerApi.imageRegionProcessor.apiInterfaces.ImageProcessorApiInterface;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
@@ -18,41 +17,41 @@ import org.springframework.web.servlet.DispatcherServlet;
 @SpringBootApplication(scanBasePackages = "com.bphan.ChemicalEquationBalancerApi")
 @EnableEurekaClient
 public class ImageRegionProcessorApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(ImageRegionProcessorApplication.class, args);
-    }
 
-    @Bean
-    public ImageTransceiver imageTransceiver() {
-        return new ImageTransceiver();
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(ImageRegionProcessorApplication.class, args);
+  }
 
-    @Bean
-    public ImageOperations imageOperations() {
-        return new ImageOperations();
-    }
+  @Bean
+  public ImageTransceiver imageTransceiver() {
+    return new ImageTransceiver();
+  }
 
-    @Bean
-    public ImageRegionExtractor imageRegionExtractor() {
-        return new ImageRegionExtractor();
-    }
+  @Bean
+  public ImageOperations imageOperations() {
+    return new ImageOperations();
+  }
 
-    @Bean
-    public ImageProcessorApiInterface imageProcessorApiInterface() {
-        return new ImageProcessorApiInterface();
-    }
+  @Bean
+  public ImageRegionExtractor imageRegionExtractor() {
+    return new ImageRegionExtractor();
+  }
 
-    @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
-    public DispatcherServlet dispatcherServlet() {
-        return new LoggableDispatcherServlet();
-    }
+  @Bean
+  public ImageProcessorApiInterface imageProcessorApiInterface() {
+    return new ImageProcessorApiInterface();
+  }
 
-    @Bean  
-    public TaskExecutor taskExecutor() {  
-      ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();  
-      threadPoolTaskExecutor.setCorePoolSize(1);  
-      threadPoolTaskExecutor.setMaxPoolSize(5);  
-      return threadPoolTaskExecutor;  
-    }  
+  @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+  public DispatcherServlet dispatcherServlet() {
+    return new LoggableDispatcherServlet();
+  }
+
+  @Bean
+  public TaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setCorePoolSize(1);
+    threadPoolTaskExecutor.setMaxPoolSize(5);
+    return threadPoolTaskExecutor;
+  }
 }

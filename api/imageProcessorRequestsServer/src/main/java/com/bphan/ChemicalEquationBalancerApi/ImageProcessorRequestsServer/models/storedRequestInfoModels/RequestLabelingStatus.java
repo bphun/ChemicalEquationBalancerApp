@@ -1,19 +1,22 @@
 package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.storedRequestInfoModels;
 
 public enum RequestLabelingStatus {
-    INCOMPLETE("INCOMPLETE"), IN_PROGRESS("IN_PROGRESS"), LABELED("LABELED"), TEST_STATUS("TEST_STATUS");
+  INCOMPLETE("INCOMPLETE"),
+  IN_PROGRESS("IN_PROGRESS"),
+  LABELED("LABELED"),
+  TEST_STATUS("TEST_STATUS");
 
-    private String status;
+  private String status;
 
-    private RequestLabelingStatus(String status) {
-        this.status = status;
-    }
+  private RequestLabelingStatus(String status) {
+    this.status = status;
+  }
 
-    public String toStr() {
-        return this.status;
-    }
+  public String toStr() {
+    return this.status;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 }

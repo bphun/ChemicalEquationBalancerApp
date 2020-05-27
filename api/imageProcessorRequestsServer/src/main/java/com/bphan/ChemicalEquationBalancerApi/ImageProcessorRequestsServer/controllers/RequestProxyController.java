@@ -1,17 +1,14 @@
 package com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.controllers;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.jdbc.ImageProcessorRequestRepository;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.requestModels.ImageProcessorRequest;
 import com.bphan.ChemicalEquationBalancerApi.ImageProcessorRequestsServer.models.responseModels.ImageProcessorResponse;
 import com.bphan.ChemicalEquationBalancerApi.common.amazon.AwsS3Client;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,57 +26,58 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 class RequestProxyController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNKE28nRi-Qt1QeOtsPUBAFHBDN8ikhcI";
+  private final RestTemplate restTemplate = new RestTemplate();
+  private String url =
+      "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDNKE28nRi-Qt1QeOtsPUBAFHBDN8ikhcI";
 
-    private final String frontendHostname = "*";
-    
-    @Autowired
-    private ImageProcessorRequestRepository imageProcessorRequestRepository;
+  private final String frontendHostname = "*";
 
-    @Autowired
-    private AwsS3Client amazonClient;
+  @Autowired private ImageProcessorRequestRepository imageProcessorRequestRepository;
 
-    @CrossOrigin(origins = frontendHostname)
-    @RequestMapping(value = "/proxy", method = RequestMethod.POST)
-    public ResponseEntity<ImageProcessorResponse> proxy(@RequestBody ImageProcessorRequest requestBody,
-            @RequestHeader("Content-Length") String contentLength,
-            @RequestParam(value = "upload", required = false) boolean shouldUploadImg,
-            @RequestParam(value = "eq", required = false, defaultValue = "") String equationString,
-            HttpServletResponse response) {
+  @Autowired private AwsS3Client amazonClient;
 
-        HttpHeaders gcpApiRequestHeaders = new HttpHeaders();
-        HttpEntity<ImageProcessorRequest> postEntity;
-        ImageProcessorResponse imageProcessorResponse;
-        long requestStartTime, requestEndTime;
-        String requestId = UUID.randomUUID().toString();
-        String base64EncodedImage = requestBody.getRequests().get(0).getImage().getContent();
+  @CrossOrigin(origins = frontendHostname)
+  @RequestMapping(value = "/proxy", method = RequestMethod.POST)
+  public ResponseEntity<ImageProcessorResponse> proxy(
+      @RequestBody ImageProcessorRequest requestBody,
+      @RequestHeader("Content-Length") String contentLength,
+      @RequestParam(value = "upload", required = false) boolean shouldUploadImg,
+      @RequestParam(value = "eq", required = false, defaultValue = "") String equationString,
+      HttpServletResponse response) {
 
-        gcpApiRequestHeaders.setContentLength(Integer.parseInt(contentLength));
-        gcpApiRequestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        postEntity = new HttpEntity<>(requestBody, gcpApiRequestHeaders);
+    HttpHeaders gcpApiRequestHeaders = new HttpHeaders();
+    HttpEntity<ImageProcessorRequest> postEntity;
+    ImageProcessorResponse imageProcessorResponse;
+    long requestStartTime, requestEndTime;
+    String requestId = UUID.randomUUID().toString();
+    String base64EncodedImage = requestBody.getRequests().get(0).getImage().getContent();
 
-        requestStartTime = System.currentTimeMillis();
-        imageProcessorResponse = this.restTemplate.postForObject(url, postEntity, ImageProcessorResponse.class);
-        requestEndTime = System.currentTimeMillis();
+    gcpApiRequestHeaders.setContentLength(Integer.parseInt(contentLength));
+    gcpApiRequestHeaders.setContentType(MediaType.APPLICATION_JSON);
+    postEntity = new HttpEntity<>(requestBody, gcpApiRequestHeaders);
 
-        imageProcessorResponse.setRequestId(requestId);
+    requestStartTime = System.currentTimeMillis();
+    imageProcessorResponse =
+        this.restTemplate.postForObject(url, postEntity, ImageProcessorResponse.class);
+    requestEndTime = System.currentTimeMillis();
 
-        if (shouldUploadImg) {
-            String imageUrl = amazonClient.uploadImage(requestId, base64EncodedImage);
-            this.imageProcessorRequestRepository.uploadRequestInfo(requestId, imageUrl, requestStartTime, requestEndTime, equationString);
-        }
+    imageProcessorResponse.setRequestId(requestId);
 
-        return ResponseEntity.ok(imageProcessorResponse);
+    if (shouldUploadImg) {
+      String imageUrl = amazonClient.uploadImage(requestId, base64EncodedImage);
+      this.imageProcessorRequestRepository.uploadRequestInfo(
+          requestId, imageUrl, requestStartTime, requestEndTime, equationString);
     }
 
-    // Decodes a URL encoded string 
-    public static String decodeValue(String value) {
-        try {
-            return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-        }
-        return value;
-    }
+    return ResponseEntity.ok(imageProcessorResponse);
+  }
 
+  // Decodes a URL encoded string
+  public static String decodeValue(String value) {
+    try {
+      return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
+    } catch (UnsupportedEncodingException e) {
+    }
+    return value;
+  }
 }
