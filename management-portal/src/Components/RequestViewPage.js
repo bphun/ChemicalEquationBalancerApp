@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { withRouter } from "react-router";
 import { CircleLeftMajorMonotone, CircleRightMajorMonotone, WandMajorMonotone, EditMajorMonotone, FolderDownMajorMonotone } from '@shopify/polaris-icons';
 import LoadingView from './LoadingView';
+import Auth from '../Utility/Auth';
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class RequestViewPage extends React.Component {
@@ -29,12 +30,18 @@ class RequestViewPage extends React.Component {
 
         this.apiHostname = process.env.REACT_APP_API_HOSTNAME
         this.regionProcessorApiHostname = process.env.REACT_APP_REGION_PROCESSOR_API_HOSTNAME
+        this.authToken = Auth.getAuthToken()
     }
 
     componentDidMount() {
         const requestId = queryString.parse(this.props.location.search).rid
 
-        fetch(formatUrl(this.apiHostname + "/requests/info", { rid: requestId }), { mode: "cors" })
+        fetch(formatUrl(this.apiHostname + "/requests/info", { rid: requestId }), {
+            mode: "cors",
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             }).then(response => {
@@ -50,7 +57,12 @@ class RequestViewPage extends React.Component {
 
     getRegions(requestId) {
         let imageRegions = []
-        fetch(this.apiHostname + "/regions/?rid=" + requestId, { mode: "cors" })
+        fetch(this.apiHostname + "/regions/?rid=" + requestId, {
+            mode: "cors",
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             })
@@ -81,7 +93,12 @@ class RequestViewPage extends React.Component {
             const url = formatUrl(this.apiHostname + "/requests/next", {
                 t: this.state.storedRequest.gcpRequestStartTimeMs
             })
-            fetch(url, { mode: "cors" })
+            fetch(url, {
+                mode: "cors",
+                headers: {
+                    "Authorization": `Bearer ${this.authToken}`
+                }
+            })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -96,7 +113,12 @@ class RequestViewPage extends React.Component {
             const url = formatUrl(this.apiHostname + "/requests/previous", {
                 t: this.state.storedRequest.gcpRequestStartTimeMs
             })
-            fetch(url, { mode: "cors" })
+            fetch(url, {
+                mode: "cors",
+                headers: {
+                    "Authorization": `Bearer ${this.authToken}`
+                }
+            })
                 .then(results => {
                     return results.json()
                 }).then(response => {
@@ -116,7 +138,11 @@ class RequestViewPage extends React.Component {
             vid: "equStr",
             v: encodeURIComponent(this.state.modalTextInputValue)
         })
-        fetch(url)
+        fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             }).then(response => {
@@ -168,7 +194,12 @@ class RequestViewPage extends React.Component {
         const url = formatUrl(this.apiHostname + "/requests/delete", {
             rid: this.state.storedRequest.id
         })
-        fetch(url, { mode: "cors" })
+        fetch(url, {
+            mode: "cors",
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             })
@@ -206,7 +237,11 @@ class RequestViewPage extends React.Component {
         const url = formatUrl(this.regionProcessorApiHostname + "/imageProcessor/extract/regions", {
             rid: this.state.storedRequest.id
         })
-        fetch(url)
+        fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             })
@@ -234,7 +269,11 @@ class RequestViewPage extends React.Component {
             rid: this.state.storedRequest.id + "_" + regionId,
             r: radians
         })
-        fetch(url)
+        fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             })

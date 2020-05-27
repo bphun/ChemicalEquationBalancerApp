@@ -2,6 +2,7 @@ import React from 'react'
 import ReactImageAnnotate from "react-image-annotate"
 import queryString from 'query-string';
 import { formatUrl } from "../Utility/Utility";
+import Auth from '../Utility/Auth';
 import "../App.css"
 require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
@@ -18,6 +19,7 @@ class ImageLabelingPage extends React.Component {
         }
 
         this.apiHostname = process.env.REACT_APP_API_HOSTNAME
+        this.authToken = Auth.getAuthToken()
     }
 
     componentDidMount() {
@@ -35,7 +37,12 @@ class ImageLabelingPage extends React.Component {
         let url = formatUrl(this.apiHostname + "/regions/", {
             rid: requestId
         })
-        fetch(url, { mode: "cors" })
+        fetch(url, {
+            mode: "cors",
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .then(results => {
                 return results.json()
             })
@@ -73,7 +80,12 @@ class ImageLabelingPage extends React.Component {
             v: "IN_PROGRESS"
         })
 
-        fetch(url, { mode: "cors" })
+        fetch(url, {
+            mode: "cors",
+            headers: {
+                "Authorization": `Bearer ${this.authToken}`
+            }
+        })
             .catch(err => {
                 console.error(err)
             })
@@ -96,7 +108,7 @@ class ImageLabelingPage extends React.Component {
         let boundingBoxes = []
         for (let i in images[0].regions) {
             const region = images[0].regions[i]
-            
+
             const boundingBox = {
                 id: region.id,
                 requestInfoId: this.state.requestId,
@@ -131,7 +143,8 @@ class ImageLabelingPage extends React.Component {
             method: "POST",
             mode: "cors",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.authToken}`
             },
             body: JSON.stringify(boundingBoxDiff)
         }

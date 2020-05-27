@@ -52,6 +52,8 @@ class LoginPage extends React.Component {
             })
         }
 
+        this.setState({ didSubmitForm: true })
+
         fetch(this.apiHostname + "/auth/login", requestConfig)
             .then(results => {
                 return results.json()
@@ -64,7 +66,7 @@ class LoginPage extends React.Component {
                     })
                     window.location.reload();
                 } else {
-                    this.setState({ authStatusCaptionText: response.description })
+                    this.setState({ authStatusCaptionText: response.description, didSubmitForm: false })
                     this.clearAuthStatusCaptionAfterDelay(10000)
                 }
             })

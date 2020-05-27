@@ -4,14 +4,16 @@ const decodeJwt = require('jwt-decode');
 const authTokenName = "token"
 
 function writeAuthCookie(cookie) {
-    let decodedJwt = decodeJwt(cookie)
-    let now = new Date().getTime()
-    let expireTime = decodedJwt.exp * 1000
-    let timeToExpire = expireTime - now
+    const decodedJwt = decodeJwt(cookie)
+    const now = new Date().getTime()
 
-    console.log({ now: now, exp: expireTime, tte: timeToExpire, expireDay: timeToExpire / 86400 })
+    // Convert seconds to milliseconds
+    const expireTime = decodedJwt.exp * 1000
 
-    Cookies.set(authTokenName, cookie, { expires: timeToExpire / 86400 })
+    // Convert seconds to days
+    const timeToExpire = (expireTime - now) / 86400
+
+    Cookies.set(authTokenName, cookie, { expires: timeToExpire })
 }
 
 function signout() {
@@ -28,7 +30,7 @@ function isLoggedIn() {
 
 function getSubject() {
     try {
-        let decodedJwt = decodeJwt(getAuthToken())
+        const decodedJwt = decodeJwt(getAuthToken())
 
         return decodedJwt.sub
     } catch {
@@ -38,7 +40,7 @@ function getSubject() {
 
 function getJwtIssueTime() {
     try {
-        let decodedJwt = decodeJwt(getAuthToken())
+        const decodedJwt = decodeJwt(getAuthToken())
 
         return decodedJwt.iat
     } catch {
@@ -48,7 +50,7 @@ function getJwtIssueTime() {
 
 function getJwtExpirationTime() {
     try {
-        let decodedJwt = decodeJwt(getAuthToken())
+        const decodedJwt = decodeJwt(getAuthToken())
 
         return decodedJwt.exp
     } catch {
@@ -58,7 +60,7 @@ function getJwtExpirationTime() {
 
 function getUserAuthorities() {
     try {
-        let decodedJwt = decodeJwt(getAuthToken())
+        const decodedJwt = decodeJwt(getAuthToken())
 
         return decodedJwt.authorities
     } catch {
@@ -70,4 +72,14 @@ function secondsToExpiration() {
     return getJwtExpirationTime() - getJwtIssueTime()
 }
 
-export default { isLoggedIn, writeAuthCookie, signout, getAuthToken, getSubject, getJwtIssueTime, getJwtExpirationTime, getUserAuthorities, secondsToExpiration }
+export default {
+    isLoggedIn,
+    writeAuthCookie,
+    signout,
+    getAuthToken,
+    getSubject,
+    getJwtIssueTime,
+    getJwtExpirationTime,
+    getUserAuthorities,
+    secondsToExpiration
+}
