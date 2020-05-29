@@ -8,6 +8,11 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>54.153.23.243/</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>ec2-54-67-49-13.us-west-1.compute.amazonaws.com:8080</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>

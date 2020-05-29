@@ -43,7 +43,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
               .setSigningKey(jwtConfig.getSecret().getBytes())
               .parseClaimsJws(token)
               .getBody();
-
+      // 9:48
       String username = claims.getSubject();
       if (username != null) {
         @SuppressWarnings("unchecked")

@@ -1,14 +1,46 @@
 version: '2'
 
 services:
+  eureka:
+    extends:
+      file: api/eureka/docker-compose.yml
+      service: eureka
   image-processor-requests-server:
     extends:
       file: api/imageProcessorRequestsServer/docker-compose.yml
       service: image-processor-requests-server
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    restart: on-failure
   image-region-processor-server:
     extends:
       file: api/imageRegionProcessor/docker-compose.yml
       service: image-region-processor-server
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    restart: on-failure
+  auth:
+    extends:
+      file: api/auth/docker-compose.yml
+      service: auth
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    restart: on-failure
+  zuul:
+    extends:
+      file: api/zuul/docker-compose.yml
+      service: zuul
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    restart: on-failure
   grafana:
     extends:
       file: grafana/docker-compose.yml
@@ -27,10 +59,12 @@ services:
       service: nginx
     depends_on:
         - image-processor-requests-server
-          # - docker-image-updater
         - grafana
         - prometheus
         - management-portal
+        - auth
+        - zuul
+        - eureka
 
 networks:
   chemBalancerNet:

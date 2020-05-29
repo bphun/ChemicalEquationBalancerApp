@@ -88,8 +88,7 @@ class StoredRequestListPage extends React.Component {
                     storedRequestInfo[2] = requestStatusBadge
                     storedRequestInfo[3] = requestDate.toLocaleDateString("en-US") + " " + requestDate.toLocaleTimeString("en-US")
                     storedRequestInfo[4] = currRequest.gcpRequestEndTimeMs - currRequest.gcpRequestStartTimeMs;
-                    storedRequestInfo[5] = currRequest.onDeviceImageProcessEndTime - currRequest.onDeviceImageProcessStartTime;
-                    storedRequestInfo[6] = currRequest.verifiedChemicalEquationString ? currRequest.verifiedChemicalEquationString : "Unavailable";
+                    // storedRequestInfo[5] = currRequest.onDeviceImageProcessEndTime - currRequest.onDeviceImageProcessStartTime;
 
                     requests.push(storedRequestInfo);
                 }
@@ -109,8 +108,7 @@ class StoredRequestListPage extends React.Component {
             "text",
             "text",
             "numeric",
-            "numeric",
-            "numeric"
+            // "numeric"
         ]
 
         const headings = [
@@ -118,9 +116,8 @@ class StoredRequestListPage extends React.Component {
             "s3ImageUrl",
             "Labeling Status",
             "Request Date",
-            "gcpProcessingTimeMs",
-            "onDeviceProcessingTimeMs",
-            "verifiedChemicalEquationString"
+            "gcpProcessingTime (ms)",
+            // "onDeviceProcessingTimeMs"
         ]
 
         return (

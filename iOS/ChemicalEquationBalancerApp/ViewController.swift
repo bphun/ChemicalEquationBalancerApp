@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, FrameExtractorDelegate {
+class ViewController: UIViewController, FrameExtractorDelegate, URLSessionDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageCaptureButton: UIButton!
@@ -119,7 +119,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         let imageProcessorRequest = ImageProcessorRequest(image: image, feature: feature)
         let imageProcessorRequestBody = ImageProcessorRequestBody(request: imageProcessorRequest)
         let requestBodyJson = try! JSONEncoder().encode(imageProcessorRequestBody)
-        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr, useProdApi: useProdApi))
+        let imageProcessingRequest = ApiRequest(resource: ImageProcessResource(data: requestBodyJson, shouldUploadImage: shouldUploadImage, equationStr: equationStr, useProdApi: useProdApi), delegate: self)
         
         requestInProgress = true
         activeUploadSessions += 1
@@ -174,6 +174,10 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     private func hideActivityIndicator() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
+    }
+    
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!) )
     }
 }
 

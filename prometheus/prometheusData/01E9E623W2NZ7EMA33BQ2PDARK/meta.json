@@ -1,0 +1,17 @@
+{
+	"ulid": "01E9E623W2NZ7EMA33BQ2PDARK",
+	"minTime": 1590638400000,
+	"maxTime": 1590645600000,
+	"stats": {
+		"numSamples": 9903,
+		"numSeries": 174,
+		"numChunks": 174
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01E9E623W2NZ7EMA33BQ2PDARK"
+		]
+	},
+	"version": 1
+}

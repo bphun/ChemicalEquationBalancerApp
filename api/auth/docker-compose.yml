@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  auth:
+    build: .
+    ports:
+      - "9100:9100"
+    image: "bphun/chemical-equation-balancer:auth"
+    container_name: auth
+    networks:
+      - chemBalancerNet
+
+networks:
+  chemBalancerNet:

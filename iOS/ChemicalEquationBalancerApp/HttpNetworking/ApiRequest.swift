@@ -12,9 +12,10 @@ class ApiRequest<Resource: ApiResource> {
     let resource: Resource
     let urlSession: URLSession
     
-    init(resource: Resource) {
+    init(resource: Resource, delegate: URLSessionDelegate) {
         self.resource = resource
-        self.urlSession = URLSession(configuration: .default, delegate: nil, delegateQueue: .main)
+        
+        self.urlSession = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
     }
 }
 

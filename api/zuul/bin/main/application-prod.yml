@@ -1,0 +1,40 @@
+zuul:
+    routes: 
+        requests:
+            path: /requests/**
+            url: http://image-processor-requests-server:8080
+            strip-prefix: false
+        regions:
+            path: /regions/**
+            url: http://image-processor-requests-server:8080
+            strip-prefix: false
+        imageProcessor:
+            path: /imageProcessor/**
+            url: http://image-region-processor-server:8081
+            strip-prefix: false
+    sensitive-headers: Cookie,Set-Cookie  
+    ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+
+spring: 
+    application: 
+        name: zuul
+
+eureka:
+    client:
+        service-url: 
+            default-zone: http://eureka:8761/eureka
+
+server:
+    port: 7080
+
+security:
+    jwt:
+        uri: /auth/**
+        header: "Authorization"
+        prefix: "Bearer "
+        expiration: 604800000
+        JwtSecretKey: secretkey
+
+ribbon:
+    eureka:
+        enabled: false

@@ -1,0 +1,27 @@
+spring: 
+    application: 
+        name: auth-service
+    datasource:
+        url: jdbc:mysql://chemicalequationbalancerdatabase.cz5vjghh05gt.us-west-1.rds.amazonaws.com:3306/ChemicalEquationBalancerDatabase
+        username: admin
+        password: 62391bphun
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+            
+server:
+    port: 9100
+
+eureka:
+    client:
+        service-url: 
+            default-zone: http://eureka:8761/eureka
+
+security:
+    jwt:
+        uri: /auth/login
+        header: Authorization
+        prefix: "Bearer "
+        expiration: 604800
+        JwtSecretKey: secretkey
