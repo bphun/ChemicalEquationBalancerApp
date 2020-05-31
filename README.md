@@ -14,51 +14,30 @@ Since there are no existing hand written chemical equation datasets, I must make
 Open the ChemicalEquationBalancerApp.xcodeproj project in Xcode located in the iOS folder of the root project directory. This application can be used to balance chemical equations which you enter manually and to upload images of chemical equations to a server(detailed below).
 
 ### Configure the API server
-Create the `application.yml` file in `$PROJECT_ROOT_DIRECTORY/api/imageProcessorRequestsServer/src/main/resources/`
-Add the the following snippet to the `application.yml` file you just created. Replace strings with the `${*}` pattern with the appropriate strings. 
-```
-spring:
-    datasource:
-    url: ${MY_SQL_SERVER_URL}
-        username: ${MY_SQL_SERVER_USERNAME}
-        password: ${MY_SQL_SERVER_PASSWORD}
-    jpa:
-        show-sql: true
-        hibernate:
-            ddl-auto: update
-
-amazonProperties:
-    endpointUrl: ${AWS_S3_BUCKET_URL}
-    accessKey: ${AWS_S3_IAM_USER_ACCESS_KEY}
-    secretKey: ${AWS_S3_IAM_USER_SECRET_KEY}
-    bucketName: ${AWS_S3_BUCKET_NAME}
-
-management:
-    endpoints:
-        web:
-            exposure:
-                include: health,info,prometheus,auditevents,caches,conditions,httptrace,metrics,scheduledtasks,heapdump
-```
+The core of the API backend is composed of five individual microservices which communicate using HTTP requests (REST). As a result of this architecture, each of the microservice have their own configuration files. To learn more about how to configure each microservice, view to the respective README.md files for each microservice(auth, eureka, imageProcessorRequestsServer, imageRegionProcessor, zuul).
 
 ### Run the server using Docker
+You must have Gradle(>=6.4.0), Node(>=v14.3.0), and Npm(>=6.14.4) installed before proceeding with these steps.
 ```
 cd $PROJECT_ROOT_DIRECTORY
+./buildAll.sh
 docker-compose up --build
 ```
-Using docker compose will start an Nginx reverse proxy, the API server, image labeling portal, Prometheus server, and Grafana dashboard,
+Using docker compose will start an Nginx reverse proxy, the API microservices, management portal, Prometheus server, and Grafana dashboard,
 
-Since this process will also start a docker container running an Nginx proxy, the API server will be accessible locally at `http://localhost/api/v1/` and the image labeling portal will be accessible at `http://localhost/`. 
+Since this process will also start a docker container running an Nginx proxy, the API server will be accessible locally at `https://localhost/api/v1/` and the management labeling portal will be accessible at `https://localhost/`. 
 
-The Grafana dashboard will be accessible from the management portal
+The Grafana dashboard will be accessible from the management portal. If you would like to access the Prometheus 
+dashboard, it is available at `https://localhost/prometheus`. Port Mappings for each service are availabe in the port Mappings section.
 
 ### Run the server directly on your computer
-Note: this method will not start the Grafana dashboard, prometheus server, or Nginx reverse proxy.
-To run the API server locally you will need to install Gradle and the Java JDK on your system. Once these packages are installed, you can run:
+Note: this method will not start the Grafana dashboard, Prometheus server, or Nginx reverse proxy.
+To run the API microservices locally, you will need to install Gradle(>=6.4.0) and the Java JDK on your system. Once these packages are installed, you can run:
 ```
-cd $PROJECT_ROOT_DIRECTORY/api/imageProcessorRequestsServer
+cd $PROJECT_ROOT_DIRECTORY/api/$MICROSERVICE
 gradle bootRun
 ```
-The API server will be available at `http://localhost:8080/`
+Port Mappings for each service are availabe in the port mappings section.
 To run the image labeling portal locally you will need to install npm. Once npm is installed, run the following:
 ```
 cd $PROJECT_ROOT_DIRECTORY/management-portal
@@ -66,3 +45,16 @@ npm i
 npm start
 ```
 The management portal will be availabe at `http://localhost:3000/`
+
+### Port Mappings
+| Service                         | Host Port Number | Container Port Number |
+|---------------------------------|------------------|-----------------------|
+| nginx                           | 80/tcp, 443/tcp  | 7080/tcp, 7443/tcp    |
+| zuul                            | 7080/tcp         | 7080/tcp              |
+| auth                            | 9100/tcp         | 9100/tcp              |
+| image-region-processor-server   | 8081/tcp         | 8081/tcp              |
+| image-processor-requests-server | 8080/tcp         | 8080/tcp              |
+| management-portal               | 3000/tcp         | 3000/tcp              |
+| prometheus                      | 9090/tcp         | 9090/tcp              |
+| eureka                          | 8761/tcp         | 8761/tcp              |
+| grafana                         | 9091/tcp         | 9091/tcp              |
