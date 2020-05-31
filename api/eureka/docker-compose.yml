@@ -9,9 +9,9 @@ services:
     container_name: eureka
     networks:
       - chemBalancerNet
-    mem_limit: 200m
-    memswap_limit: 200m
-    mem_reservation: 160m
+    mem_limit: 500m
+    memswap_limit: 500m
+    mem_reservation: 450m
 
 networks:
   chemBalancerNet:

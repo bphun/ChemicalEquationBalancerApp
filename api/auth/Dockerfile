@@ -16,4 +16,4 @@ USER AuthServiceUser
 
 ENV spring.profiles.active=prod
 
-ENTRYPOINT ["java", "-Xmx200m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx500m", "-jar", "app.jar"]
