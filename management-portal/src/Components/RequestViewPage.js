@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import { CircleLeftMajorMonotone, CircleRightMajorMonotone, WandMajorMonotone, EditMajorMonotone, FolderDownMajorMonotone } from '@shopify/polaris-icons';
 import LoadingView from './LoadingView';
 import Auth from '../Utility/Auth';
-require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
+import config from 'react-global-configuration';
 
 class RequestViewPage extends React.Component {
 
@@ -28,15 +28,14 @@ class RequestViewPage extends React.Component {
             hasPreviousRequest: false
         }
 
-        this.apiHostname = process.env.REACT_APP_API_HOSTNAME
-        this.regionProcessorApiHostname = process.env.REACT_APP_REGION_PROCESSOR_API_HOSTNAME
+        this.apiUrl = config.get("apiUrl")
         this.authToken = Auth.getAuthToken()
     }
 
     componentDidMount() {
         const requestId = queryString.parse(this.props.location.search).rid
 
-        fetch(formatUrl(this.apiHostname + "/requests/info", { rid: requestId }), {
+        fetch(formatUrl(this.apiUrl + "/requests/info", { rid: requestId }), {
             mode: "cors",
             headers: {
                 "Authorization": `Bearer ${this.authToken}`
@@ -57,7 +56,7 @@ class RequestViewPage extends React.Component {
 
     getRegions(requestId) {
         let imageRegions = []
-        fetch(this.apiHostname + "/regions/?rid=" + requestId, {
+        fetch(this.apiUrl + "/regions/?rid=" + requestId, {
             mode: "cors",
             headers: {
                 "Authorization": `Bearer ${this.authToken}`
@@ -90,7 +89,7 @@ class RequestViewPage extends React.Component {
 
     fetchNextAndPreviousRequestInfo() {
         if (!this.state.nextRequestId) {
-            const url = formatUrl(this.apiHostname + "/requests/next", {
+            const url = formatUrl(this.apiUrl + "/requests/next", {
                 t: this.state.storedRequest.gcpRequestStartTimeMs
             })
             fetch(url, {
@@ -110,7 +109,7 @@ class RequestViewPage extends React.Component {
                 })
         }
         if (!this.state.previousRequestId) {
-            const url = formatUrl(this.apiHostname + "/requests/previous", {
+            const url = formatUrl(this.apiUrl + "/requests/previous", {
                 t: this.state.storedRequest.gcpRequestStartTimeMs
             })
             fetch(url, {
@@ -133,7 +132,7 @@ class RequestViewPage extends React.Component {
 
     handleValueEditModalSubmit() {
         if (this.state.editActionTargetRegion === "" || this.state.modalTextInputValue === "") { return }
-        let url = formatUrl(this.apiHostname + "/regions/updateValue", {
+        let url = formatUrl(this.apiUrl + "/regions/updateValue", {
             rid: this.state.editActionTargetRegion,
             vid: "equStr",
             v: encodeURIComponent(this.state.modalTextInputValue)
@@ -191,7 +190,7 @@ class RequestViewPage extends React.Component {
     }
 
     deleteRequest() {
-        const url = formatUrl(this.apiHostname + "/requests/delete", {
+        const url = formatUrl(this.apiUrl + "/requests/delete", {
             rid: this.state.storedRequest.id
         })
         fetch(url, {
@@ -234,7 +233,7 @@ class RequestViewPage extends React.Component {
 
     processRegions() {
         this.setState({ processingRegions: true })
-        const url = formatUrl(this.regionProcessorApiHostname + "/imageProcessor/extract/regions", {
+        const url = formatUrl(this.apiUrl + "/imageProcessor/extract/regions", {
             rid: this.state.storedRequest.id
         })
         fetch(url, {
@@ -265,7 +264,7 @@ class RequestViewPage extends React.Component {
 
     rotateRegion(regionId, radians) {
         // Rotated image may not display after this call because the browser might use a cached version of the image
-        const url = formatUrl(this.regionProcessorApiHostname + "/imageProcessor/transform/rotate/", {
+        const url = formatUrl(this.apiUrl + "/imageProcessor/transform/rotate/", {
             rid: this.state.storedRequest.id + "_" + regionId,
             r: radians
         })

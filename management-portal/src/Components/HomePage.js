@@ -1,7 +1,6 @@
 import React from 'react'
 import { AppProvider, Page, Navigation } from "@shopify/polaris";
 import { AnalyticsMajorMonotone, HomeMajorTwotone, ImagesMajorMonotone } from '@shopify/polaris-icons';
-require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
 
 class HomePage extends React.Component {
 
@@ -29,7 +28,7 @@ class HomePage extends React.Component {
                                         icon: ImagesMajorMonotone                                  
                                     },
                                     {
-                                        url: "https://54.153.23.243/metrics/",
+                                        url: "https://50.18.99.12/metrics/",
                                         label: "Grafana Metrics Dashboard",
                                         icon: AnalyticsMajorMonotone
                                     }

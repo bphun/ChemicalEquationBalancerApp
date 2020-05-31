@@ -38,6 +38,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(HttpMethod.POST, jwtConfig.getUri())
         .permitAll()
+        .antMatchers("/actuator/**")
+        .permitAll()
         .antMatchers("/regions/**")
         .hasRole("USER")
         .antMatchers("/requests/**")

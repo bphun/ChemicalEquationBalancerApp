@@ -3,6 +3,7 @@ FROM openjdk:8-jdk-alpine
 WORKDIR /AuthService
 COPY build/libs/auth-0.0.1-SNAPSHOT.jar ./app.jar
 COPY src/main/resources/application-prod.yml ./application-prod.yml
+COPY src/main/resources/bootstrap.yml ./bootstrap.yml
 
 EXPOSE 9100
 
@@ -15,4 +16,4 @@ USER AuthServiceUser
 
 ENV spring.profiles.active=prod
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx200m", "-jar", "app.jar"]

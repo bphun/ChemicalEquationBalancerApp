@@ -8,3 +8,4 @@ api/imageRegionProcessor/src/main/resources/
 api/auth/src/main/resources/
 api/eureka/src/main/resources/
 api/zuul/src/main/resources/
+api/auth/bin/main

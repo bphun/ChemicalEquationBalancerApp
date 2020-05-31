@@ -9,6 +9,9 @@ services:
     container_name: image-region-processor-server
     networks:
       - chemBalancerNet
+    mem_limit: 200m
+    memswap_limit: 200m
+    mem_reservation: 160m
 
 networks:
   chemBalancerNet:

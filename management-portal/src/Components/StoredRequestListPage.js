@@ -3,7 +3,7 @@ import { formatUrl } from "../Utility/Utility";
 import { AppProvider, Page, Card, DataTable, Link, Badge, Spinner } from "@shopify/polaris";
 import LoadingView from './LoadingView';
 import Auth from '../Utility/Auth';
-require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
+import config from 'react-global-configuration';
 
 class StoredRequestListPage extends React.Component {
 
@@ -15,7 +15,7 @@ class StoredRequestListPage extends React.Component {
             shouldDisplay: false
         }
 
-        this.apihostname = process.env.REACT_APP_API_HOSTNAME
+        this.apiUrl = config.get("apiUrl")
         this.authToken = Auth.getAuthToken()
 
     }
@@ -59,7 +59,7 @@ class StoredRequestListPage extends React.Component {
 
     getStoredRequests() {
         const requests = []
-        fetch(formatUrl(this.apihostname + "/requests/list"), {
+        fetch(formatUrl(this.apiUrl + "/requests/list"), {
             headers: {
                 "Authorization": `Bearer ${this.authToken}`
             }

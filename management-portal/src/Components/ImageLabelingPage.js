@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { formatUrl } from "../Utility/Utility";
 import Auth from '../Utility/Auth';
 import "../App.css"
-require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
+import config from 'react-global-configuration';
 
 class ImageLabelingPage extends React.Component {
 
@@ -18,7 +18,7 @@ class ImageLabelingPage extends React.Component {
             ready: false
         }
 
-        this.apiHostname = process.env.REACT_APP_API_HOSTNAME
+        this.apiUrl = config.get("apiUrl")
         this.authToken = Auth.getAuthToken()
     }
 
@@ -34,7 +34,7 @@ class ImageLabelingPage extends React.Component {
 
     getRegions(requestId) {
         let imageBoundingsBoxes = []
-        let url = formatUrl(this.apiHostname + "/regions/", {
+        let url = formatUrl(this.apiUrl + "/regions/", {
             rid: requestId
         })
         fetch(url, {
@@ -74,7 +74,7 @@ class ImageLabelingPage extends React.Component {
     }
 
     setInProgressLabelingStatus(requestId) {
-        let url = formatUrl(this.apiHostname + "/requests/updateValue/", {
+        let url = formatUrl(this.apiUrl + "/requests/updateValue/", {
             rid: requestId,
             vid: "labelingStatus",
             v: "IN_PROGRESS"
@@ -149,7 +149,7 @@ class ImageLabelingPage extends React.Component {
             body: JSON.stringify(boundingBoxDiff)
         }
 
-        fetch(this.apiHostname + "/regions/update/", config)
+        fetch(this.apiUrl + "/regions/update/", config)
             .then(results => {
                 return results.json()
             })

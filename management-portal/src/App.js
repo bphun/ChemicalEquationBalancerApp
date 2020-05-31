@@ -6,8 +6,26 @@ import RequestViewPage from './Components/RequestViewPage'
 import ImageLabelingPage from './Components/ImageLabelingPage'
 import LoginPage from "./Components/LoginPage";
 import Auth from "./Utility/Auth"
+import config from 'react-global-configuration';
 
 export default class App extends Component {
+
+    constructor(props) {
+        super(props)
+
+        const env = process.env.NODE_ENV || "development";
+        var ipAddress = ""
+
+        if (env === "development") {
+            ipAddress = "localhost"
+        }
+
+        config.set({
+            apiUrl: env === "development" ? `http://${ipAddress}:7080` : `/api/v1`,
+            authApiUrl: env === "development" ? `http://${ipAddress}:9100` : `/api/v1`
+        })
+    }
+
     render() {
         const PrivateRoute = ({ component: Component, ...rest }) => (
             <Route {...rest} render={(props) => (
@@ -19,7 +37,7 @@ export default class App extends Component {
                     }} />
             )} />
         )
-                
+
         return (
             <Router>
                 <Switch>

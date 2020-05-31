@@ -21,3 +21,19 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ['image-region-processor-server:8081']
+  - job_name: 'eureka'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['eureka:8761']
+  - job_name: 'auth'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['auth:9100']
+  - job_name: 'zuul'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['zuul:7080']
+

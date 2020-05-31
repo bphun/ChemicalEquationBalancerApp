@@ -2,7 +2,7 @@ import React from 'react'
 import "../App.css"
 import { AppProvider, TextField, FormLayout, Page, Form, Button, Caption } from "@shopify/polaris";
 import Auth from '../Utility/Auth';
-require('dotenv').config(process.env.NODE_ENV === "development" ? "../../.env.development" : "../../.env.production")
+import config from 'react-global-configuration';
 
 class LoginPage extends React.Component {
 
@@ -23,7 +23,7 @@ class LoginPage extends React.Component {
             authStatusCaptionText: ""
         }
 
-        this.apiHostname = process.env.REACT_APP_AUTH_API_HOSTNAME
+        this.authApiUrl = config.get("authApiUrl")
     }
 
     clearAuthStatusCaptionAfterDelay(delay) {
@@ -54,7 +54,7 @@ class LoginPage extends React.Component {
 
         this.setState({ didSubmitForm: true })
 
-        fetch(this.apiHostname + "/auth/login", requestConfig)
+        fetch(this.authApiUrl + "/auth/login", requestConfig)
             .then(results => {
                 return results.json()
             })
