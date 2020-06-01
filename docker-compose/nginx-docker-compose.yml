@@ -2,7 +2,7 @@ version: '2'
 
 services:
   nginx:
-    build: .
+    build: ../nginx
     ports:
       - "80:7080"
       - "443:7443"

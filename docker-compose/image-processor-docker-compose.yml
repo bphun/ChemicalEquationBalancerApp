@@ -2,7 +2,7 @@ version: '2'
 
 services:
   image-processor-requests-server:
-    build: .
+    build: ../api/imageProcessorRequestsServer
     ports:
       - "8080:8080"
     image: "bphun/chemical-equation-balancer:image-processor-requests-server"

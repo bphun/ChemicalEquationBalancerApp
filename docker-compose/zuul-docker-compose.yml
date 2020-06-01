@@ -2,7 +2,7 @@ version: '2'
 
 services:
   zuul:
-    build: .
+    build: ../api/zuul
     ports:
       - "7080:7080"
     image: "bphun/chemical-equation-balancer:zuul"

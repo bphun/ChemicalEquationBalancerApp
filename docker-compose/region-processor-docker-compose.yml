@@ -2,7 +2,7 @@ version: '2'
 
 services:
   image-region-processor-server:
-    build: .
+    build: ../api/imageRegionProcessor
     ports:
       - "8081:8081"
     image: "bphun/chemical-equation-balancer:image-region-processor-server"

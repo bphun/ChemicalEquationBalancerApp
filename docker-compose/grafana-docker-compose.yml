@@ -2,7 +2,7 @@ version: '2'
 
 services:
   grafana:
-    build: .
+    build: ../grafana
     ports:
       - "9091:3000"
     user: "472"

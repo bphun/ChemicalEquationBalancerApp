@@ -1,5 +1,4 @@
 nginx/htpasswd
-docker-compose
 api/bin
 .DS_Store
 *.class

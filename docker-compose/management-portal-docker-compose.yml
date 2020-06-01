@@ -2,7 +2,7 @@ version: '2'
 
 services:
   management-portal:
-    build: .
+    build: ../management-portal
     ports:
       - "5000:5000"
     image: "bphun/chemical-equation-balancer:management-portal"

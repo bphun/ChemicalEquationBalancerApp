@@ -1,12 +1,12 @@
 version: '2'
 
 services:
-  eureka:
-    build: .
+  auth:
+    build: ../api/auth
     ports:
-      - "8761:8761"
-    image: "bphun/chemical-equation-balancer:eureka"
-    container_name: eureka
+      - "9100:9100"
+    image: "bphun/chemical-equation-balancer:auth"
+    container_name: auth
     networks:
       - chemBalancerNet
     mem_limit: 500m
