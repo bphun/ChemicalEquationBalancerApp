@@ -362,19 +362,23 @@ public class ImageProcessorRequestRepository {
   }
 
   public ApiResponse getPreviousRequestIdBeforeTimestamp(String timestamp) {
-    ApiResponse response;
+    ApiResponse response = null;
 
     try {
+      List<ApiResponse> responses =
+          jdbcTemplate.query(
+              "SELECT * FROM ImageProcessorRequestInfo WHERE "
+                  + "gcpRequestStartTimeMs < "
+                  + Long.parseLong(timestamp)
+                  + " ORDER BY "
+                  + "gcpRequestStartTimeMs DESC LIMIT 0,1;",
+              (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id")));
+
       response =
-          jdbcTemplate
-              .query(
-                  "SELECT * FROM ImageProcessorRequestInfo WHERE "
-                      + "gcpRequestStartTimeMs < "
-                      + Long.parseLong(timestamp)
-                      + " ORDER BY "
-                      + "gcpRequestStartTimeMs DESC LIMIT 0,1;",
-                  (resource, rowNum) -> new StoredRequestInfoId(resource.getString("id")))
-              .get(0);
+          responses.size() > 1
+              ? responses.get(0)
+              : new ApiResponse("success", "No previous request");
+
     } catch (Exception e) {
       String errorMessage = e.getLocalizedMessage();
       logger.log(Level.WARNING, errorMessage);

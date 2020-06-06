@@ -38,3 +38,15 @@ security:
 ribbon:
     eureka:
         enabled: false
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,prometheus,auditevents,caches,conditions,httptrace,metrics,scheduledtasks,heapdump
+    security:
+        enabled: false
+
+endpoints:
+  actuator:
+    sensitive: false

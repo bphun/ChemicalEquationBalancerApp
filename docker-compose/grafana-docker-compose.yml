@@ -1,19 +1,17 @@
-version: '2'
+version: '2.2'
 
 services:
   grafana:
-    build: ../grafana
+    build: ../monitoring/grafana
     ports:
       - "9091:3000"
     user: "472"
     volumes: 
-      - ./grafana:/var/lib/grafana
+      - ../monitoring/grafana/grafana:/var/lib/grafana
     image: "bphun/chemical-equation-balancer:grafana"
     container_name: grafana
     networks:
       - chemBalancerNet
-    mem_limit: 25m
-    memswap_limit: 25m
-                
+    
 networks:
   chemBalancerNet:

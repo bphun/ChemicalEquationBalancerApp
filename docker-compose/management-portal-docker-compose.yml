@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 
 services:
   management-portal:
@@ -9,8 +9,6 @@ services:
     container_name: management-portal
     networks:
       - chemBalancerNet
-    mem_limit: 25m
-    memswap_limit: 25m
 
 networks:
   chemBalancerNet:

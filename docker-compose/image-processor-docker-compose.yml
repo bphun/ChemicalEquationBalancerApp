@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 
 services:
   image-processor-requests-server:
@@ -9,9 +9,6 @@ services:
     container_name: image-processor-requests-server
     networks:
       - chemBalancerNet
-    mem_limit: 500m
-    memswap_limit: 500m
-    mem_reservation: 450m
 
 networks:
   chemBalancerNet:

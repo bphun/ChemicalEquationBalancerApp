@@ -28,7 +28,7 @@ class HomePage extends React.Component {
                                         icon: ImagesMajorMonotone                                  
                                     },
                                     {
-                                        url: "https://50.18.99.12/metrics/",
+                                        url: "/metrics/",
                                         label: "Grafana Metrics Dashboard",
                                         icon: AnalyticsMajorMonotone
                                     }
